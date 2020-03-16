@@ -1,0 +1,1 @@
+[@bs.module] external make: unit => string = "uuid/v1";
