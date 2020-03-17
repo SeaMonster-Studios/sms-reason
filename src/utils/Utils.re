@@ -21,7 +21,7 @@ let arrayKeepSome = array =>
     }
   );
 
-module Form = {
+module Input = {
   let handleEnterPressOnKeyDown = (event, callback) => {
     ReactEvent.Synthetic.persist(event);
     if (event->ReactEvent.Keyboard.which == 13
@@ -63,4 +63,31 @@ module Form = {
 
   let boolChangeWrapper = (handleChange, event) =>
     ReactEvent.Form.target(event)##checked->handleChange->ignore;
+
+  let downloadFile: (string, string, string, string) => unit = [%raw
+    {|
+  // Resource: https://stackoverflow.com/questions/3975648/how-to-set-content-disposition-attachment-via-javascript
+
+	async function(fileData, fileName, dataType, blobType) {
+		const blob = new Blob([fileData],{type: blobType, charset: "UTF-8"});
+
+    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(blob);
+      return;
+    }
+
+    const data = await window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.dataType = dataType;
+    link.href = data;
+    link.download = fileName;
+    link.dispatchEvent(new MouseEvent('click'));
+
+    setTimeout(function () {
+      // For Firefox it is necessary to delay revoking the ObjectURL
+      window.URL.revokeObjectURL(data)
+    }, 60);
+	}
+|}
+  ];
 };
