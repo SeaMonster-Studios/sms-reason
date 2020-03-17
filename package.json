@@ -36,6 +36,7 @@
     "lodash.startcase": "^4.4.0",
     "lodash.uniq": "^4.5.0",
     "moment-timezone": "^0.5.28",
+    "nanoid": "^2.1.11",
     "papaparse": "^5.1.1",
     "react-json-view": "^1.19.1",
     "react-map-gl": "^5.2.3",
