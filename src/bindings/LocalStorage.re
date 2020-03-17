@@ -9,7 +9,13 @@ external setItem: (string, string) => unit = "setItem";
 
 let getItemAndDecode = (key, decoder) =>
   switch (getItem(key)->Js.Nullable.toOption) {
-  | Some(cachedState) => Some(cachedState->Js.Json.parseExn->decoder)
+  | Some(cachedState) =>
+    switch (cachedState->Js.Json.parseExn->decoder) {
+    | Ok(decoded) => Some(decoded)
+    | Error(error) =>
+      error->Sms.Sentry.captureDeccoError;
+      None;
+    }
   | None => None
   };
 
