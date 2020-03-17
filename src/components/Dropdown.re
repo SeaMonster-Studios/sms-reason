@@ -1,3 +1,5 @@
+open Utils;
+
 type align = [ | `right | `left];
 
 module Style = {
@@ -42,6 +44,7 @@ module Style = {
           [
             margin(0->px),
             background(Colors.white),
+            selector("button", [unsafe("fontWeight", "600")]),
             boxShadow(
               Shadow.box(
                 ~x=2->px,
@@ -76,6 +79,7 @@ let make =
     (
       ~children: renderProps => React.element,
       ~align,
+      ~className="",
       ~renderToggler: renderProps => React.element,
     ) => {
   let (isActive, setIsActive) = React.useState(() => false);
@@ -121,7 +125,7 @@ let make =
     );
 
   <div ref={rootRef->ReactDOMRe.Ref.domRef}>
-    <div className=Style.root>
+    <div className={Css.merge([Style.root, className])}>
       {renderToggler(renderProps)}
       {isActive
          ? <div className={Style.content(align)}>
