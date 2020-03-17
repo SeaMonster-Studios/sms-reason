@@ -20,14 +20,14 @@ let captureDeccoError = (error: Decco.decodeError) => {
   let path = error.path;
   let message = error.message;
   let value = error.value->Js.Json.stringify;
-  captureException(
-    {j|
+  let report = {j|
     DECODE ERROR
     Path: $path
 
     Message: $message
 
     Value: $value
-  |j},
-  );
+  |j};
+  Js.log(report);
+  captureException(report);
 };
