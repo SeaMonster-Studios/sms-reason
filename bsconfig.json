@@ -1,5 +1,6 @@
 {
-  "name": "reason-react-examples",
+  "name": "@seamonster-studios/reason",
+  "namespace": "sms",
   "reason": {
     "react-jsx": 3
   },
@@ -15,7 +16,6 @@
     }
   ],
   "suffix": ".bs.js",
-  "namespace": true,
   "ppx-flags": ["decco/ppx"],
   "bs-dependencies": [
     "reason-react",

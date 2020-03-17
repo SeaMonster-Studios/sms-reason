@@ -9,7 +9,7 @@ external setItem: (string, string) => unit = "setItem";
 
 let getItemAndDecode = (key, decoder) =>
   switch (getItem(key)->Js.Nullable.toOption) {
-  | Some(cachedState) => Some(cachedState->Js.Json.parseExn)
+  | Some(cachedState) => Some(cachedState->Js.Json.parseExn->decoder)
   | None => None
   };
 
