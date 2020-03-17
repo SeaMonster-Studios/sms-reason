@@ -19,7 +19,7 @@ module Mount1 = {
   let make = () =>
     <>
       <NoticeSystem.Container>
-        <h1> "Hello World"->str </h1>
+        <h1> "Hello World"->React.string </h1>
       </NoticeSystem.Container>
     </>;
 };

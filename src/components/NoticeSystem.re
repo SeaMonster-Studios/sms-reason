@@ -466,7 +466,7 @@ module Notice = {
       let removeNotice = useRemoveNotice();
 
       <header className=Style.Notice.header>
-        <div> title->str </div>
+        <div> title->React.string </div>
         {switch (shownNoticeType) {
          | Active =>
            <button
@@ -589,12 +589,12 @@ module Notice = {
                 <div>
                   <div>
                     "An unknown error has occurred, please try again later. If this continues, please contact us."
-                    ->str
+                    ->React.string
                     <a
                       href="/contact"
                       rel="noopener noreferrer"
                       target="_blank">
-                      "here"->str
+                      "here"->React.string
                     </a>
                   </div>
                 </div>
@@ -622,7 +622,7 @@ let useAddNotice = () => {
         | (Some(el), _) => el
         | (None, Some(content)) => <Notice content ?title />
         | (None, None) =>
-          <Notice content={<span> "test"->str </span>} ?title />
+          <Notice content={<span> "test"->React.string </span>} ?title />
         };
 
       dispatch(AddNotice(id, key, (type_, element, life)));
@@ -836,7 +836,7 @@ module Component = {
               showNoticeType == All
                 ? "Show Current Notices" : "Show All Notices"
             )
-            ->str
+            ->React.string
           </button>
         </div>
       </div>

@@ -1,27 +1,34 @@
 open Belt;
 
-let str = React.string;
+module StyleU = {
+  let rem_of_px = pixel => (pixel->float_of_int /. 16.)->Css.rem;
+};
 
-let rem_of_px = pixel => (pixel->float_of_int /. 16.)->Css.rem;
+module ErrorU = {
+  let unknownErrorMessage = "An unknown error has occurred.";
+};
 
-let createMarkup = str => <span dangerouslySetInnerHTML={"__html": str} />;
+module DomU = {
+  let createMarkup = markup =>
+    <span dangerouslySetInnerHTML={"__html": markup} />;
+};
 
-let unknownErrorMessage = "An unknown error has occurred.";
+module ArrayU = {
+  let mergeDeep = (items: array(array('a))) =>
+    items->Belt.Array.reduce([||], (acc, item) =>
+      acc->Belt.Array.concat(item)
+    );
 
-let mergeDeep = (items: array(array('a))) =>
-  items->Belt.Array.reduce([||], (acc, item) =>
-    acc->Belt.Array.concat(item)
-  );
+  let arrayKeepSome = array =>
+    array->Array.reduce([||], (acc, item) =>
+      switch (item) {
+      | None => acc
+      | Some(item) => Array.concat(acc, [|item|])
+      }
+    );
+};
 
-let arrayKeepSome = array =>
-  array->Array.reduce([||], (acc, item) =>
-    switch (item) {
-    | None => acc
-    | Some(item) => Array.concat(acc, [|item|])
-    }
-  );
-
-module Input = {
+module InputU = {
   let handleEnterPressOnKeyDown = (event, callback) => {
     ReactEvent.Synthetic.persist(event);
     if (event->ReactEvent.Keyboard.which == 13
@@ -60,9 +67,6 @@ module Input = {
     | Some(node) => node->focus
     };
   };
-
-  let boolChangeWrapper = (handleChange, event) =>
-    ReactEvent.Form.target(event)##checked->handleChange->ignore;
 
   let downloadFile: (string, string, string, string) => unit = [%raw
     {|
