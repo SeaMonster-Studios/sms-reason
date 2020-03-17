@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/reason",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
@@ -19,10 +19,10 @@
   "dependencies": {
     "@boldcommerce/bold-subscriptions-js": "^1.2.6",
     "@juggle/resize-observer": "^3.1.1",
+    "bs-css-emotion": "^1.0.1",
     "bs-date-fns": "^0.1.6",
     "bs-fetch": "^0.5.2",
     "bs-react-spring": "^0.4.0",
-    "bs-css-emotion": "^1.0.1",
     "dayjs": "^1.8.23",
     "decco": "^1.2.0",
     "deck.gl": "^8.0.17",
@@ -38,6 +38,7 @@
     "moment-timezone": "^0.5.28",
     "nanoid": "^2.1.11",
     "papaparse": "^5.1.1",
+    "randomcolor": "^0.5.4",
     "react-json-view": "^1.19.1",
     "react-map-gl": "^5.2.3",
     "react-query": "^1.0.27",
@@ -55,8 +56,8 @@
     "moduleserve": "^0.9.0"
   },
   "peerDependencies": {
-    "reason-react": ">=0.7.0",
     "react": "^16.8.1",
-    "react-dom": "^16.8.1"
+    "react-dom": "^16.8.1",
+    "reason-react": ">=0.7.0"
   }
 }

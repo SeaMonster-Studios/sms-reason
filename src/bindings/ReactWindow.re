@@ -1,4 +1,4 @@
-type itemRenderer('a) =
+type listItemRenderer('a) =
   {
     .
     "data": 'a,
@@ -7,7 +7,21 @@ type itemRenderer('a) =
   } =>
   React.element;
 
-module FixedSizeList = {
+type onItemsRenderedValue = {
+  overscanStartIndex: int,
+  overscanStopIndex: int,
+  visibleStartIndex: int,
+  visibleStopIndex: int,
+};
+
+type onScrollValue = {
+  scrollTop: int,
+  scrollDirection: string,
+  scrollOffset: int,
+  scrollUpdateWasRequested: bool,
+};
+
+module List = {
   [@bs.module "react-window"] [@react.component]
   external make:
     (
@@ -17,12 +31,49 @@ module FixedSizeList = {
       ~width: string,
       ~layout: string=?,
       ~itemData: 'b=?,
-      ~ref: ReactDOMRe.Ref.t=?,
+      ~outerRef: ReactDOMRe.Ref.t=?,
+      ~innerRef: ReactDOMRe.Ref.t=?,
       ~overscanCount: int=?,
       ~useIsScrolling: bool=?,
-      ~onItemsRendered: unit => unit=?,
-      ~children: itemRenderer('a)
+      ~onItemsRendered: onItemsRenderedValue => unit=?,
+      ~onScroll: onScrollValue => unit=?,
+      ~className: string=?,
+      ~children: listItemRenderer('a)
     ) =>
     React.element =
     "FixedSizeList";
+};
+
+type cellItemRenderer('a) =
+  {
+    .
+    "data": 'a,
+    "rowIndex": int,
+    "columnIndex": int,
+    "style": ReactDOMRe.Style.t,
+  } =>
+  React.element;
+
+module Grid = {
+  [@bs.module "react-window"] [@react.component]
+  external make:
+    (
+      ~columnCount: int,
+      ~columnWidth: int,
+      ~height: int,
+      ~rowCount: int,
+      ~itemSize: int,
+      ~width: int,
+      ~rowHeight: int,
+      ~itemData: 'b=?,
+      ~ref: ReactDOMRe.Ref.t=?,
+      ~overscanCount: int=?,
+      ~useIsScrolling: bool=?,
+      ~onItemsRendered: onItemsRenderedValue => unit=?,
+      ~onScroll: onScrollValue => unit=?,
+      ~className: string=?,
+      ~children: cellItemRenderer('a)
+    ) =>
+    React.element =
+    "FixedSizeGrid";
 };
