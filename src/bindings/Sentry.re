@@ -16,12 +16,12 @@ external showReportDialog: unit => unit = "showReportDialog";
 [@bs.module "@sentry/browser"]
 external withScope: scope => unit = "showReportDialog";
 
-let captureDeccoError = (error: Decco.decodeError) => {
+let captureDeccoError = (error: Decco.decodeError, decoderName: string) => {
   let path = error.path;
   let message = error.message;
   let value = error.value->Js.Json.stringify;
   let report = {j|
-    DECODE ERROR
+    DECODE ERROR WITH $decoderName
     Path: $path
 
     Message: $message
