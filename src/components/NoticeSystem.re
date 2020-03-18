@@ -610,6 +610,63 @@ module Notice = {
   };
 };
 
+let useAddNoticeAndGetId = () => {
+  let dispatch = Store.useDispatch();
+
+  React.useMemo1(
+    (
+      (),
+      ~id as id_=?,
+      ~content=?,
+      ~el=?,
+      ~title=?,
+      ~life: singleNoticeLife=?,
+      type_,
+    ) => {
+      /** If an id is provided then this new notice will _replace_ the previous notice with that id. This is beneficial when using notices for acync states (Loading, Success, Error) */
+      let key = Uuid.make();
+      let element =
+        switch (el, content) {
+        | (Some(el), _) => el
+        | (None, Some(content)) => <Notice content ?title />
+        | (None, None) =>
+          <Notice content={<span> "test"->React.string </span>} ?title />
+        };
+
+      let id =
+        switch (id_) {
+        | Some(id) => id
+        | None => Uuid.make()
+        };
+
+      dispatch(AddNotice(id, key, (type_, element, life)));
+      id;
+    },
+    [|dispatch|],
+  );
+};
+
+type manage = {
+  add:
+    (
+      ~id: string=?,
+      ~content: React.element=?,
+      ~el: React.element=?,
+      ~title: string=?,
+      ~life: int=?,
+      type_
+    ) =>
+    string,
+  remove: string => unit,
+};
+
+let useManage = () => {
+  let add = useAddNoticeAndGetId();
+  let remove = useRemoveNotice();
+
+  React.useMemo2(() => {add, remove}, (add, remove));
+};
+
 let useAddNotice = () => {
   let dispatch = Store.useDispatch();
 
