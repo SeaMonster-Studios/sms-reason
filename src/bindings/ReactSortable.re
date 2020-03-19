@@ -20,10 +20,8 @@ module Container = {
       <> children </>;
   };
 
-  module Hoc = {
-    include Component;
-    let make = withSortableContainer(make);
-  };
+  include Component;
+  let make = withSortableContainer(make);
 };
 
 module Item = {
@@ -36,10 +34,8 @@ module Item = {
       <> children </>;
   };
 
-  module Hoc = {
-    include Component;
-    let make = withSortableElement(make);
-  };
+  include Component;
+  let make = withSortableElement(make);
 };
 
 /**
@@ -54,7 +50,7 @@ let make =
       ~onOrderChange: array(Widget.widget) => unit,
     ) => {
   <div className=Style.root>
-    <Sms.ReactSortable.Container.Hoc
+    <Sms.ReactSortable.Container
       onSortEnd={({oldIndex, newIndex}) => {
         let updatedWidgets = arrayMove(widgets, oldIndex, newIndex);
         onOrderChange(
@@ -70,16 +66,16 @@ let make =
         {widgets
          ->sortWidgets
          ->Array.mapWithIndex((index, widget) =>
-             <Sms.ReactSortable.Item.Hoc index key={index->string_of_int}>
+             <Sms.ReactSortable.Item index key={index->string_of_int}>
                <div
                  className={Style.widgetContainer(widgets->Array.length)}>
                  <WidgetItem widget onUpdate onDelete />
                </div>
-             </Sms.ReactSortable.Item.Hoc>
+             </Sms.ReactSortable.Item>
            )
          ->React.array}
       </div>
-    </Sms.ReactSortable.Container.Hoc>
+    </Sms.ReactSortable.Container>
   </div>;
 };
  */;
