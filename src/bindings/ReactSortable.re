@@ -32,7 +32,8 @@ module Item = {
 
   module Component = {
     [@react.component]
-    let make = (~children: React.element) => <> children </>;
+    let make = (~children: React.element, ~index as _index: int) =>
+      <> children </>;
   };
 
   module Hoc = {
