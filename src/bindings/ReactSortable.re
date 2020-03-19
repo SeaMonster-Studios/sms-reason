@@ -70,10 +70,9 @@ let make =
         {widgets
          ->sortWidgets
          ->Array.mapWithIndex((index, widget) =>
-             <Sms.ReactSortable.Item.Hoc index>
+             <Sms.ReactSortable.Item.Hoc index key={index->string_of_int}>
                <div
-                 className={Style.widgetContainer(widgets->Array.length)}
-                 key={index->string_of_int}>
+                 className={Style.widgetContainer(widgets->Array.length)}>
                  <WidgetItem widget onUpdate onDelete />
                </div>
              </Sms.ReactSortable.Item.Hoc>
