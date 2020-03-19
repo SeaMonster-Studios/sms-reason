@@ -29,5 +29,5 @@ let captureDeccoError = (error: Decco.decodeError, decoderName: string) => {
     Value: $value
   |j};
   Js.log(report);
-  captureException(report);
+  captureMessage(report);
 };

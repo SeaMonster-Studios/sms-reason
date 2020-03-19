@@ -26,6 +26,7 @@ type classList = {
 type element = {
   .
   [@bs.meth] "querySelector": string => element,
+  [@bs.meth] "appendChild": element => element,
   "classList": classList,
 };
 
