@@ -41,3 +41,46 @@ module Item = {
     let make = withSortableElement(make);
   };
 };
+
+/**
+ * EXAMPLE
+
+[@react.component]
+let make =
+    (
+      ~widgets: array(Widget.widget),
+      ~onUpdate: Widget.widget => unit,
+      ~onDelete: string => unit,
+      ~onOrderChange: array(Widget.widget) => unit,
+    ) => {
+  <div className=Style.root>
+    <Sms.ReactSortable.Container.Hoc
+      onSortEnd={({oldIndex, newIndex}) => {
+        let updatedWidgets = arrayMove(widgets, oldIndex, newIndex);
+        onOrderChange(
+          updatedWidgets->Array.mapWithIndex((index, widget) =>
+            {...widget, displayIndex: index}
+          ),
+        );
+      }}
+      axis="xy"
+      distance=5
+      helperClass="is-dragging">
+      <div>
+        {widgets
+         ->sortWidgets
+         ->Array.mapWithIndex((index, widget) =>
+             <Sms.ReactSortable.Item.Hoc index>
+               <div
+                 className={Style.widgetContainer(widgets->Array.length)}
+                 key={index->string_of_int}>
+                 <WidgetItem widget onUpdate onDelete />
+               </div>
+             </Sms.ReactSortable.Item.Hoc>
+           )
+         ->React.array}
+      </div>
+    </Sms.ReactSortable.Container.Hoc>
+  </div>;
+};
+ */;
