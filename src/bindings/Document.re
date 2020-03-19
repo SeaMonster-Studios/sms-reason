@@ -27,6 +27,7 @@ type element = {
   .
   [@bs.meth] "querySelector": string => element,
   [@bs.meth] "appendChild": element => element,
+  [@bs.meth] "remove": element => unit,
   "classList": classList,
 };
 
