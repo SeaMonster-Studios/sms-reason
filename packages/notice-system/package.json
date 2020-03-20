@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/notice-system",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
@@ -29,6 +29,5 @@
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "reason-react": ">=0.7.0"
-  },
-  "gitHead": "d00c56a0a1711b8b74e4651a1ea9e962ecc26652"
+  }
 }
