@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/reason",
-  "version": "0.6.3",
+  "version": "0.6.4",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
