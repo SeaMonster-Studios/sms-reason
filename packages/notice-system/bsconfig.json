@@ -22,6 +22,8 @@
     "bs-css-emotion",
     "reductive",
     "@seamonster-studios/reason",
+    "@seamonster-studios/react-use-countdown",
+    "@seamonster-studios/react-use-measure",
     "bs-react-spring"
   ],
   "refmt": 3
