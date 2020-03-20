@@ -504,8 +504,7 @@ module Notice = {
         (notice, removeNotice),
       );
 
-    let countdown =
-      Sms.TimerHooks.CountDown.useHook(life, handleRemoveNotice);
+    let countdown = ReactUseCountdown.useHook(life, handleRemoveNotice);
 
     React.useEffect1(
       () => {
@@ -756,7 +755,7 @@ module Component = {
   module Item = {
     [@react.component]
     let make = (~children, ~id) => {
-      let (ref, bounds) = Sms.UseMeasure.(use(params(~polyfill, ())));
+      let (ref, bounds) = ReactUseMeasure.(use(params(~polyfill, ())));
       let setNoticeHeight = useSetNoticeHeight();
       let notice = useNotice(id);
 
