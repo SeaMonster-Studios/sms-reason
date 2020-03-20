@@ -10,7 +10,7 @@
 1. Duplicate one of the existing component packages
 2. Update the "name" field in package.json and bsconfig.json (need to match)
 3. Add your component, lib, etc.
-4. Follow the steps in the [publishing updates](#user-content-publishing-updates-to-packages) section
+4. Follow the steps in the [publishing updates](#publishing-updates-to-packages) section
 
 ### installing an npm package
 
