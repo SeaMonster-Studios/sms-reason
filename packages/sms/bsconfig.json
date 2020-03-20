@@ -1,19 +1,13 @@
 {
-  "name": "@seamonster-studios/reason-mono-repo",
-  "namespace": false,
+  "name": "@seamonster-studios/reason",
+  "namespace": "sms",
   "reason": {
     "react-jsx": 3
   },
-  "sources": [
-    {
-      "dir": "packages/sms/src/",
-      "subdirs": true
-    },
-    {
-      "dir": "packages/notice-system/src/",
-      "subdirs": true
-    }
-  ],
+  "sources": {
+    "dir": "src",
+    "subdirs": true
+  },
   "bsc-flags": ["-bs-super-errors", "-bs-no-version-header"],
   "package-specs": [
     {
@@ -28,10 +22,7 @@
     "bs-css",
     "bs-css-emotion",
     "bs-date-fns",
-    "bs-fetch",
-    "reductive",
-    "decco",
-    "bs-react-spring"
+    "decco"
   ],
   "refmt": 3
 }

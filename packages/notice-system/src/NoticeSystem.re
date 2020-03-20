@@ -1,16 +1,4 @@
-/**
- * Dependencies:
- * bs-react-spring
- * react-spinners, ReactSpinners.re (bindings)
- * uuid, Uuid.re (bindings)
- * reason-react
- * react
- * reductive
- * react-dom
- * bs-react-spring
- * react-use-measure, @juggle/resize-observer, UseMeasure.re (bindings)
- */
-open Utils;
+open Sms.Utils;
 
 type shownNoticesType =
   | All
@@ -516,7 +504,8 @@ module Notice = {
         (notice, removeNotice),
       );
 
-    let countdown = TimerHooks.CountDown.useHook(life, handleRemoveNotice);
+    let countdown =
+      Sms.TimerHooks.CountDown.useHook(life, handleRemoveNotice);
 
     React.useEffect1(
       () => {
@@ -572,7 +561,7 @@ module Notice = {
            <div className=Style.Notice.loaderContent>
              <div>
                <Loaders.Container className=Style.Notice.loader>
-                 <ReactSpinners.PropagateLoader
+                 <Sms.ReactSpinners.PropagateLoader
                    size=20
                    loading=true
                    color="rgb(77, 161, 255)"
@@ -624,7 +613,7 @@ let useAddNoticeAndGetId = () => {
       type_,
     ) => {
       /** If an id is provided then this new notice will _replace_ the previous notice with that id. This is beneficial when using notices for acync states (Loading, Success, Error) */
-      let key = Uuid.make();
+      let key = Sms.Uuid.make();
       let element =
         switch (el, content) {
         | (Some(el), _) => el
@@ -636,7 +625,7 @@ let useAddNoticeAndGetId = () => {
       let id =
         switch (id_) {
         | Some(id) => id
-        | None => Uuid.make()
+        | None => Sms.Uuid.make()
         };
 
       dispatch(AddNotice(id, key, (type_, element, life)));
@@ -673,7 +662,7 @@ let useAddNotice = () => {
   React.useMemo1(
     ((), ~id, ~content=?, ~el=?, ~title=?, ~life: singleNoticeLife=?, type_) => {
       /** If an id is provided then this new notice will _replace_ the previous notice with that id. This is beneficial when using notices for acync states (Loading, Success, Error) */
-      let key = Uuid.make();
+      let key = Sms.Uuid.make();
       let element =
         switch (el, content) {
         | (Some(el), _) => el
@@ -705,7 +694,7 @@ type useManageNoticeValue = {
 };
 
 let useManageNotice = () => {
-  let noticeId = React.useMemo0(() => Uuid.make());
+  let noticeId = React.useMemo0(() => Sms.Uuid.make());
   let addNotice = useAddNotice();
   let removeNotice = useRemoveNotice();
   let notice = useNotice(noticeId);
@@ -767,7 +756,7 @@ module Component = {
   module Item = {
     [@react.component]
     let make = (~children, ~id) => {
-      let (ref, bounds) = UseMeasure.(use(params(~polyfill, ())));
+      let (ref, bounds) = Sms.UseMeasure.(use(params(~polyfill, ())));
       let setNoticeHeight = useSetNoticeHeight();
       let notice = useNotice(id);
 
