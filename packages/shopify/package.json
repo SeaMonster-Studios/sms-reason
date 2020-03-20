@@ -23,5 +23,6 @@
   "dependencies": {
     "bs-fetch": "^0.5.2",
     "decco": "^1.2.0"
-  }
+  },
+  "gitHead": "a5c60d47e73d8f32cb0e0ba5d047ccd73a88b094"
 }

@@ -1,9 +1,6 @@
 {
   "name": "@seamonster-studios/reason-mono-repo",
   "private": true,
-  "publishConfig": {
-    "access": "public"
-  },
   "workspaces": [
     "packages/*"
   ],
