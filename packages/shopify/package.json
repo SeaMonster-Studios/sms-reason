@@ -12,6 +12,9 @@
     "ReasonReact",
     "reason-react"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
   "devDependencies": {
@@ -24,5 +27,5 @@
     "bs-fetch": "^0.5.2",
     "decco": "^1.2.0"
   },
-  "gitHead": "a5c60d47e73d8f32cb0e0ba5d047ccd73a88b094"
+  "gitHead": "e003f879ef8c58f5a9daa878da05cd97bdc54990"
 }
