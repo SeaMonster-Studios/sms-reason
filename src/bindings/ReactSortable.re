@@ -16,6 +16,7 @@ module Container = {
           ~distance as _disatance: int,
           ~helperClass as _helperClass: string,
           ~onSortEnd as _onSortEnd: sortEndParams => unit,
+          ~useDragHandle as _useDragHandle: bool=false,
         ) =>
       <> children </>;
   };
@@ -36,6 +37,20 @@ module Item = {
 
   include Component;
   let make = withSortableElement(make);
+};
+
+module Handle = {
+  [@bs.module "react-sortable-hoc"]
+  external withSortableHandle: Hoc.t('a) = "sortableHandle";
+
+  module Component = {
+    [@react.component]
+    let make = (~children: React.element) =>
+      <> children </>;
+  };
+
+  include Component;
+  let make = withSortableHandle(make);
 };
 
 /**
