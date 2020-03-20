@@ -13,6 +13,7 @@ module Container = {
         (
           ~children: React.element,
           ~axis as _axis: string,
+          ~lockAxis as _lockAxis: option(string)=?,
           ~distance as _disatance: int,
           ~helperClass as _helperClass: string,
           ~onSortEnd as _onSortEnd: sortEndParams => unit,
