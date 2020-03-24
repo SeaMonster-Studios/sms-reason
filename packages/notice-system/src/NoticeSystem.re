@@ -1,28 +1,57 @@
-open Sms.Utils;
-
 type shownNoticesType =
   | All
   | Active;
 
-module Color = {
-  open Css;
+type noticeColor = {
+  text: Css.Types.Color.t,
+  accent: Css.Types.Color.t,
+  background: Css.Types.Color.t,
+};
 
-  let blue = rgb(77, 161, 255);
-  let blue2 = rgb(69, 145, 229);
-  let blueLight = rgb(241, 248, 255);
+type noticeColors = {
+  info: noticeColor,
+  success: noticeColor,
+  warning: noticeColor,
+  error: noticeColor,
+};
 
-  let white = rgb(255, 255, 255);
-  let black = rgb(0, 0, 0);
+type toggleNoticeTypeButton = {
+  background: Css.Types.Color.t,
+  text: Css.Types.Color.t,
+};
 
-  let green = rgb(166, 229, 15);
-  let green2 = rgb(147, 201, 38);
-  let greenLight = rgb(245, 255, 220);
+type palette = {
+  notices: noticeColors,
+  toggleNoticeTypeButton,
+};
 
-  let yellowLight = rgb(255, 249, 226);
-
-  let red = rgb(255, 109, 74);
-  let red2 = rgb(229, 98, 67);
-  let redLight = rgb(255, 240, 237);
+let defaultPalette = {
+  notices: {
+    info: {
+      text: Css.rgb(61, 128, 204),
+      accent: Css.rgb(77, 100, 128),
+      background: Css.rgb(152, 201, 255),
+    },
+    success: {
+      text: Css.rgb(52, 199, 125),
+      accent: Css.rgb(69, 122, 95),
+      background: Css.rgb(140, 251, 196),
+    },
+    warning: {
+      text: Css.rgb(204, 185, 61), // 255, 255, 51
+      accent: Css.rgb(128, 121, 77),
+      background: Css.rgb(255, 241, 153),
+    },
+    error: {
+      text: Css.rgb(204, 84, 57),
+      accent: Css.rgb(128, 84, 74),
+      background: Css.rgb(255, 168, 148),
+    },
+  },
+  toggleNoticeTypeButton: {
+    text: Css.rgb(255, 255, 255),
+    background: Css.rgb(61, 128, 204),
+  },
 };
 
 module Style = {
@@ -33,11 +62,12 @@ module Style = {
       boxShadow(
         Shadow.box(~x=px(2), ~y=px(2), ~blur=px(10), rgba(0, 0, 0, 0.15)),
       );
+    let white = rgb(255, 255, 255);
   };
 
-  let board =
+  let board = (p: palette) =>
     style([
-      label("bottom-right-board"),
+      label("notice--board"),
       position(`fixed),
       bottom(0->px),
       right(0->px),
@@ -45,10 +75,86 @@ module Style = {
       display(`flex),
       flexDirection(`column),
       padding(20->px),
+      selector(
+        "[class*='notice--info']",
+        [
+          borderLeftColor(p.notices.info.accent),
+          color(p.notices.info.text),
+          backgroundColor(p.notices.info.background),
+          selector(
+            "button[class*='remove-button'] path",
+            [SVG.fill(p.notices.info.text)],
+          ),
+          selector(
+            "div[class*='life-bar'] > div",
+            [backgroundColor(p.notices.info.text)],
+          ),
+        ],
+      ),
+      selector(
+        "[class*='notice--success']",
+        [
+          borderLeftColor(p.notices.success.accent),
+          color(p.notices.success.text),
+          backgroundColor(p.notices.success.background),
+          selector(
+            "button[class*='remove-button'] path",
+            [SVG.fill(p.notices.success.text)],
+          ),
+          selector(
+            "div[class*='life-bar'] > div",
+            [backgroundColor(p.notices.success.text)],
+          ),
+        ],
+      ),
+      selector(
+        "[class*='notice--warning']",
+        [
+          borderLeftColor(p.notices.warning.accent),
+          color(p.notices.warning.text),
+          backgroundColor(p.notices.warning.background),
+          selector(
+            "button[class*='remove-button'] path",
+            [SVG.fill(p.notices.warning.text)],
+          ),
+          selector(
+            "div[class*='life-bar'] > div",
+            [backgroundColor(p.notices.warning.text)],
+          ),
+        ],
+      ),
+      selector(
+        "[class*='notice--error']",
+        [
+          borderLeftColor(p.notices.error.accent),
+          color(p.notices.error.text),
+          backgroundColor(p.notices.error.background),
+          selector(
+            "button[class*='remove-button'] path",
+            [SVG.fill(p.notices.error.text)],
+          ),
+          selector(
+            "div[class*='life-bar'] > div",
+            [backgroundColor(p.notices.error.text)],
+          ),
+        ],
+      ),
+      selector(
+        "[class*='notices--type-toggle']",
+        [
+          backgroundColor(p.toggleNoticeTypeButton.background),
+          selector("button", [color(p.toggleNoticeTypeButton.text)]),
+        ],
+      ),
+      selector(
+        "[class*='notice--loader'] > div > div",
+        [background(p.notices.info.text)],
+      ),
     ]);
 
   let noticesContainer =
     style([
+      label("notices--container"),
       overflowY(`scroll),
       display(`flex),
       flexDirection(`column),
@@ -57,8 +163,8 @@ module Style = {
 
   let toggleAllNotices = visible =>
     style([
+      label("notices--type-toggle"),
       opacity(visible ? 1. : 0.),
-      backgroundColor(Color.blue2),
       Common.boxShadow,
       borderRadius(100.->pct),
       position(`absolute),
@@ -81,7 +187,6 @@ module Style = {
           background(`none),
           borderStyle(`none),
           textTransform(`uppercase),
-          color(Color.white),
           selector("&:focus", [outlineStyle(`none)]),
         ],
       ),
@@ -100,8 +205,9 @@ module Style = {
     let base =
       merge([
         style([
+          label("notices--notice"),
           width(275->px),
-          backgroundColor(Color.white),
+          backgroundColor(Common.white),
           Common.boxShadow,
           borderLeftWidth(4->px),
           borderLeftStyle(`solid),
@@ -111,77 +217,13 @@ module Style = {
         ]),
       ]);
 
-    let info =
-      merge([
-        base,
-        style([
-          borderLeftColor(Color.blue2),
-          color(Color.blue),
-          backgroundColor(Color.blueLight),
-          selector(
-            "button[class*='remove-button'] path",
-            [SVG.fill(Color.blue)],
-          ),
-          selector(
-            "div[class*='life-bar'] > div",
-            [backgroundColor(Color.blue)],
-          ),
-        ]),
-      ]);
+    let info = merge([base, style([label("notice--info")])]);
 
-    let success =
-      merge([
-        base,
-        style([
-          borderLeftColor(Color.green2),
-          color(Color.green),
-          backgroundColor(Color.greenLight),
-          selector(
-            "button[class*='remove-button'] path",
-            [SVG.fill(Color.green)],
-          ),
-          selector(
-            "div[class*='life-bar'] > div",
-            [backgroundColor(Color.green)],
-          ),
-        ]),
-      ]);
+    let success = merge([base, style([label("notice--success")])]);
 
-    let warning =
-      merge([
-        base,
-        style([
-          borderLeftColor(Color.black),
-          color(Color.black),
-          backgroundColor(Color.yellowLight),
-          selector(
-            "button[class*='remove-button'] path",
-            [SVG.fill(Color.black)],
-          ),
-          selector(
-            "div[class*='life-bar'] > div",
-            [backgroundColor(Color.black)],
-          ),
-        ]),
-      ]);
+    let warning = merge([base, style([label("notice--warning")])]);
 
-    let error =
-      merge([
-        base,
-        style([
-          borderLeftColor(Color.red2),
-          color(Color.red),
-          backgroundColor(Color.redLight),
-          selector(
-            "button[class*='remove-button'] path",
-            [SVG.fill(Color.red)],
-          ),
-          selector(
-            "div[class*='life-bar'] > div",
-            [backgroundColor(Color.red)],
-          ),
-        ]),
-      ]);
+    let error = merge([base, style([label("notice--error")])]);
 
     let lifeBarAnimation =
       keyframes([(0, [width(100.->pct)]), (100, [width(0.->pct)])]);
@@ -200,7 +242,7 @@ module Style = {
         style([
           width(100.->pct),
           marginTop(10->px),
-          label("life-bar"),
+          label("notice--life-bar"),
           selector(
             "> div",
             [
@@ -218,6 +260,7 @@ module Style = {
 
     let header =
       style([
+        label("notice--header"),
         padding3(~bottom=10->px, ~top=10->px, ~h=10->px),
         textTransform(`uppercase),
         fontWeight(`bold),
@@ -229,6 +272,7 @@ module Style = {
 
     let content =
       style([
+        label("notice--content"),
         padding3(~top=0->px, ~bottom=10->px, ~h=10->px),
         fontSize(14->px),
         lineHeight(1.25->em),
@@ -236,6 +280,7 @@ module Style = {
 
     let loaderContent =
       style([
+        label("notice--loader-content"),
         selector(
           "> div:first-of-type",
           [
@@ -254,6 +299,7 @@ module Style = {
 
     let loader =
       style([
+        label("notice--loader"),
         transforms([scale(0.5, 0.5)]),
         selector(".inner-container", [margin(0->px)]),
       ]);
@@ -262,7 +308,9 @@ module Style = {
       merge([
         hideWithAllNoticeType(shownNoticeType),
         style([
-          label("remove-button"),
+          label("notice--remove-button"),
+          position(`relative),
+          zIndex(2),
           borderStyle(`none),
           background(`none),
           marginLeft(5->px),
@@ -293,7 +341,6 @@ type notice = {
   id: string,
   key: string,
   isActive: bool,
-  height: int,
   element: React.element,
   life: int,
   type_,
@@ -301,6 +348,7 @@ type notice = {
 
 type noticeSystemState = {
   notices: array(notice),
+  noticeHeights: Belt.Map.String.t(int),
   noticeLife: int, //milliseconds
   shownNoticesType,
 };
@@ -330,7 +378,6 @@ let reducer = (state: noticeSystemState, action) =>
                 isActive: true,
                 id,
                 key,
-                height: 0,
                 life:
                   switch (singleNoticeLife) {
                   | None => state.noticeLife
@@ -338,6 +385,7 @@ let reducer = (state: noticeSystemState, action) =>
                   },
               },
             |]),
+        noticeHeights: Map.String.set(state.noticeHeights, id, 0),
       }
     | None =>
       // Create brand new notice
@@ -350,7 +398,6 @@ let reducer = (state: noticeSystemState, action) =>
               isActive: true,
               id,
               key,
-              height: 0,
               life:
                 switch (singleNoticeLife) {
                 | None => state.noticeLife
@@ -359,14 +406,20 @@ let reducer = (state: noticeSystemState, action) =>
             },
           |]);
       updated->Array.length > 20
-        ? {...state, notices: updated->Array.slice(~offset=1, ~len=20)}
-        : {...state, notices: updated};
+        ? {
+          ...state,
+          notices: updated->Array.slice(~offset=1, ~len=20),
+          noticeHeights: Map.String.set(state.noticeHeights, id, 0),
+        }
+        : {
+          ...state,
+          notices: updated,
+          noticeHeights: Map.String.set(state.noticeHeights, id, 0),
+        };
     }
   | SetNoticeHeight((id, height)) => {
       ...state,
-      notices:
-        state.notices
-        ->Array.map(notice => notice.id == id ? {...notice, height} : notice),
+      noticeHeights: Map.String.set(state.noticeHeights, id, height),
     }
   | RemoveNotice(key) => {
       ...state,
@@ -384,6 +437,7 @@ let noticeSystemStore =
     ~reducer,
     ~preloadedState={
       notices: [||],
+      noticeHeights: Map.String.empty,
       noticeLife: defaultLife,
       shownNoticesType: Active,
     },
@@ -395,6 +449,21 @@ module Store = {
     type action = noticeSystemAction;
     type state = noticeSystemState;
   });
+};
+
+let noticeHeightsSelector = state => state.noticeHeights;
+
+let useNoticeHeights = () => Store.useSelector(noticeHeightsSelector);
+
+let getNoticeHeight = (noticeHeights, id) =>
+  noticeHeights->Map.String.get(id);
+
+let useNoticeHeight = id => {
+  let noticeHeights = useNoticeHeights();
+  React.useMemo2(
+    () => noticeHeights->getNoticeHeight(id),
+    (noticeHeights, id),
+  );
 };
 
 let allNoticesSelector = state => state.notices;
@@ -560,11 +629,7 @@ module Notice = {
            <div className=Style.Notice.loaderContent>
              <div>
                <Loaders.Container className=Style.Notice.loader>
-                 <Sms.ReactSpinners.PropagateLoader
-                   size=20
-                   loading=true
-                   color="rgb(77, 161, 255)"
-                 />
+                 <Sms.ReactSpinners.PropagateLoader size=20 loading=true />
                </Loaders.Container>
              </div>
              timerNode
@@ -578,14 +643,14 @@ module Notice = {
                   <div>
                     "An unknown error has occurred, please try again later. If this continues, please contact us."
                     ->React.string
-                    <a
-                      href="/contact"
-                      rel="noopener noreferrer"
-                      target="_blank">
-                      "here"->React.string
-                    </a>
                   </div>
                 </div>
+              // <a
+              //   href="/contact"
+              //   rel="noopener noreferrer"
+              //   target="_blank">
+              //   "here"->React.string
+              // </a>
               /***TODO: Implement a way for a custom message here. Ideally we'd want a developer to be able to implement a sentry "send report" form and maybe give the user an opportunity to restart the app */
               | _ => React.null
               }}
@@ -757,17 +822,17 @@ module Component = {
     let make = (~children, ~id) => {
       let (ref, bounds) = ReactUseMeasure.(use(params(~polyfill, ())));
       let setNoticeHeight = useSetNoticeHeight();
-      let notice = useNotice(id);
+      let noticeHeight = useNoticeHeight(id);
 
       React.useEffect4(
         () => {
-          switch (notice) {
+          switch (noticeHeight) {
           | None => ()
-          | Some(notice) =>
+          | Some(currentHeight) =>
             /** We're not using this to control the animation value of the height (we control that with the useTransition)... As such we do not need to reset the height to 0... and then set it again if the notice becomes visible again. We really just want to set the height initially and then again if the content of the notice changes.  */
             (
               if (bounds.height != 0
-                  && notice.height != bounds.height
+                  && currentHeight != bounds.height
                   + noticeGap) {
                 setNoticeHeight((id, bounds.height + noticeGap));
               }
@@ -776,7 +841,7 @@ module Component = {
 
           None;
         },
-        (bounds.height, setNoticeHeight, id, notice),
+        (bounds.height, setNoticeHeight, id, noticeHeight),
       );
 
       <div ref className="notice-item"> children </div>;
@@ -791,12 +856,13 @@ module Component = {
     | Active;
 
   [@react.component]
-  let make = (~children, ~noticeLife) => {
+  let make = (~children, ~noticeLife, ~palette, ~className="") => {
     let activeNotices = useNotices();
     let allNotices = useAllNotices();
     let setNoticeLife = useSetNoticeLife();
     let showNoticeType = useShownNoticeType();
     let setShownNoticeType = useSetShownNoticeType();
+    let noticeHeights = useNoticeHeights();
 
     React.useEffect2(
       () => {
@@ -807,7 +873,7 @@ module Component = {
     );
 
     let getTransitionState =
-      React.useCallback1(
+      React.useCallback2(
         (notice: notice) =>
           {
             opacity:
@@ -821,17 +887,20 @@ module Component = {
             height:
               switch (showNoticeType, notice.isActive) {
               | (Active, true)
-              | (All, _) => notice.height
+              | (All, _) =>
+                noticeHeights
+                ->getNoticeHeight(notice.id)
+                ->Option.getWithDefault(0)
               | (Active, false) => 0
               },
           },
-        [|showNoticeType|],
+        (noticeHeights, showNoticeType),
       );
 
     let transitions =
       TransitionHook.use(
         allNotices,
-        item => item.key ++ item.height->string_of_int,
+        item => item.key,
         TransitionHook.config(
           ~from=
             _notice => {
@@ -850,7 +919,7 @@ module Component = {
 
     <>
       children
-      <div className=Style.board>
+      <div className={Css.merge([Style.board(palette), className])}>
         <div className=Style.noticesContainer>
           {transitions
            ->Array.map(({props, key, item}) => {
@@ -891,8 +960,14 @@ module Component = {
 
 module Container = {
   [@react.component]
-  let make = (~children, ~noticeLife=defaultLife) =>
+  let make =
+      (
+        ~children,
+        ~noticeLife=defaultLife,
+        ~palette=defaultPalette,
+        ~className="",
+      ) =>
     <Store.Provider store=noticeSystemStore>
-      <Component noticeLife> children </Component>
+      <Component palette className noticeLife> children </Component>
     </Store.Provider>;
 };
