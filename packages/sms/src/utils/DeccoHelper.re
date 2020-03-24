@@ -1,6 +1,12 @@
 open Belt;
 
-let encode = (x, ~tToJs) => tToJs(x) |> Decco.stringToJson;
+external t_to_string: 'a => string = "%identity";
+
+let encode = (x, ~tToJs) =>
+/** for some reason tToJs if failing with `x` is already a string */
+  Js.typeof(x) == "string"
+    ? x->t_to_string->Decco.stringToJson : x->tToJs->Decco.stringToJson;
+
 let decode = (x, ~tFromJs, ~name) =>
   Decco.stringFromJson(x)
   ->Result.map(tFromJs)
@@ -10,6 +16,7 @@ let decode = (x, ~tFromJs, ~name) =>
       | None => Decco.error("Unknown " ++ name, x)
       }
     );
+    
 let decode_array = (x, ~tFromJs, ~name) => {
   x
   |> Decco.arrayFromJson(item =>
