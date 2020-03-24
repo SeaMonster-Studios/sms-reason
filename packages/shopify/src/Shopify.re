@@ -11,6 +11,7 @@ open Belt;
         {% assign is_bundle = true %}
       {% endif %}
       window.is_bundle = window.is_bundle = {{ is_bundle | json }};
+
       window.products = []
       {% for product_handle in product.metafields.sms.bundle_products %}
         window.products = [...window.products, {{ all_products[product_handle] | json }}]
@@ -19,6 +20,7 @@ open Belt;
       window.products = [{{ product | json }}]
     * OPTIONAL VARIABLES:
       window.custom_original_price = "{{ product.metafields.sms.custom_original_price }}"
+
  */
 
 type orderType =
@@ -77,7 +79,6 @@ let blankSelectItem = {
 
 type selectedProductOptions = array(array(selectItem));
 
-[@decco]
 type cartItemSubscriptionProperties = {
   group_id: int,
   frequency_num: int,
@@ -86,17 +87,14 @@ type cartItemSubscriptionProperties = {
   _ro_discount_percentage: int,
 };
 
-[@decco]
 type cartItemSubscription = {
   id: int,
   quantity: int,
   properties: cartItemSubscriptionProperties,
 };
 
-[@decco]
 type cartItemsSubscription = {items: array(cartItemSubscription)};
 
-[@decco]
 type cartItem('a) = {
   id: int,
   quantity: int,
@@ -122,28 +120,31 @@ let dataError = "There was a problem retrieving this product's data. Please try 
 
 module Encode = {
   external cartItemsToJson: cartItems('a) => Js.Json.t = "%identity";
-  // let cartItemSubscriptionProperties = (c: cartItemSubscriptionProperties) =>
-  //   Json.Encode.(
-  //     object_([
-  //       ("group_id", c.group_id->int),
-  //       ("frequency_num", c.frequency_num->int),
-  //       ("frequency_type", c.frequency_type->int),
-  //       ("frequency_type_text", c.frequency_type_text->string),
-  //       ("_ro_discount_percentage", c._ro_discount_percentage->int),
-  //     ])
-  //   );
-  // let cartItemSubscription = (c: cartItemSubscription) =>
-  //   Json.Encode.(
-  //     object_([
-  //       ("id", c.id->int),
-  //       ("quantity", c.quantity->int),
-  //       ("properties", c.properties->cartItemSubscriptionProperties),
-  //       ("bold-ro__selector_radio_button", "2"->string),
-  //     ])
-  //   );
-  // let cartItemSubscriptions = Json.Encode.array(cartItemSubscription);
-  // let cartItemsSubscription = (c: cartItemsSubscription) =>
-  //   Json.Encode.(object_([("items", c.items->cartItemSubscriptions)]));
+
+  let cartItemSubscriptionProperties = (c: cartItemSubscriptionProperties) =>
+    Json.Encode.(
+      object_([
+        ("group_id", c.group_id->int),
+        ("frequency_num", c.frequency_num->int),
+        ("frequency_type", c.frequency_type->int),
+        ("frequency_type_text", c.frequency_type_text->string),
+        ("_ro_discount_percentage", c._ro_discount_percentage->int),
+      ])
+    );
+  let cartItemSubscription = (c: cartItemSubscription) =>
+    Json.Encode.(
+      object_([
+        ("id", c.id->int),
+        ("quantity", c.quantity->int),
+        ("properties", c.properties->cartItemSubscriptionProperties),
+        ("bold-ro__selector_radio_button", "2"->string),
+      ])
+    );
+
+  let cartItemSubscriptions = Json.Encode.array(cartItemSubscription);
+
+  let cartItemsSubscription = (c: cartItemsSubscription) =>
+    Json.Encode.(object_([("items", c.items->cartItemSubscriptions)]));
 };
 
 module Bold = {
@@ -451,13 +452,14 @@ type useSubscriptionFormValue = {
   customOriginalPriceLabel: option(string),
   handleSubscriptionFrequencyChange: selectItem => unit,
   deliveryFrequency: selectItem,
-  subscriptionDeliveryFrequencyItems: array(selectItem),
+  subscriptionDeliveryFrequencyItems: option(array(selectItem)),
   quantity: int,
   handleQuantityUpdate: int => unit,
   formSubmitStatus: fetch(string, string),
   disableSubmit: bool,
   status: fetch(unit, string),
   handleSubmit: (~redirectToCartOnSuccess: bool=?, unit) => unit,
+  hasBoldInfo: bool,
 };
 
 type state = {
@@ -466,8 +468,8 @@ type state = {
   productsWithoutOptions: array(product),
   status: fetch(unit, string),
   formSubmitStatus: fetch(string, string),
-  groupInfo: Bold.groupInfo,
-  frequency: Bold.frequency,
+  groupInfo: option(Bold.groupInfo),
+  frequency: option(Bold.frequency),
   selectedOptions: array(array(selectItem)),
   selectedOptionsErrors: array(selectError),
   price: float,
@@ -479,7 +481,7 @@ type state = {
 
 type action =
   | SetStatus(fetch(unit, string))
-  | SetBoldGroupInfo(Bold.groupInfo, Bold.frequency)
+  | SetBoldGroupInfo(option(Bold.groupInfo), option(Bold.frequency))
   | SetSelectedOptions(array(array(selectItem)))
   | SetDeliveryFrequency(selectItem)
   | SetOrderType(orderType)
@@ -504,7 +506,14 @@ let reducer = (state, action) => {
       status: Success(),
       deliveryFrequency: {
         id: "1",
-        inputLabel: "1 " ++ frequency.intervalLabel,
+        inputLabel:
+          "1 "
+          ++ (
+            switch (frequency) {
+            | None => ""
+            | Some(frequency) => frequency.intervalLabel
+            }
+          ),
         productIndex: 0,
         optionIndex: 0,
       },
@@ -590,8 +599,8 @@ module Hooks = {
             selectedOptions,
             selectedOptionsErrors,
             status: Loading,
-            groupInfo: Bold.blankGroupInfo,
-            frequency: Bold.blankFrequency,
+            groupInfo: None,
+            frequency: None,
             deliveryFrequency: blankSelectItem,
           };
         },
@@ -604,13 +613,16 @@ module Hooks = {
           |> then_(response => {
                switch (response->Bold.getFrequency) {
                | Some(frequency) =>
-                 dispatch(SetBoldGroupInfo(response, frequency))
+                 dispatch(
+                   SetBoldGroupInfo(Some(response), Some(frequency)),
+                 )
                | None => dispatch(SetStatus(Failure(dataError)))
                };
                resolve();
              })
           |> catch(error => {
-               dispatch(SetStatus(Failure(dataError)));
+               /** No bold group info for product, no problme */
+               dispatch(SetBoldGroupInfo(None, None));
                Js.log(error);
                resolve();
              })
@@ -630,11 +642,23 @@ module Hooks = {
           switch (state.orderType) {
           | Subscription =>
             let properties = {
-              group_id: state.groupInfo.group_id,
+              group_id:
+                state.groupInfo
+                ->Option.map(info => info.group_id)
+                ->Option.getWithDefault(0),
               frequency_num: state.deliveryFrequency.id->int_of_string,
-              frequency_type: state.frequency.intervalId,
-              frequency_type_text: state.frequency.intervalLabel ++ "(s)",
-              _ro_discount_percentage: state.groupInfo.group_discount,
+              frequency_type:
+                state.frequency
+                ->Option.map(freq => freq.intervalId)
+                ->Option.getWithDefault(0),
+              frequency_type_text:
+                state.frequency
+                ->Option.map(freq => freq.intervalLabel)
+                ->Option.getWithDefault(""),
+              _ro_discount_percentage:
+                state.groupInfo
+                ->Option.map(info => info.group_discount)
+                ->Option.getWithDefault(0),
             };
             let items =
               state.productsWithOptions
@@ -685,7 +709,7 @@ module Hooks = {
                   ~body=
                     Fetch.BodyInit.make(
                       Js.Json.stringify(
-                        {items: items}->cartItemsSubscription_encode,
+                        {items: items}->Encode.cartItemsSubscription,
                       ),
                     ),
                   ~headers=
@@ -816,15 +840,25 @@ module Hooks = {
         | None => None
         },
       isSubscription: state.orderType == Subscription,
+      hasBoldInfo:
+        state.frequency->Option.isSome && state.groupInfo->Option.isSome,
       setIsSubscription: () => dispatch(SetOrderType(Subscription)),
       setIsNotSubscription: () => dispatch(SetOrderType(SingleOrder)),
       subscriptionPriceLabel:
         state.price
-        ->Utils.getDiscountedPrice(state.groupInfo.discount_percentage)
+        ->Utils.getDiscountedPrice(
+            state.groupInfo
+            ->Option.map(info => info.discount_percentage)
+            ->Option.getWithDefault(0.),
+          )
         ->Utils.getPriceLabel,
       subscriptionComparePriceLabel:
         state.comparePrice
-        ->Utils.getDiscountedPrice(state.groupInfo.discount_percentage)
+        ->Utils.getDiscountedPrice(
+            state.groupInfo
+            ->Option.map(info => info.discount_percentage)
+            ->Option.getWithDefault(0.),
+          )
         ->Utils.getPriceLabel,
       priceLabel:
         (state.price *. state.quantity->float_of_int)->Utils.getPriceLabel,
@@ -837,7 +871,9 @@ module Hooks = {
         dispatch(SetDeliveryFrequency(value)),
       deliveryFrequency: state.deliveryFrequency,
       subscriptionDeliveryFrequencyItems:
-        state.frequency->Utils.getFrequencySelectOptions,
+        state.frequency
+        ->Option.map(freq => Some(freq->Utils.getFrequencySelectOptions))
+        ->Option.getWithDefault(None),
       quantity: state.quantity,
       handleQuantityUpdate: quantity => dispatch(SetQuantity(quantity)),
       formSubmitStatus: state.formSubmitStatus,
