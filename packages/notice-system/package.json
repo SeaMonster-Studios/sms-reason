@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/notice-system",
-  "version": "0.6.12",
+  "version": "0.7.0",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
@@ -19,9 +19,9 @@
   "license": "MIT",
   "dependencies": {
     "@juggle/resize-observer": "^3.1.1",
-    "@seamonster-studios/react-use-countdown": "^0.6.9",
-    "@seamonster-studios/react-use-measure": "^0.6.9",
-    "@seamonster-studios/reason": "^0.6.11",
+    "@seamonster-studios/react-use-countdown": "^0.7.0",
+    "@seamonster-studios/react-use-measure": "^0.7.0",
+    "@seamonster-studios/reason": "^0.7.0",
     "bs-css-emotion": "^1.0.1",
     "bs-react-spring": "^0.4.0",
     "react-use-measure": "^2.0.0",

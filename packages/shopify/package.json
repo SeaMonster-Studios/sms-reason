@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/shopify-react",
-  "version": "0.6.11",
+  "version": "0.7.0",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
