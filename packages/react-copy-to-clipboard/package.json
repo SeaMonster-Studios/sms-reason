@@ -1,0 +1,31 @@
+{
+  "name": "@seamonster-studios/react-copy-to-clipboard",
+  "version": "0.6.8",
+  "private": false,
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w -ws _ ",
+    "clean": "bsb -clean-world"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "BuckleScript",
+    "ReasonReact",
+    "reason-react"
+  ],
+  "author": "Engineering Team @ SeaMonster Studios",
+  "license": "MIT",
+  "devDependencies": {
+    "bs-platform": "^7.0.1",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "reason-react": ">=0.7.0"
+  },
+  "gitHead": "e003f879ef8c58f5a9daa878da05cd97bdc54990",
+  "dependencies": {
+    "bs-css": "^12.1.0",
+    "react-copy-to-clipboard": "^5.0.2"
+  }
+}
