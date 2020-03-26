@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/react-error-boundary",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",

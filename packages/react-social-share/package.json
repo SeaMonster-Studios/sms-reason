@@ -1,6 +1,6 @@
 {
   "name": "@semonster-studios/react-social-share",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
