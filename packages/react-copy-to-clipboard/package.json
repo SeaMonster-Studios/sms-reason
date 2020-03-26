@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/react-copy-to-clipboard",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
@@ -18,7 +18,7 @@
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
   "devDependencies": {
-    "@seamonster-studios/reason": "^0.7.2",
+    "@seamonster-studios/reason": "^0.7.3",
     "bs-platform": "^7.0.1",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
