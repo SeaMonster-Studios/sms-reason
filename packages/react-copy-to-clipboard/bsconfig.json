@@ -8,7 +8,10 @@
     "dir": "src",
     "subdirs": true
   },
-  "bsc-flags": ["-bs-super-errors", "-bs-no-version-header"],
+  "bsc-flags": [
+    "-bs-super-errors",
+    "-bs-no-version-header"
+  ],
   "package-specs": [
     {
       "module": "commonjs",
@@ -16,6 +19,11 @@
     }
   ],
   "suffix": ".bs.js",
-  "bs-dependencies": ["reason-react", "bs-css", "bs-css-emotion"],
+  "bs-dependencies": [
+    "reason-react",
+    "bs-css",
+    "bs-css-emotion",
+    "@seamonster-studios/reason"
+  ],
   "refmt": 3
 }

@@ -51,13 +51,6 @@ module IconCopy = {
     </svg>;
 };
 
-module CopyToClipboard = {
-  [@react.component] [@bs.module "react-copy-to-clipboard"]
-  external make:
-    (~text: string, ~onCopy: unit => unit, ~children: React.element) =>
-    React.element =
-    "default";
-};
 [@react.component]
 let make = (~text, ~className="", ~actionClassName="", ~icon={<IconCopy />}) => {
   let (copied, setCopied) = React.useState(() => false);
@@ -75,7 +68,7 @@ let make = (~text, ~className="", ~actionClassName="", ~icon={<IconCopy />}) => 
     },
     (copied, setCopied),
   );
-  <CopyToClipboard text onCopy={() => setCopied(_ => true)}>
+  <Sms.ReactCopyToClipboard text onCopy={() => setCopied(_ => true)}>
     <div className={Css.merge([Style.content, className])}>
       <span> text->React.string </span>
       <span className={Css.merge([Style.action, actionClassName])}>
@@ -83,5 +76,5 @@ let make = (~text, ~className="", ~actionClassName="", ~icon={<IconCopy />}) => 
            ? "copied!"->React.string : <> icon "copy"->React.string </>}
       </span>
     </div>
-  </CopyToClipboard>;
+  </Sms.ReactCopyToClipboard>;
 };

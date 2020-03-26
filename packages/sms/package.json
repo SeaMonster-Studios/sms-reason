@@ -37,9 +37,11 @@
     "nanoid": "^2.1.11",
     "papaparse": "^5.1.1",
     "randomcolor": "^0.5.4",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-json-view": "^1.19.1",
     "react-map-gl": "^5.2.3",
     "react-query": "^1.0.27",
+    "react-share": "^4.1.0",
     "react-sortable-hoc": "^1.11.0",
     "react-spinners": "^0.8.1",
     "react-window": "^1.8.5",
@@ -55,5 +57,5 @@
     "react-dom": "^16.8.1",
     "reason-react": ">=0.7.0"
   },
-  "gitHead": "bd4c74b0f527f862aea25444a6ba0ac1923af2ee"
+  "gitHead": "aaca625de97334393426e7759dec0ab7d6ca0e7e"
 }
