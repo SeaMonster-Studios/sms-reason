@@ -1,3 +1,5 @@
+open Belt;
+
 [@bs.module "react"]
 external useMemo8:
   ([@bs.uncurry] (unit => 'any), ('a, 'b, 'c, 'd, 'e, 'f, 'g, 'h)) => 'any =
@@ -156,4 +158,23 @@ let useRenderError = () => {
     },
     (error, setError),
   );
+};
+
+external nullElement: Js.Nullable.t('a) => Dom.element = "%identity";
+
+let useIdRef = id => {
+  let el =
+    Document.getElementById(id)
+    ->Option.getWithDefault(Js.Nullable.null->nullElement);
+  let ref_ = React.useRef(el);
+
+  React.useEffect2(
+    () => {
+      React.Ref.(ref_->setCurrent(el));
+      None;
+    },
+    (ref_, el),
+  );
+
+  ref_;
 };

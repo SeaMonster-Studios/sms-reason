@@ -44,6 +44,7 @@
     "react-share": "^4.1.0",
     "react-sortable-hoc": "^1.11.0",
     "react-spinners": "^0.8.1",
+    "react-use-media-query-hook": "^0.0.1",
     "react-window": "^1.8.5",
     "url-validator": "^2.0.3",
     "usa-states": "^0.0.5",
