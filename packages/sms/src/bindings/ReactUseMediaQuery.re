@@ -1,2 +1,2 @@
-[@bs.module "react-use-media-query-hook"]
-external useHook: string => bool = "default";
+[@bs.module]
+external useMediaQuery: string => bool = "react-use-media-query-hook";
