@@ -5603,12 +5603,12 @@ ms@^2.0.0, ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-msal@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/msal/-/msal-1.2.2.tgz#914b229df6d2c83c69d46a681aa95be7adf361b6"
-  integrity sha512-HVQnomsTF2r8wV28M3W57I2Kcv28KQu9qnLGPzllxqw3VlC/74DVxHLconHTj1/S3Gn/9j1yaA2uEmIlre05qQ==
+msal@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/msal/-/msal-0.2.4.tgz#34ac608ebce0415da20ce946297e876ebebebd63"
+  integrity sha512-/DPtEBL8M4gwSjEYZy4ep+j1ZaawA9XEKJi4nPxmQLT85rLNZLARrxhIRwzwXtkPNewoB+zdoNKzETW8ZrTOFQ==
   dependencies:
-    tslib "^1.9.3"
+    tslib "1.7.1"
 
 multimatch@^3.0.0:
   version "3.0.0"
@@ -7784,7 +7784,12 @@ trim-off-newlines@^1.0.0:
   resolved "https://registry.yarnpkg.com/trim-off-newlines/-/trim-off-newlines-1.0.1.tgz#9f9ba9d9efa8764c387698bcbfeb2c848f11adb3"
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
 
-tslib@^1.10.0, tslib@^1.9.0, tslib@^1.9.3:
+tslib@1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.7.1.tgz#bc8004164691923a79fe8378bbeb3da2017538ec"
+  integrity sha1-vIAEFkaRkjp5/oN4u+s9ogF1OOw=
+
+tslib@^1.10.0, tslib@^1.9.0:
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
   integrity sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==
