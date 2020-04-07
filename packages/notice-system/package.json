@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/notice-system",
-  "version": "0.7.9",
+  "version": "0.7.10",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
@@ -20,7 +20,7 @@
   "dependencies": {
     "@juggle/resize-observer": "^3.1.1",
     "@seamonster-studios/react-use-countdown": "^0.7.2",
-    "@seamonster-studios/react-use-measure": "^0.7.2",
+    "@seamonster-studios/react-use-measure": "^0.7.10",
     "@seamonster-studios/reason": "^0.7.9",
     "bs-css-emotion": "^1.0.1",
     "bs-react-spring": "^0.4.0",
