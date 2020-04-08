@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/isometric-grid",
-  "version": "0.7.12",
+  "version": "0.7.13",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
@@ -20,7 +20,7 @@
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
   "dependencies": {
-    "@seamonster-studios/reason": "^0.7.12",
+    "@seamonster-studios/reason": "^0.7.13",
     "bs-css": "^12.1.0",
     "bs-css-emotion": "^1.1.0",
     "bs-react-spring": "^0.4.0"
