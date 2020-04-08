@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/react-use-countdown",
-  "version": "0.7.2",
+  "version": "0.7.11",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",

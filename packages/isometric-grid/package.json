@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/isometric-grid",
-  "version": "0.1.0",
+  "version": "0.7.11",
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w -ws _ ",
@@ -16,17 +16,17 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@seamonster-studios/reason": "^0.7.9",
+    "@seamonster-studios/reason": "^0.7.11",
     "bs-css": "^12.1.0",
     "bs-css-emotion": "^1.1.0",
     "bs-react-spring": "^0.4.0"
   },
   "devDependencies": {
+    "bs-platform": "^7.2.2",
+    "moduleserve": "^0.9.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
-    "reason-react": ">=0.7.0",
-    "bs-platform": "^7.2.2",
-    "moduleserve": "^0.9.0"
+    "reason-react": ">=0.7.0"
   },
   "peerDependencies": {
     "@seamonster-studios/react-use-measure": "^0.7.10"
