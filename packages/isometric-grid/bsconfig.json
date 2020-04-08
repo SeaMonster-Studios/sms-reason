@@ -1,5 +1,6 @@
 {
   "name": "@seamonster-studios/isometric-grid",
+  "namespace": false,
   "reason": {
     "react-jsx": 3
   },
@@ -13,7 +14,6 @@
     "in-source": true
   }],
   "suffix": ".bs.js",
-  "namespace": false,
   "bs-dependencies": [
     "reason-react",
     "bs-react-spring",
