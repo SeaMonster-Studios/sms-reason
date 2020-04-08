@@ -201,7 +201,6 @@ let make = (~columns=3, ~items as itemsProp, ~render, ~filter) => {
                label("grid-container"),
                position(`relative),
                flexGrow(1.0),
-               outline(1->px, `solid, black),
                overflow(`hidden),
              ]
              ->style
