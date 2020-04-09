@@ -96,6 +96,7 @@ module Box = {
           height(theWidth->px),
           position(`absolute),
           padding(thePadding->px),
+          pointerEvents(show ? `auto : none),
           zIndex(show ? 2 : 1),
         ]
         ->style

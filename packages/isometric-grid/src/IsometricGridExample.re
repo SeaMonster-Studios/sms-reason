@@ -15,6 +15,7 @@ module GridItem = {
           width(100.0->pct),
           height(100.0->pct),
           position(`relative),
+          cursor(`pointer),
           overflow(`hidden),
           selector(
             "&:hover .item__bg-image",
