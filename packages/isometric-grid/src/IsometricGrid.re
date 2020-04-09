@@ -54,6 +54,7 @@ module Box = {
         ~row as theRow,
         ~col as theCol,
         ~show,
+        ~padding as thePadding,
         ~children=?,
       ) => {
     let theTop = React.useMemo2(() => theRow * theWidth, (theRow, theWidth));
@@ -94,7 +95,7 @@ module Box = {
           width(theWidth->px),
           height(theWidth->px),
           position(`absolute),
-          padding(5->px),
+          padding(thePadding->px),
           zIndex(show ? 2 : 1),
         ]
         ->style
@@ -115,7 +116,7 @@ module HeightSpring = {
 
 module RunningView = {
   [@react.component]
-  let make = (~items, ~itemWidth, ~itemHeight, ~columns, ~render) => {
+  let make = (~items, ~itemWidth, ~itemHeight, ~columns, ~render, ~padding) => {
     let filteredItems =
       React.useMemo1(
         () => items->Array.keep(((_, show)) => show),
@@ -169,7 +170,7 @@ module RunningView = {
              };
 
            <Box
-             key={i->string_of_int} width=itemWidth row=rowNum col=colNum show>
+             key={i->string_of_int} width=itemWidth row=rowNum col=colNum show padding>
              {render(n)}
            </Box>;
          })
@@ -247,7 +248,7 @@ let reducer = (status, action) => {
 };
 
 [@react.component]
-let make = (~columns=3, ~items as itemsProp, ~render, ~filter) => {
+let make = (~columns=3, ~items as itemsProp, ~render, ~filter, ~padding=0) => {
   let (ref, {ReactUseMeasure.width: containerWidth}) =
     ReactUseMeasure.(use(params(~polyfill, ())));
 
@@ -293,7 +294,7 @@ let make = (~columns=3, ~items as itemsProp, ~render, ~filter) => {
       {switch (status) {
        | Loading => React.null
        | Running({items, itemHeight, itemWidth}) =>
-         <RunningView items itemHeight itemWidth columns render />
+         <RunningView items itemHeight itemWidth columns render padding/>
        }}
     </div>
   </div>;

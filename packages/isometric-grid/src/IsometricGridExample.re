@@ -77,6 +77,6 @@ let make = () => {
       <button onClick={_ => setFilterBy1(b => !b)}> "filter"->str </button>
       <button onClick={_ => setFilterBy2(b => !b)}> "filter2"->str </button>
     </div>
-    <IsometricGrid columns=3 items render filter />
+    <IsometricGrid columns=3 items render filter padding=10/>
   </div>;
 };

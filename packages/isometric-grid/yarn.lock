@@ -16,10 +16,10 @@
   dependencies:
     "@babel/types" "^7.8.3"
 
-"@babel/helper-validator-identifier@^7.9.0":
-  version "7.9.0"
-  resolved "https://registry.yarnpkg.com/@babel/helper-validator-identifier/-/helper-validator-identifier-7.9.0.tgz#ad53562a7fc29b3b9a91bbf7d10397fd146346ed"
-  integrity sha512-6G8bQKjOh+of4PV/ThDm/rRqlU7+IGoJuofpagU5GlEl29Vv0RGqqt86ZGRV8ZuSOY3o+8yXl5y782SMcG7SHw==
+"@babel/helper-validator-identifier@^7.9.0", "@babel/helper-validator-identifier@^7.9.5":
+  version "7.9.5"
+  resolved "https://registry.yarnpkg.com/@babel/helper-validator-identifier/-/helper-validator-identifier-7.9.5.tgz#90977a8e6fbf6b431a7dc31752eee233bf052d80"
+  integrity sha512-/8arLKUFq882w4tWGj9JYzRpAlZgiWUJ+dtteNTDqrRBz9Iguck9Rn3ykuBDoUwh2TO4tSAJlrxDUOXWklJe4g==
 
 "@babel/highlight@^7.8.3":
   version "7.9.0"
@@ -38,11 +38,11 @@
     regenerator-runtime "^0.13.4"
 
 "@babel/types@^7.8.3":
-  version "7.9.0"
-  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.9.0.tgz#00b064c3df83ad32b2dbf5ff07312b15c7f1efb5"
-  integrity sha512-BS9JKfXkzzJl8RluW4JGknzpiUV7ZrvTayM6yfqLTVBEnFtyowVIOu6rqxRd5cVO6yGoWf4T8u8dgK9oB+GCng==
+  version "7.9.5"
+  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.9.5.tgz#89231f82915a8a566a703b3b20133f73da6b9444"
+  integrity sha512-XjnvNqenk818r5zMaba+sLQjnbda31UfUURv3ei0qPQw4u+j2jMyJ5b11y8ZHYTRSI3NnInQkkkRT4fLqqPdHg==
   dependencies:
-    "@babel/helper-validator-identifier" "^7.9.0"
+    "@babel/helper-validator-identifier" "^7.9.5"
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
@@ -485,17 +485,17 @@
   integrity sha512-Fx6atDc7JM1r0WkPCDhNetVZNp+DO21q/HGlomAKBG+k8vb1B8fg8Yige4oCf1P9OWTZWm5tM5i3jlXhrSbNOg==
 
 "@seamonster-studios/react-use-measure@^0.7.10":
-  version "0.7.10"
-  resolved "https://registry.yarnpkg.com/@seamonster-studios/react-use-measure/-/react-use-measure-0.7.10.tgz#fc989827fcaa763c9fab3d309c83bc019cd13d06"
-  integrity sha512-2164lyEG7kU/JyLVS0jNAR6DWseYHQ6g+ntKdHCstJO4ZGkcSrZ2FMdoWHPmQZQw0d7Hwf4YKTtzCi47VJJbtg==
+  version "0.7.13"
+  resolved "https://registry.yarnpkg.com/@seamonster-studios/react-use-measure/-/react-use-measure-0.7.13.tgz#b9e1904f083b81010a286aee1689f36a551347ea"
+  integrity sha512-TKbAaAA0ZUys6OSkTOHons5N6lYyRLPrJKgOZL+7D6f3tW+LPj2mVeTQdl8wrAzxsZWWGaYxa+c3uIjvwx0WiA==
   dependencies:
     "@juggle/resize-observer" "^3.1.1"
     react-use-measure "^2.0.0"
 
-"@seamonster-studios/reason@^0.7.9":
-  version "0.7.9"
-  resolved "https://registry.yarnpkg.com/@seamonster-studios/reason/-/reason-0.7.9.tgz#00f821edc5b426e55b1b9a4ca18efc4e0cfce163"
-  integrity sha512-+m578be4WSuXs7ZcuTZB2kOVJXwssKK1n+JQXNlGprfds7NJ08j+yjSB/fcv2j/G2ZcO1WRx0iVjQjEFPA6HPQ==
+"@seamonster-studios/reason@^0.7.13":
+  version "0.7.13"
+  resolved "https://registry.yarnpkg.com/@seamonster-studios/reason/-/reason-0.7.13.tgz#f6712932c3083fc3a01b4a038d7de7d5b4273ad5"
+  integrity sha512-cw3mFPbaYfjozLLJuHrumP+OHL+EnZxLLbgljB/8tHPWfSv9pWbs2cqcnDywXlU9RqQDtvAhTVIuTFUSqYT9dw==
   dependencies:
     "@boldcommerce/bold-subscriptions-js" "^1.2.6"
     bs-css-emotion "^1.0.1"
@@ -613,9 +613,9 @@ bs-platform@^7.2.2:
   integrity sha512-PWcFfN+jCTtT/rMaHDhKh+W9RUTpaRunmSF9vbLYcrJbpgCNW6aFKAY33u0P3mLxwuhshN3b4FxqGUBPj6exZQ==
 
 bs-react-spring@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/bs-react-spring/-/bs-react-spring-0.4.0.tgz#78db62b903ef5ed22862a224c80b22dfd6692c17"
-  integrity sha512-zJpI/dmvmv9YISVUxcUM3oy1i4yYU/CIbesF+gaEG2e3319f551bpydn1zaBcceGWr7sWTPx/Vb15c+FoUCelA==
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/bs-react-spring/-/bs-react-spring-0.4.1.tgz#f976d4226e475b9a1c156f8369155489258f51d2"
+  integrity sha512-vR6yM2FlYnX5PZ2Z7g8m4Gcv5cLYwW8rA14OGaph2BCU85oD7YiaBF+T7RqpovnuOJsuRA10YigbZxde9kg3Ew==
   dependencies:
     react-spring "^8.0.27"
     react-with-gesture "^4.0.8"
@@ -812,9 +812,9 @@ destroy@~1.0.4:
   integrity sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
 
 downshift@^5.0.5:
-  version "5.0.5"
-  resolved "https://registry.yarnpkg.com/downshift/-/downshift-5.0.5.tgz#1cc90dc09ae62998ce28a4ce457e0f1cdd0bfcfa"
-  integrity sha512-V1idov3Rkvz1YWA1K67aIx51EgokIDvep4x6KmU7HhsayI8DvTEZBeH4O92zeFVGximKujRO7ChBzBAf4PKWFA==
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/downshift/-/downshift-5.0.6.tgz#5045a620dbf4c0e2243b8e47ef95205374327dc6"
+  integrity sha512-N2BVC5MmDgsF40/WIQuPNmN/tICEn/Y7f18wf2jdtu4uAkbCZ5i7uMAIrPZYI4dWbRtzia9Od+xsk37EW+7t9w==
   dependencies:
     "@babel/runtime" "^7.4.5"
     compute-scroll-into-view "^1.0.9"
@@ -1445,9 +1445,9 @@ react-map-gl@^5.2.3:
     viewport-mercator-project "^6.2.3 || ^7.0.1"
 
 react-query@^1.0.27:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/react-query/-/react-query-1.2.0.tgz#a4216dcd1e71f4bf73a07beb3c7f029c2b8cb27a"
-  integrity sha512-BtMfJqRTFY1D4T6FvTp8JD+xNjA7tsCpxUhz9JihfJ7zsbRywD7hf1ypSuCO38Ifdo1pe4ID4Bw9HWl/wvc2Ng==
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-1.2.1.tgz#dfc9cc4afe3253b8df9f76d466fad5f50d06a535"
+  integrity sha512-2x1D1U1FOfLqlgTxpPCWyVkVE85eqskOabSasjRODDoyKS0TXCF6kQyq3P1/0TkFEUwTQIjV9hDz2MDaAJVqMw==
   dependencies:
     "@scarf/scarf" "^0.1.3"
 
