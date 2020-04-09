@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/isometric-grid",
-  "version": "0.7.15",
+  "version": "0.7.16",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
