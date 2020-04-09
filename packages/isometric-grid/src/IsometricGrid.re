@@ -150,7 +150,6 @@ module RunningView = {
           label("grid-container"),
           position(`relative),
           flexGrow(1.0),
-          overflow(`hidden),
         ]
         ->style
       )
