@@ -49,7 +49,13 @@ module Box = {
 
   [@react.component]
   let make =
-      (~width as theWidth, ~row as theRow, ~col as theCol, ~show, ~children=?) => {
+      (
+        ~width as theWidth,
+        ~row as theRow,
+        ~col as theCol,
+        ~show,
+        ~children=?,
+      ) => {
     let theTop = React.useMemo2(() => theRow * theWidth, (theRow, theWidth));
     let theLeft =
       React.useMemo2(() => theCol * theWidth, (theCol, theWidth));
@@ -107,74 +113,22 @@ module HeightSpring = {
   let interpolate = interpolate(_, height => {height->string_of_int ++ "px"});
 };
 
-let initItemsState = items => {
-  items->Array.map(item => (item, true));
-};
-
-type status =
-  | Measuring
-  | Measured({
-      containerWidth: int,
-      itemWidth: int,
-      itemHeight: int,
-    });
-
-[@react.component]
-let make = (~columns=3, ~items as itemsProp, ~render, ~filter) => {
-  let (ref, {ReactUseMeasure.width: containerWidth}) =
-    ReactUseMeasure.(use(params(~polyfill, ())));
-
-  let (status, setStatus) = React.useState(() => Measuring);
-  let (items, setItems) = React.useState(() => itemsProp->initItemsState);
-
-  React.useEffect2(
-    () => {
-      setItems(_ => itemsProp->initItemsState);
-      None;
-    },
-    (itemsProp, setItems),
-  );
-
-  React.useEffect2(
-    () => {
-      setItems(items => items->Array.map(((x, _)) => (x, filter(x))));
-      None;
-    },
-    (filter, setItems),
-  );
-
-  let (terpValues, setTerpValues) =
-    HeightSpring.use(
-      ~config=Spring.config(~mass=1.0, ~tension=110., ~friction=20.),
-      0,
-    );
-
-  React.useEffect2(
-    () => {
-      setStatus(
-        fun
-        | Measured(_)
-        | Measuring when containerWidth > 0 => {
-            let width = containerWidth / columns;
-            Measured({containerWidth, itemWidth: width, itemHeight: width});
-          }
-        | status => status,
+module RunningView = {
+  [@react.component]
+  let make = (~items, ~itemWidth, ~itemHeight, ~columns, ~render) => {
+    let filteredItems =
+      React.useMemo1(
+        () => items->Array.keep(((_, show)) => show),
+        [|items|],
       );
-      None;
-    },
-    (containerWidth, setStatus),
-  );
 
-  let filteredItems =
-    React.useMemo1(
-      () => items->Array.keep(((_, show)) => show),
-      [|items|],
-    );
-
-  React.useEffect3(
-    () => {
-      switch (status) {
-      | Measured({itemHeight}) =>
+    let (heightSpring, setHeightSpring) =
+      HeightSpring.use(
+        ~config=Spring.config(~mass=1.0, ~tension=110., ~friction=20.),
+        0,
+      );
+    React.useEffect2(
+      () => {
         let filteredRows =
           (
             filteredItems->Array.length->Float.fromInt /. columns->Float.fromInt
@@ -182,54 +136,164 @@ let make = (~columns=3, ~items as itemsProp, ~render, ~filter) => {
           ->ceil
           ->Float.toInt;
         let height = filteredRows * itemHeight;
-        setTerpValues(height);
-      | _ => ()
-      };
+        setHeightSpring(height);
+
+        None;
+      },
+      (setHeightSpring, filteredItems),
+    );
+
+    <Spring.Div
+      className=Css.(
+        [
+          label("grid-container"),
+          position(`relative),
+          flexGrow(1.0),
+          overflow(`hidden),
+        ]
+        ->style
+      )
+      style={ReactDOMRe.Style.make(
+        ~height=heightSpring->HeightSpring.interpolate,
+        (),
+      )}>
+      {items
+       ->Array.mapWithIndex((i, (n, show) as tuple) => {
+           let (rowNum, colNum) =
+             switch (filteredItems->Array.getIndexBy(x => x == tuple)) {
+             | None => (i / columns, i mod columns)
+             | Some(iFiltered) => (
+                 iFiltered / columns,
+                 iFiltered mod columns,
+               )
+             };
+
+           <Box
+             key={i->string_of_int} width=itemWidth row=rowNum col=colNum show>
+             {render(n)}
+           </Box>;
+         })
+       ->React.array}
+    </Spring.Div>;
+  };
+};
+
+let initItemsState = items => {
+  items->Array.map(item => (item, true));
+};
+
+let applyFilter = (items, filter) =>
+  items->Array.map(((x, _)) => (x, filter(x)));
+
+type show = bool;
+type filter('item) = 'item => show;
+
+type runConfig('item) = {
+  items: array('item),
+  containerWidth: int,
+  columns: int,
+  filter: filter('item),
+};
+
+type action('item) =
+  | Run(runConfig('item))
+  | SetItems(array('item))
+  | SetFilter(filter('item))
+  | ChangeLayout({
+      containerWidth: int,
+      columns: int,
+    });
+
+type status('item) =
+  | Loading
+  | Running({
+      items: array(('item, show)),
+      itemWidth: int,
+      itemHeight: int,
+      columns: int,
+    });
+
+let calcContainerHeight = (items, columns, itemHeight) => {
+  let filteredItems = items->Array.keep(((_, show)) => show);
+  let numRows =
+    {
+      filteredItems->Array.length->Float.fromInt /. columns->Float.fromInt;
+    }
+    ->ceil
+    ->Float.toInt;
+  numRows * itemHeight;
+};
+
+let reducer = (status, action) => {
+  switch (status, action) {
+  | (Loading, Run(runConfig)) =>
+    let {items, filter, containerWidth, columns} = runConfig;
+    let width = containerWidth / columns;
+    let items = items->initItemsState->applyFilter(filter);
+    Running({items, itemWidth: width, itemHeight: width, columns});
+
+  | (Running(state), SetItems(items)) =>
+    Running({...state, items: items->initItemsState})
+
+  | (Running(state), SetFilter(filter)) =>
+    Running({...state, items: state.items->applyFilter(filter)})
+
+  | (Running(state), ChangeLayout({containerWidth, columns})) =>
+    let width = containerWidth / state.columns;
+    Running({...state, columns, itemWidth: width, itemHeight: width});
+
+  | _ => status
+  };
+};
+
+[@react.component]
+let make = (~columns=3, ~items as itemsProp, ~render, ~filter) => {
+  let (ref, {ReactUseMeasure.width: containerWidth}) =
+    ReactUseMeasure.(use(params(~polyfill, ())));
+
+  let (status, dispatch) = React.useReducer(reducer, Loading);
+
+  React.useEffect2(
+    () => {
+      dispatch(SetItems(itemsProp));
       None;
     },
-    (setTerpValues, filteredItems, status),
+    (itemsProp, dispatch),
+  );
+
+  React.useEffect2(
+    () => {
+      dispatch(SetFilter(filter));
+      None;
+    },
+    (filter, dispatch),
+  );
+
+  React.useEffect3(
+    () => {
+      containerWidth == 0
+        ? ()
+        : (
+          switch (status) {
+          | Loading =>
+            dispatch(
+              Run({items: itemsProp, containerWidth, filter, columns}),
+            )
+
+          | Running(_) => dispatch(ChangeLayout({containerWidth, columns}))
+          }
+        );
+      None;
+    },
+    (containerWidth, columns, dispatch),
   );
 
   <div className=Css.([width(100.0->pct)]->style)>
     <div ref className=Css.([display(`flex)]->style)>
       {switch (status) {
-       | Measuring => React.null
-       | Measured({itemWidth}) =>
-         <Spring.Div
-           className=Css.(
-             [
-               label("grid-container"),
-               position(`relative),
-               flexGrow(1.0),
-               overflow(`hidden),
-             ]
-             ->style
-           )
-           style={ReactDOMRe.Style.make(
-             ~height=terpValues->HeightSpring.interpolate,
-             (),
-           )}>
-           {items
-            ->Array.mapWithIndex((i, (n, show) as tuple) => {
-                let (rowNum, colNum) =
-                  switch (filteredItems->Array.getIndexBy(x => x == tuple)) {
-                  | None => (i / columns, i mod columns)
-                  | Some(iFiltered) => (
-                      iFiltered / columns,
-                      iFiltered mod columns,
-                    )
-                  };
-                <Box
-                  key={i->string_of_int}
-                  width=itemWidth
-                  row=rowNum
-                  col=colNum
-                  show>
-                  {render(n)}
-                </Box>;
-              })
-            ->React.array}
-         </Spring.Div>
+       | Loading => React.null
+       | Running({items, itemHeight, itemWidth}) =>
+         <RunningView items itemHeight itemWidth columns render />
        }}
     </div>
   </div>;
