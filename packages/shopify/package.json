@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/shopify-react",
-  "version": "0.7.2",
+  "version": "0.7.13",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
@@ -27,5 +27,5 @@
     "bs-fetch": "^0.5.2",
     "decco": "^1.2.0"
   },
-  "gitHead": "aaca625de97334393426e7759dec0ab7d6ca0e7e"
+  "gitHead": "442fcf71845e384ccdd5ca0e92a3a17ff17461f2"
 }

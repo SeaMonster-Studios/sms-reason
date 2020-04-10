@@ -1,11 +1,13 @@
 {
-  "name": "@seamonster-studios/notice-system",
-  "version": "0.7.13",
+  "name": "@seamonster-studios/isometric-grid",
+  "version": "0.7.16",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w -ws _ ",
-    "clean": "bsb -clean-world"
+    "clean": "bsb -clean-world",
+    "server": "moduleserve ./ --port 8000",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "BuckleScript",
@@ -18,22 +20,21 @@
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
   "dependencies": {
-    "@juggle/resize-observer": "^3.1.1",
-    "@seamonster-studios/react-use-countdown": "^0.7.13",
-    "@seamonster-studios/react-use-measure": "^0.7.13",
+    "@seamonster-studios/react-use-measure": "^0.7.10",
     "@seamonster-studios/reason": "^0.7.13",
-    "bs-css-emotion": "^1.0.1",
-    "bs-react-spring": "^0.4.0",
-    "react-use-measure": "^2.0.0",
-    "reductive": "^2.0.1"
+    "bs-css": "^12.1.0",
+    "bs-css-emotion": "^1.1.0",
+    "bs-react-spring": "^0.4.0"
   },
   "devDependencies": {
-    "@glennsl/bs-jest": "^0.5.0",
-    "bs-platform": "^7.0.1",
+    "bs-platform": "^7.2.2",
     "moduleserve": "^0.9.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "reason-react": ">=0.7.0"
   },
-  "gitHead": "442fcf71845e384ccdd5ca0e92a3a17ff17461f2"
+  "peerDependencies": {
+    "@seamonster-studios/react-use-measure": "^0.7.10"
+  },
+  "gitHead": "41c5612015b5244f2ca23f579dbca584ba689302"
 }
