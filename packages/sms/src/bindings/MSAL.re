@@ -5,113 +5,179 @@ type error = string;
 type tokenReceivedCallback = (errorDesc, token, error, tokenType) => unit;
 type scopes = array(string);
 
+module Config = {
+  [@bs.deriving abstract]
+  type auth = {
+    clientId: string,
+    [@bs.optional]
+    authority: string,
+    [@bs.optional]
+    validateAuthority: bool,
+    redirectUri: unit => string,
+    [@bs.optional]
+    postLogoutRedirectUri: unit => string,
+    [@bs.optional]
+    navigateToLoginRequestUrl: bool,
+  };
+
+  [@bs.deriving abstract]
+  type cache = {
+    // options: localStorage  or localSession
+    [@bs.optional]
+    cacheLocation: string,
+    [@bs.optional]
+    storeAuthStateInCookie: bool,
+  };
+
+  type logger;
+  type telemetry;
+
+  [@bs.deriving abstract]
+  type system = {
+    [@bs.optional]
+    logger,
+    [@bs.optional]
+    loadFrameTimeout: float,
+    [@bs.optional]
+    tokenRenewalOffsetSeconds: float,
+    [@bs.optional]
+    navigateFrameWait: float,
+    [@bs.optional]
+    telemetry,
+  };
+
+  type framework;
+
+  [@bs.deriving abstract]
+  type t = {
+    auth,
+    [@bs.optional]
+    cache,
+    [@bs.optional]
+    system,
+    [@bs.optional]
+    framework,
+  };
+};
+
+type claims = {
+  exp: int,
+  nbf: int,
+  ver: string,
+  iss: string,
+  sub: string,
+  aud: string,
+  nonce: string,
+  iat: int,
+  auth_time: int,
+  oid: string,
+  name: string,
+  jobTitle: string,
+  emails: array(string),
+  tfp: string,
+};
+
+type idToken = {
+  rawIdToken: string,
+  issuer: string,
+  objectId: string,
+  subject: string,
+  version: string,
+  name: string,
+  nonce: string,
+  expiration: int,
+  claims,
+  idTokenClaims: claims,
+};
+
+type account = {
+  accountIdentifier: string,
+  homeAccountIdentifier: string,
+  userName: Js.Nullable.t(string),
+  name: string,
+  idToken,
+  idTokenClaims: idToken,
+  sid: Js.Nullable.t(string),
+  environment: string,
+};
+
+type loginPopupValue = {
+  idToken,
+  idTokenClaims: idToken,
+  uniqueId: string,
+  tenantId: string,
+  tokenType: string,
+  accountState: string,
+  fromCache: bool,
+  scopes: array(string),
+  accessToken: Js.Nullable.t(string),
+};
+
 [@bs.deriving abstract]
-type config = {
+type authenticationParameters = {
   [@bs.optional]
-  // options: localStorage  or localSession
-  cacheLocation: string,
+  scopes: array(string),
   [@bs.optional]
-  postLogoutRedirectUri: string,
+  extraScopesToConsent: array(string),
+  [@bs.optional]
+  prompt: string,
+  [@bs.optional]
+  extraQueryPrameters: Js.Dict.t(string),
+  [@bs.optional]
+  claimsRequest: string,
+  [@bs.optional]
+  authority: string,
+  [@bs.optional]
+  state: string,
+  [@bs.optional]
+  correlationId: string,
+  [@bs.optional]
+  account,
+  [@bs.optional]
+  sid: string,
+  [@bs.optional]
+  loginHint: string,
+  [@bs.optional]
+  forceRefresh: bool,
   [@bs.optional]
   redirectUri: string,
   [@bs.optional]
-  storeAuthStateInCookie: bool,
-  [@bs.optional]
-  validateAuthority: bool,
+  redirectStartPage: string,
 };
 
-type authorityInstance;
-[@bs.get]
-external aadInstanceDiscoveryEndpointUrl: authorityInstance => string =
-  "AadInstanceDiscoveryEndpointUrl";
-[@bs.get]
-external authorityType: authorityInstance => string = "AuthorityType";
-[@bs.get]
-external authorizationEndpoint: authorityInstance => string =
-  "AuthorizationEndpoint";
-[@bs.get]
-external canonicalAuthority: authorityInstance => string =
-  "CanonicalAuthority";
-[@bs.get]
-external canonicalAuthorityUrlComponents: authorityInstance => string =
-  "CanonicalAuthorityUrlComponents";
-[@bs.get]
-external defaultOpenIdConfigurationEndpoint: authorityInstance => string =
-  "DefaultOpenIdConfigurationEndpoint";
-[@bs.get]
-external endSessionEndpoint: authorityInstance => string =
-  "EndSessionEndpoint";
-[@bs.get]
-external isValidationEnabled: authorityInstance => bool =
-  "IsValidationEnabled";
-[@bs.get]
-external selfSignedJwtAudience: authorityInstance => string =
-  "SelfSignedJwtAudience";
-[@bs.get] external tenant: authorityInstance => string = "Tenant";
-
-type cacheLocations;
-[@bs.get] external localStorage: cacheLocations => string = "localStorage";
-[@bs.get] external sessionStorage: cacheLocations => string = "sessionStorage";
-
-type cacheStorage;
-[@bs.get]
-external localStorageSupported: cacheStorage => bool =
-  "_localStorageSupported";
-[@bs.get]
-external sessionStorageSupported: cacheStorage => bool =
-  "_sessionStorageSupported";
-
-type logger;
-[@bs.get] external level: logger => int = "_level";
-[@bs.get] external correlationId: logger => int = "_correlationId";
-[@bs.get] external localCallback: logger => unit = "_localCallback";
-[@bs.get] external piiLoggingEnabled: logger => unit = "_piiLoggingEnabled";
-
-type app = {clientId: string};
-[@bs.get] external clientId: app => string = "clientId";
-[@bs.get] external authority: app => string = "authority";
-[@bs.get]
-external authorityInstance: app => authorityInstance = "authorityInstance";
-[@bs.get] external cacheLocation: app => string = "cacheLocation";
-[@bs.get] external loadFrameTimeout: app => int = "loadFrameTimeout";
-[@bs.get]
-external storeAuthStateInCookie: app => bool = "storeAuthStateInCookie";
-[@bs.get] external validateAuthority: app => bool = "validateAuthority";
-[@bs.get] external cacheLocations: app => cacheLocations = "_cacheLocations";
-[@bs.get] external cacheStorage: app => cacheStorage = "_cacheStorage";
-[@bs.get] external logger: app => logger = "_logger";
-[@bs.get]
-external acquireTokenInProgress: app => bool = "_acquireTokenInProgress";
-[@bs.get] external clockSkew: app => int = "_clockSkew";
-[@bs.get] external isAngular: app => bool = "_isAngular";
-[@bs.get] external loginInProgress: app => bool = "_loginInProgress";
-[@bs.get]
-external navigateToLoginRequestUrl: app => bool = "_navigateToLoginRequestUrl";
-[@bs.get]
-external postLogoutredirectUri: app => string = "_postLogoutredirectUri";
-[@bs.get] external redirectUri: app => string = "_redirectUri";
-[@bs.get] external state: app => string = "_state";
-[@bs.send] external logout: app => unit;
-[@bs.send]
-external loginPopup: (app, scopes) => Js.Promise.t(string) = "loginPopup";
-[@bs.send]
-external acquireTokenSilent: (app, scopes) => Js.Promise.t(string) =
-  "acquireTokenSilent";
-[@bs.send]
-external acquireTokenPopup: (app, scopes) => Js.Promise.t(string) =
-  "acquireTokenPopup";
+type app = {
+  .
+  "authority": string,
+  "clientId": string,
+  "inCookie": bool,
+  [@bs.meth] "logout": unit => unit,
+  [@bs.meth] "getAccount": unit => Js.Nullable.t(account),
+  [@bs.meth] "loginPopup": scopes => Js.Promise.t(loginPopupValue),
+  [@bs.meth]
+  "acquireTokenSilent":
+    authenticationParameters => Js.Promise.t(loginPopupValue),
+  [@bs.meth]
+  "acquireTokenPopup":
+    authenticationParameters => Js.Promise.t(loginPopupValue),
+};
 
 [@bs.module "msal"] [@bs.new]
-external make_:
-  (string, string, option(tokenReceivedCallback), option(config)) => app =
-  "UserAgentApplication";
+external make: Config.t => app = "UserAgentApplication";
 
-let make =
-    (
-      ~clientId: string,
-      ~authority: string,
-      ~tokenReceivedCallback: option(tokenReceivedCallback)=?,
-      ~config: option(config)=?,
-      (),
-    ) =>
-  make_(clientId, authority, tokenReceivedCallback, config);
+let%private isTruthy: account => bool = [%raw
+  {|
+  function(account) {
+    return !!account
+  }
+|}
+];
+
+let getAccount = app => {
+  switch (app##getAccount()->Js.Nullable.toOption) {
+  | None => None
+  | Some(account) =>
+    /**Sometimes this isn't null but still a JS "falsey" value */
+    (account->isTruthy)
+      ? Some(account) : None
+  };
+};
