@@ -26,6 +26,7 @@
     "deck.gl": "^8.0.17",
     "downshift": "^5.0.5",
     "email-validator": "^2.0.4",
+    "fontfaceobserver": "^2.1.0",
     "format-usd": "^1.0.1",
     "formik": "^2.1.4",
     "lodash.difference": "^4.5.0",
@@ -47,6 +48,7 @@
     "react-spinners": "^0.8.1",
     "react-use-media-query-hook": "^0.0.1",
     "react-window": "^1.8.5",
+    "store-css": "^1.0.2",
     "url-validator": "^2.0.3",
     "usa-states": "^0.0.5",
     "uuid": "^7.0.2"
