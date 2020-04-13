@@ -8,7 +8,7 @@ module GridItem = {
 
   [@react.component]
   let make = (~name) => {
-    let imageRandomizer = React.useMemo0(() => Random.int(999999));
+    let imageRandomizer = React.useMemo0(() => name);
     <div
       className=Css.(
         [
@@ -57,7 +57,7 @@ let render = n => <GridItem name={n->string_of_int} />;
 
 [@react.component]
 let make = () => {
-  let items = React.useMemo0(() => Array.makeBy(10, n => n));
+  let items = React.useMemo0(() => Array.makeBy(20, n => n));
 
   let (filterBy1, setFilterBy1) = React.useState(() => false);
   let (filterBy2, setFilterBy2) = React.useState(() => false);
@@ -78,6 +78,15 @@ let make = () => {
       <button onClick={_ => setFilterBy1(b => !b)}> "filter"->str </button>
       <button onClick={_ => setFilterBy2(b => !b)}> "filter2"->str </button>
     </div>
-    <IsometricGrid columns=3 items render filter padding=10/>
+    <IsometricGrid
+      columns=3
+      getKey={item => item->string_of_int}
+      items
+      render
+      filter
+      padding=10
+      paging={IsometricGrid.Paged({openPages: 1, itemsPerPage: 6})}
+      buttonClass=Css.(style([color(black)]))
+    />
   </div>;
 };
