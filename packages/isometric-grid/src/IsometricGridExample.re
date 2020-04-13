@@ -86,7 +86,7 @@ let make = () => {
       filter
       padding=10
       paging={IsometricGrid.Paged({openPages: 1, itemsPerPage: 6})}
-      buttonClass=Css.(style([color(black)]))
+      buttonClass=Css.(style([color(black), marginLeft(`auto), marginRight(`auto)]))
     />
   </div>;
 };

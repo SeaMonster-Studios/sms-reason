@@ -188,7 +188,7 @@ module RunningView = {
       (setHeightSpring, filteredItems),
     );
 
-    <div>
+    <>
       <Spring.Div
         className=Css.(
           [label("grid-container"), position(`relative), flexGrow(1.0)]
@@ -239,7 +239,7 @@ module RunningView = {
              "Load more"->str
            </button>
          : React.null}
-    </div>;
+    </>;
   };
 };
 
@@ -364,7 +364,7 @@ let make =
   );
 
   <div className=Css.([width(100.0->pct)]->style)>
-    <div ref className=Css.([display(`flex)]->style)>
+    <div ref className=Css.([display(`flex), flexDirection(`column)]->style)>
       {switch (status) {
        | Loading => React.null
        | Running({items, itemHeight, itemWidth}) =>
