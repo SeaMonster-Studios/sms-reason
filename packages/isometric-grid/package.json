@@ -19,13 +19,11 @@
   },
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "@seamonster-studios/react-use-measure": "^0.8.0",
     "@seamonster-studios/reason": "^0.8.0",
     "bs-css-emotion": "^1.1.0",
-    "bs-react-spring": "^0.4.0"
-  },
-  "devDependencies": {
+    "bs-react-spring": "^0.4.0",
     "bs-platform": "^7.2.2",
     "moduleserve": "^0.9.0",
     "react": "^16.8.1",
@@ -33,7 +31,14 @@
     "reason-react": ">=0.7.0"
   },
   "peerDependencies": {
-    "@seamonster-studios/react-use-measure": "^0.7.10"
+    "@seamonster-studios/react-use-measure": "^0.7.10",
+    "@seamonster-studios/reason": "^0.8.0",
+    "bs-css-emotion": "^1.1.0",
+    "bs-react-spring": "^0.4.0",
+    "bs-platform": "^7.2.2",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "reason-react": ">=0.7.0"
   },
   "gitHead": "41c5612015b5244f2ca23f579dbca584ba689302"
 }
