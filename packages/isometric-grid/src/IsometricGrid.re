@@ -1,6 +1,15 @@
 open Belt;
 let str = React.string;
 
+type paged = {
+  itemsPerPage: int,
+  openPages: int,
+};
+
+type paging =
+  | Single
+  | Paged(paged);
+
 module Box = {
   module TransformSpring = {
     type t = (int, int);
@@ -117,7 +126,27 @@ module HeightSpring = {
 
 module RunningView = {
   [@react.component]
-  let make = (~items, ~itemWidth, ~itemHeight, ~columns, ~render, ~padding) => {
+  let make =
+      (
+        ~items,
+        ~itemWidth,
+        ~itemHeight,
+        ~columns,
+        ~render,
+        ~padding,
+        ~paging as pagingProp,
+        ~getKey,
+        ~buttonClass,
+      ) => {
+    let (paging, setPaging) = React.useState(() => pagingProp);
+    React.useEffect2(
+      () => {
+        setPaging(_ => pagingProp);
+        None;
+      },
+      (pagingProp, setPaging),
+    );
+
     let filteredItems =
       React.useMemo1(
         () => items->Array.keep(((_, show)) => show),
@@ -129,14 +158,28 @@ module RunningView = {
         ~config=Spring.config(~mass=1.0, ~tension=110., ~friction=20.),
         0,
       );
+
+    let maxDisplayedItems =
+      React.useMemo1(
+        () =>
+          switch (paging) {
+          | Single => items->Array.length
+          | Paged({itemsPerPage, openPages}) => itemsPerPage * openPages
+          },
+        [|paging|],
+      );
+
     React.useEffect2(
       () => {
-        let filteredRows =
-          (
-            filteredItems->Array.length->Float.fromInt /. columns->Float.fromInt
-          )
+        let filteredRows = {
+          let numfilteredItems = filteredItems->Array.length;
+          let numDisplayedItems =
+            numfilteredItems <= maxDisplayedItems
+              ? numfilteredItems : maxDisplayedItems;
+          (numDisplayedItems->Float.fromInt /. columns->Float.fromInt)
           ->ceil
           ->Float.toInt;
+        };
         let height = filteredRows * itemHeight;
         setHeightSpring(height);
 
@@ -145,37 +188,58 @@ module RunningView = {
       (setHeightSpring, filteredItems),
     );
 
-    <Spring.Div
-      className=Css.(
-        [
-          label("grid-container"),
-          position(`relative),
-          flexGrow(1.0),
-        ]
-        ->style
-      )
-      style={ReactDOMRe.Style.make(
-        ~height=heightSpring->HeightSpring.interpolate,
-        (),
-      )}>
-      {items
-       ->Array.mapWithIndex((i, (n, show) as tuple) => {
-           let (rowNum, colNum) =
-             switch (filteredItems->Array.getIndexBy(x => x == tuple)) {
-             | None => (i / columns, i mod columns)
-             | Some(iFiltered) => (
-                 iFiltered / columns,
-                 iFiltered mod columns,
-               )
-             };
+    <>
+      <Spring.Div
+        className=Css.(
+          [label("grid-container"), position(`relative), flexGrow(1.0)]
+          ->style
+        )
+        style={ReactDOMRe.Style.make(
+          ~height=heightSpring->HeightSpring.interpolate,
+          (),
+        )}>
+        {let (shownItems, hiddenItems) =
+           items->Array.partition(((_, show)) => show);
+         let sortedItems = Array.concat(shownItems, hiddenItems);
+         sortedItems
+         ->Array.slice(~offset=0, ~len=maxDisplayedItems)
+         ->Array.mapWithIndex((i, (n, show) as tuple) => {
+             let (rowNum, colNum) =
+               switch (filteredItems->Array.getIndexBy(x => x == tuple)) {
+               | None => (i / columns, i mod columns)
+               | Some(iFiltered) => (
+                   iFiltered / columns,
+                   iFiltered mod columns,
+                 )
+               };
 
-           <Box
-             key={i->string_of_int} width=itemWidth row=rowNum col=colNum show padding>
-             {render(n)}
-           </Box>;
-         })
-       ->React.array}
-    </Spring.Div>;
+             <Box
+               key={n->getKey}
+               width=itemWidth
+               row=rowNum
+               col=colNum
+               show
+               padding>
+               {render(n)}
+             </Box>;
+           })
+         ->React.array}
+      </Spring.Div>
+      {maxDisplayedItems < filteredItems->Array.length
+         ? <button
+             className=buttonClass
+             onClick={_ =>
+               setPaging(
+                 fun
+                 | Single => Single
+                 | Paged({openPages, itemsPerPage}) =>
+                   Paged({itemsPerPage, openPages: openPages + 1}),
+               )
+             }>
+             "Load more"->str
+           </button>
+         : React.null}
+    </>;
   };
 };
 
@@ -248,7 +312,17 @@ let reducer = (status, action) => {
 };
 
 [@react.component]
-let make = (~columns=3, ~items as itemsProp, ~render, ~filter, ~padding=0) => {
+let make =
+    (
+      ~columns=3,
+      ~items as itemsProp,
+      ~render,
+      ~filter,
+      ~padding=0,
+      ~getKey,
+      ~paging=Single,
+      ~buttonClass="isometric-grid__load-more-button"
+    ) => {
   let (ref, {ReactUseMeasure.width: containerWidth}) =
     ReactUseMeasure.(use(params(~polyfill, ())));
 
@@ -290,11 +364,21 @@ let make = (~columns=3, ~items as itemsProp, ~render, ~filter, ~padding=0) => {
   );
 
   <div className=Css.([width(100.0->pct)]->style)>
-    <div ref className=Css.([display(`flex)]->style)>
+    <div ref className=Css.([display(`flex), flexDirection(`column)]->style)>
       {switch (status) {
        | Loading => React.null
        | Running({items, itemHeight, itemWidth}) =>
-         <RunningView items itemHeight itemWidth columns render padding/>
+         <RunningView
+           items
+           itemHeight
+           itemWidth
+           columns
+           render
+           padding
+           paging
+           getKey
+           buttonClass
+         />
        }}
     </div>
   </div>;
