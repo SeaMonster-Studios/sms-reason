@@ -2255,7 +2255,7 @@ bs-css-emotion@^1.0.1, bs-css-emotion@^1.1.0:
     bs-css "12.1.0"
     emotion "^10.0.7"
 
-bs-css@12.1.0, bs-css@^12.1.0:
+bs-css@12.1.0:
   version "12.1.0"
   resolved "https://registry.yarnpkg.com/bs-css/-/bs-css-12.1.0.tgz#8bea8970d31cd133bb81e2aeb78b187a807d003c"
   integrity sha512-cKxVoPe1PtVTYAUYp81lleRwawd/OhdgDINx8V1/AOUuHkan6g23Jh6b+WACJXrOn4vVJmSgVdBfMqaeHMoi8g==
