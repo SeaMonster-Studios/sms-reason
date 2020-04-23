@@ -47,6 +47,7 @@
     "react-spinners": "^0.8.1",
     "react-window": "^1.8.5",
     "store-css": "^1.0.2",
+    "title-case": "^3.0.2",
     "url-validator": "^2.0.3",
     "usa-states": "^0.0.5",
     "uuid": "^7.0.2"

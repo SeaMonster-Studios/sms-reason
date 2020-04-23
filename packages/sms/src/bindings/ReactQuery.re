@@ -96,6 +96,7 @@ type response(
 
 type status('data) =
   | NotAsked
+  | Loading
   | Success('data)
   | Failure(string);
 
@@ -166,6 +167,7 @@ module Query = {
                 ),
             )
           )
+        | "loading" => setStatus(_ => Loading)
         | _ =>
           setStatus(_ => NotAsked);
           Js.log2("Unrecognized react query response status:", query.status);
@@ -189,46 +191,3 @@ external prefetchQuery:
   ) =>
   Js.Promise.t('data) =
   "prefetchQuery";
-
-/**Example
-	 /** Project.re **/
-		let fetchInvitees = projectId =>
-			Axios.Instance.get(
-				Api.instance,
-				"/projects/" ++ projectId ++ "/invitee-users",
-			);
-
-		module Queries = {
-			let useInvitees = projectId => {
-				ReactQuery.(
-					Query.useQuery(
-						~key=[|"project", "invitees", projectId|],
-						~fn=() => fetchInvitees(projectId),
-						~config=makeConfig(~cacheTime=50000, ()),
-						User.Decoder.users,
-					)
-				);
-			};
-		};
-
-		/** ProjectScreen.re **/
-		[@react.component]
-		let make = (~project) => {
-			let (fetchInviteesStatus, fetchInviteesQuery) =
-				Project.Queries.useInvitees(project.id);
-
-				switch(fetchInviteesStatus) {
-					| (NotAsked) => React.null
-					| (Success(invitees)) => {
-						<div>
-							<ul>
-							{invitees->Belt.Array.map(invitee => <li key=invitee.id>invitee.name->React.string</li>)}
-							</ul>
-							{fetchInviteesQuery.isFetching ? <span>{"Refreshing data..."->React.string}</span> : React.null}
-						</div>
-					}
-					| Failure(error) => <div>error->React.string</div>
-				}
-		}
-
-	 */;
