@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/react-copy-to-clipboard",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
@@ -18,11 +18,11 @@
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
   "devDependencies": {
-    "@seamonster-studios/reason": "^0.9.0",
+    "@seamonster-studios/reason": "^0.10.0",
+    "bs-css-emotion": "^1.1.0",
     "bs-platform": "^7.0.1",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
-    "bs-css-emotion": "^1.1.0",
     "reason-react": ">=0.7.0"
   },
   "gitHead": "442fcf71845e384ccdd5ca0e92a3a17ff17461f2"
