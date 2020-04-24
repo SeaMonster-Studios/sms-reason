@@ -8,4 +8,4 @@ Install:
 
 Install Peer Dependencies:
 
-`yarn add bs-date-fns bs-css-emotion`
+`yarn add bs-date-fns bs-css-emotion decco`
