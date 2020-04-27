@@ -78,9 +78,26 @@ type claims = {
   auth_time: int,
   oid: string,
   name: string,
-  jobTitle: string,
+  [@decco.default None]
+  jobTitle: option(string),
   emails: array(string),
   tfp: string,
+};
+
+[@decco]
+type idTokenClaims = {
+  exp: int,
+  nbf: int,
+  ver: string,
+  iss: string,
+  sub: string,
+  aud: string,
+  nonce: string,
+  iat: int,
+  auth_time: int,
+  oid: string,
+  name: string,
+  extension_Organization: string,
 };
 
 [@decco]
@@ -94,35 +111,39 @@ type idToken = {
   nonce: string,
   expiration: int,
   claims,
-  idTokenClaims: claims,
 };
 
 [@decco]
 type account = {
-  accountIdentifier: string,
-  homeAccountIdentifier: string,
+  [@decco.default None]
+  accountIdentifier: option(string),
+  [@decco.default None]
+  homeAccountIdentifier: option(string),
   [@decco.default None]
   userName: option(string),
   name: string,
-  idToken,
-  idTokenClaims: idToken,
+  // idToken,
+  // [@decco.default None]
+  // idTokenClaims: option(idToken),
+  // [@decco.default None]
+  // sid: option(string),
   [@decco.default None]
-  sid: option(string),
-  environment: string,
+  environment: option(string),
 };
 
 [@decco]
 type loginPopupValue = {
   idToken,
-  idTokenClaims: idToken,
+  // idTokenClaims,
   uniqueId: string,
-  tenantId: string,
   tokenType: string,
   accountState: string,
   fromCache: bool,
   scopes: array(string),
   [@decco.default None]
   accessToken: option(string),
+  expiresOn: string,
+  account,
 };
 
 [@bs.deriving abstract]
