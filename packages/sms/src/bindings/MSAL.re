@@ -1,8 +1,13 @@
+[@decco]
 type errorDesc = string;
+[@decco]
 type token = string;
+[@decco]
 type tokenType = string;
+[@decco]
 type error = string;
 type tokenReceivedCallback = (errorDesc, token, error, tokenType) => unit;
+[@decco]
 type scopes = array(string);
 
 module Config = {
@@ -60,6 +65,7 @@ module Config = {
   };
 };
 
+[@decco]
 type claims = {
   exp: int,
   nbf: int,
@@ -77,6 +83,7 @@ type claims = {
   tfp: string,
 };
 
+[@decco]
 type idToken = {
   rawIdToken: string,
   issuer: string,
@@ -90,17 +97,21 @@ type idToken = {
   idTokenClaims: claims,
 };
 
+[@decco]
 type account = {
   accountIdentifier: string,
   homeAccountIdentifier: string,
-  userName: Js.Nullable.t(string),
+  [@decco.default None]
+  userName: option(string),
   name: string,
   idToken,
   idTokenClaims: idToken,
-  sid: Js.Nullable.t(string),
+  [@decco.default None]
+  sid: option(string),
   environment: string,
 };
 
+[@decco]
 type loginPopupValue = {
   idToken,
   idTokenClaims: idToken,
@@ -110,7 +121,8 @@ type loginPopupValue = {
   accountState: string,
   fromCache: bool,
   scopes: array(string),
-  accessToken: Js.Nullable.t(string),
+  [@decco.default None]
+  accessToken: option(string),
 };
 
 [@bs.deriving abstract]
