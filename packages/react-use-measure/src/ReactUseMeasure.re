@@ -35,4 +35,4 @@ type bounds = {
 };
 
 [@bs.module]
-external use: params => (ReactDOMRe.domRef, bounds) = "react-use-measure";
+external useHook: params => (ReactDOMRe.domRef, bounds) = "react-use-measure";

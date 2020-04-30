@@ -822,7 +822,7 @@ module Component = {
   module Item = {
     [@react.component]
     let make = (~children, ~id) => {
-      let (ref, bounds) = ReactUseMeasure.(use(params(~polyfill, ())));
+      let (ref, bounds) = ReactUseMeasure.(useHook(params(~polyfill, ())));
       let setNoticeHeight = useSetNoticeHeight();
       let noticeHeight = useNoticeHeight(id);
 
