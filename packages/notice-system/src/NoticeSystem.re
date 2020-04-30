@@ -157,7 +157,7 @@ module Style = {
   let noticesContainer =
     style([
       label("notices--container"),
-      overflowY(`scroll),
+      overflowY(`auto),
       display(`flex),
       flexDirection(`column),
       maxHeight(`calc((`sub, 100.->vh, 20->px))),
