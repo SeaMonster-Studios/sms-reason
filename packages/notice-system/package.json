@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/notice-system",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
