@@ -1,6 +1,7 @@
+module Sms = SeamonsterStudiosReason;
+
 type shownNoticesType =
-  | All
-  | Active;
+  | All;
 
 type noticeColor = {
   text: Css.Types.Color.t,

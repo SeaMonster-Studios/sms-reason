@@ -46,8 +46,7 @@ module Handle = {
 
   module Component = {
     [@react.component]
-    let make = (~children: React.element) =>
-      <> children </>;
+    let make = (~children: React.element) => <> children </>;
   };
 
   include Component;
@@ -66,7 +65,7 @@ let make =
       ~onOrderChange: array(Widget.widget) => unit,
     ) => {
   <div className=Style.root>
-    <Sms.ReactSortable.Container
+    <SeamonsterStudiosReason.ReactSortable.Container
       onSortEnd={({oldIndex, newIndex}) => {
         let updatedWidgets = arrayMove(widgets, oldIndex, newIndex);
         onOrderChange(
@@ -82,16 +81,16 @@ let make =
         {widgets
          ->sortWidgets
          ->Array.mapWithIndex((index, widget) =>
-             <Sms.ReactSortable.Item index key={index->string_of_int}>
+             <SeamonsterStudiosReason.ReactSortable.Item index key={index->string_of_int}>
                <div
                  className={Style.widgetContainer(widgets->Array.length)}>
                  <WidgetItem widget onUpdate onDelete />
                </div>
-             </Sms.ReactSortable.Item>
+             </SeamonsterStudiosReason.ReactSortable.Item>
            )
          ->React.array}
       </div>
-    </Sms.ReactSortable.Container>
+    </SeamonsterStudiosReason.ReactSortable.Container>
   </div>;
 };
  */;

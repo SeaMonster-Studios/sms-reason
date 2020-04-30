@@ -51,7 +51,7 @@ module MakePV = (Config: MakePV) => {
 
   /** Example
    module County =
-    Sms.DeccoHelper.MakePV({
+    SeamonsterStudiosReason.DeccoHelper.MakePV({
       [@bs.deriving jsConverter]
       type t = [
         | `staunton
@@ -155,7 +155,7 @@ module MakePVV = (Config: MakePVV) => {
       };
 
       module Test =
-        Sms.DeccoHelper.MakePVV({
+        SeamonsterStudiosReason.DeccoHelper.MakePVV({
           let name = "Test Module";
 
           [@genType]

@@ -1,3 +1,4 @@
+module Sms = SeamonsterStudiosReason;
 module Style = {
   open Css;
 
@@ -52,7 +53,15 @@ module IconCopy = {
 };
 
 [@react.component]
-let make = (~text, ~className="", ~actionClassName="", ~icon={<IconCopy />}) => {
+let make =
+    (
+      ~text,
+      ~className="",
+      ~actionClassName="",
+      ~icon={
+              <IconCopy />;
+            },
+    ) => {
   let (copied, setCopied) = React.useState(() => false);
   React.useEffect2(
     () => {
@@ -72,8 +81,7 @@ let make = (~text, ~className="", ~actionClassName="", ~icon={<IconCopy />}) => 
     <div className={Css.merge([Style.content, className])}>
       <span> text->React.string </span>
       <span className={Css.merge([Style.action, actionClassName])}>
-        {copied
-           ? "copied!"->React.string : <> icon "copy"->React.string </>}
+        {copied ? "copied!"->React.string : <> icon "copy"->React.string </>}
       </span>
     </div>
   </Sms.ReactCopyToClipboard>;
