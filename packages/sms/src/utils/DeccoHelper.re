@@ -79,7 +79,7 @@ module MakePVV =
            let name: string;
            let encodePattern: (t, (string, Js.Json.t) => 'a) => 'a;
            let decodePattern:
-             (string, Js.Json.t, Belt.Result.t('a, Decco.decodeError)) =>
+             (string, Js.Json.t, Decco.decodeError) =>
              Belt.Result.t(t, Decco.decodeError);
          },
        ) => {
@@ -105,13 +105,11 @@ module MakePVV =
             Config.decodePattern(
               tag,
               value,
-              Belt.Result.Error(
-                {
-                  path: {j|[$name].tag|j},
-                  message: {j|$tag variant type does not exist on $name|j},
-                  value: tag->Decco.stringToJson,
-                }: Decco.decodeError,
-              ),
+              {
+                path: {j|[$name].tag|j},
+                message: {j|$tag variant type does not exist on $name|j},
+                value: tag->Decco.stringToJson,
+              }: Decco.decodeError,
             )
           )
       | (None, None) =>
