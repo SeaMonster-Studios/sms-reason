@@ -35,15 +35,13 @@ module PolymorphicVariantHelpers = {
 };
 
 // Make Polymorphic Variant
-module MakePV =
-       (
-         Config: {
-           type t;
-           let tToJs: t => string;
-           let tFromJs: Js.String.t => option(t);
-           let name: string;
-         },
-       ) => {
+module type MakePV = {
+  type t;
+  let tToJs: t => string;
+  let tFromJs: Js.String.t => option(t);
+  let name: string;
+};
+module MakePV = (Config: MakePV) => {
   include Config;
 
   let t_encode = PolymorphicVariantHelpers.encode(~tToJs);
@@ -72,17 +70,15 @@ module MakePV =
 };
 
 // Make Polymorphic Variant with Value
-module MakePVV =
-       (
-         Config: {
-           type t;
-           let name: string;
-           let encodePattern: (t, (string, Js.Json.t) => 'a) => 'a;
-           let decodePattern:
-             (string, Js.Json.t, Decco.decodeError) =>
-             Belt.Result.t(t, Decco.decodeError);
-         },
-       ) => {
+module type MakePVV = {
+  type t;
+  let name: string;
+  let encodePattern: (t, (string, Js.Json.t) => 'a) => 'a;
+  let decodePattern:
+    (string, Js.Json.t, Decco.decodeError) =>
+    Belt.Result.t(t, Decco.decodeError);
+};
+module MakePVV = (Config: MakePVV) => {
   include Config;
 
   let%private encoder: Decco.encoder(t) =
