@@ -161,6 +161,7 @@ module Style = {
       display(`flex),
       flexDirection(`column),
       maxHeight(`calc((`sub, 100.->vh, 20->px))),
+      selector("> div", [overflow(`hidden)]),
     ]);
 
   let toggleAllNotices = visible =>
