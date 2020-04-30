@@ -1,6 +1,7 @@
 module Sms = SeamonsterStudiosReason;
 
 type shownNoticesType =
+  | Active
   | All;
 
 type noticeColor = {
