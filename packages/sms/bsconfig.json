@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/reason",
-  "namespace": "sms",
+  "namespace": true,
   "reason": {
     "react-jsx": 3
   },
@@ -8,7 +8,10 @@
     "dir": "src",
     "subdirs": true
   },
-  "bsc-flags": ["-bs-super-errors", "-bs-no-version-header"],
+  "bsc-flags": [
+    "-bs-super-errors",
+    "-bs-no-version-header"
+  ],
   "package-specs": [
     {
       "module": "commonjs",
@@ -16,7 +19,9 @@
     }
   ],
   "suffix": ".bs.js",
-  "ppx-flags": ["decco/ppx"],
+  "ppx-flags": [
+    "decco/ppx"
+  ],
   "bs-dependencies": [
     "reason-react",
     "bs-css",
