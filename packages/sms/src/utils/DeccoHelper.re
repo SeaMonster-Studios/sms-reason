@@ -85,63 +85,65 @@ module MakePVV =
        ) => {
   include Config;
 
-  let%private encoder = t => {
-    /**This will not work if the value of the variant also contains variants */
+  let%private encoder: Decco.encoder(t) =
+    t => {
+      /**This will not work if the value of the variant also contains variants */
 
-    let encode = (tag: string, value: Js.Json.t): Js.Json.t =>
-      {"tag": tag, "value": value}->Obj.magic;
+      let encode = (tag: string, value: Js.Json.t): Js.Json.t =>
+        {"tag": tag, "value": value}->Obj.magic;
 
-    t->Config.encodePattern(encode);
-  };
-
-  let%private decoder = json =>
-    switch (json->Js.Json.decodeObject) {
-    | Some(dict) =>
-      switch (dict->Js.Dict.get("tag"), dict->Js.Dict.get("value")) {
-      | (Some(tag), Some(value)) =>
-        tag
-        ->Decco.stringFromJson
-        ->Belt.Result.map(tag =>
-            Config.decodePattern(
-              tag,
-              value,
-              {
-                path: {j|[$name].tag|j},
-                message: {j|$tag variant type does not exist on $name|j},
-                value: tag->Decco.stringToJson,
-              }: Decco.decodeError,
-            )
-          )
-      | (None, None) =>
-        Error(
-          {
-            path: {j|[$name].tag, [$name].value|j},
-            message: "variant fields `tag` and `value` do not exist",
-            value: json,
-          }: Decco.decodeError,
-        )
-      | (Some(_), None) =>
-        Error(
-          {
-            path: {j|[$name].tag|j},
-            message: "variant field `tag` does not exist",
-            value: json,
-          }: Decco.decodeError,
-        )
-      | (None, Some(_)) =>
-        Error(
-          {
-            path: {j|[$name].value|j},
-            message: "variant field `value` does not exist",
-            value: json,
-          }: Decco.decodeError,
-        )
-      }
-    | None =>
-      Error(
-        {path: "", message: "Not a dict", value: json}: Decco.decodeError,
-      )
+      t->Config.encodePattern(encode);
     };
+
+  let%private decoder: Decco.decoder(t) =
+    json =>
+      switch (json->Js.Json.decodeObject) {
+      | Some(dict) =>
+        switch (dict->Js.Dict.get("tag"), dict->Js.Dict.get("value")) {
+        | (Some(tag), Some(value)) =>
+          tag
+          ->Decco.stringFromJson
+          ->Belt.Result.flatMap(tag =>
+              Config.decodePattern(
+                tag,
+                value,
+                {
+                  path: {j|[$name].tag|j},
+                  message: {j|$tag variant type does not exist on $name|j},
+                  value: tag->Decco.stringToJson,
+                }: Decco.decodeError,
+              )
+            )
+        | (None, None) =>
+          Error(
+            {
+              path: {j|[$name].tag, [$name].value|j},
+              message: "variant fields `tag` and `value` do not exist",
+              value: json,
+            }: Decco.decodeError,
+          )
+        | (Some(_), None) =>
+          Error(
+            {
+              path: {j|[$name].tag|j},
+              message: "variant field `tag` does not exist",
+              value: json,
+            }: Decco.decodeError,
+          )
+        | (None, Some(_)) =>
+          Error(
+            {
+              path: {j|[$name].value|j},
+              message: "variant field `value` does not exist",
+              value: json,
+            }: Decco.decodeError,
+          )
+        }
+      | None =>
+        Error(
+          {path: "", message: "Not a dict", value: json}: Decco.decodeError,
+        )
+      };
 
   [@genType]
   [@decco]
@@ -176,7 +178,7 @@ module MakePVV =
               value->Decco.stringFromJson->Belt.Result.map(value => `Account(value))
             | "NoAccount" =>
               value->someRecord_decode->Belt.Result.map(value => `NoAccount(value))
-            | _ => decodeError
+            | _ => deccoError->Error
             };
           };
         });
