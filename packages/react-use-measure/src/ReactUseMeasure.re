@@ -34,5 +34,5 @@ type bounds = {
   y: float,
 };
 
-[@bs.module]
-external useHook: params => (ReactDOMRe.domRef, bounds) = "react-use-measure";
+[@bs.module "react-use-measure"]
+external useHook: params => (ReactDOMRe.domRef, bounds) = "default";
