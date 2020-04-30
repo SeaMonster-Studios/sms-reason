@@ -45,11 +45,11 @@ module MakePV =
          },
        ) => {
   include Config;
-  include PolymorphicVariantHelpers;
 
-  let t_encode = encode(~tToJs);
-  let t_decode = decode(~tFromJs, ~name);
-  let t_decode_array = decode_array(~tFromJs, ~name);
+  let t_encode = PolymorphicVariantHelpers.encode(~tToJs);
+  let t_decode = PolymorphicVariantHelpers.decode(~tFromJs, ~name);
+  let t_decode_array =
+    PolymorphicVariantHelpers.decode_array(~tFromJs, ~name);
 
   /** Example
    module County =
@@ -79,7 +79,8 @@ module MakePVV =
            let name: string;
            let encodePattern: (t, (string, Js.Json.t) => 'a) => 'a;
            let decodePattern:
-             (string, Js.Json.t) => Belt.Result.t(t, Decco.decodeError);
+             (string, Js.Json.t, Belt.Result.t('a, Decco.decodeError)) =>
+             Belt.Result.t(t, Decco.decodeError);
          },
        ) => {
   include Config;
@@ -100,7 +101,19 @@ module MakePVV =
       | (Some(tag), Some(value)) =>
         tag
         ->Decco.stringFromJson
-        ->Belt.Result.map(tag => Config.decodePattern(tag, value))
+        ->Belt.Result.map(tag =>
+            Config.decodePattern(
+              tag,
+              value,
+              Belt.Result.Error(
+                {
+                  path: {j|[$name].tag|j},
+                  message: {j|$tag variant type does not exist on $name|j},
+                  value: tag->Decco.stringToJson,
+                }: Decco.decodeError,
+              ),
+            )
+          )
       | (None, None) =>
         Error(
           {
@@ -159,20 +172,13 @@ module MakePVV =
               "NoAccount"->encode(someRecord->someRecord_encode)
             };
 
-          let decodePattern = (tag, value) => {
+          let decodePattern = (tag, value, decodeError) => {
             switch (tag) {
             | "Account" =>
               value->Decco.stringFromJson->Belt.Result.map(value => `Account(value))
             | "NoAccount" =>
               value->someRecord_decode->Belt.Result.map(value => `NoAccount(value))
-            | _ =>
-              Error(
-                {
-                  path: {j|[$name].tag|j},
-                  message: {j|$tag variant type does not exist on $name|j},
-                  value: tag->Decco.stringToJson,
-                }: Decco.decodeError,
-              )
+            | _ => decodeError
             };
           };
         });
