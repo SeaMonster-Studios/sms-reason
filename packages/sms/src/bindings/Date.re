@@ -3,6 +3,8 @@ type date = {
   [@bs.meth] "getUTCMonth": unit => int,
   [@bs.meth] "getUTCDate": unit => int,
   [@bs.meth] "getUTCFullYear": unit => int,
+  [@bs.meth] "setMonth": int => date,
+  [@bs.meth] "getMonth": unit => int,
 };
 
 [@bs.new] external init: string => date = "Date";
