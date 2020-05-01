@@ -3,7 +3,7 @@ type date = {
   [@bs.meth] "getUTCMonth": unit => int,
   [@bs.meth] "getUTCDate": unit => int,
   [@bs.meth] "getUTCFullYear": unit => int,
-  [@bs.meth] "setMonth": int => date,
+  [@bs.meth] "setMonth": int => float,
   [@bs.meth] "getMonth": unit => int,
 };
 
