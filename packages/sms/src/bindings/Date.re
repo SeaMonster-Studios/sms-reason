@@ -6,7 +6,7 @@ type date = {
 };
 
 [@bs.new] external init: string => date = "Date";
-[@bs.new] external initInt: int => date = "Date";
+[@bs.new] external initFloat: float => date = "Date";
 [@bs.new] external initNow: unit => date = "Date";
 [@bs.new] external now: unit => int = "Date";
 [@bs.send] external toIsoString: date => string = "toISOString";
