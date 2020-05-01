@@ -324,7 +324,7 @@ let make =
       ~buttonClass="isometric-grid__load-more-button"
     ) => {
   let (ref, {ReactUseMeasure.width: containerWidth}) =
-    ReactUseMeasure.(use(params(~polyfill, ())));
+    ReactUseMeasure.(useHook(params(~polyfill, ())));
 
   let (status, dispatch) = React.useReducer(reducer, Loading);
 
