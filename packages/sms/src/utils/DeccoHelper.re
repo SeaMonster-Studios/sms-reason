@@ -73,7 +73,7 @@ module MakePV = (Config: MakePV) => {
 module type MakePVV = {
   type t;
   let name: string;
-  let encodePattern: (t, (~value: option(Js.Json.t)=?, string) => 'a) => 'a;
+  let encodePattern: (t, (string, option(Js.Json.t)) => 'a) => 'a;
   let decodePattern:
     (string, Js.Json.t, Decco.decodeError) =>
     Belt.Result.t(t, Decco.decodeError);
@@ -84,7 +84,7 @@ module MakePVV = (Config: MakePVV) => {
   let%private encoder: Decco.encoder(t) =
     t => {
       /** It's possible that one variant will have a value while another will not */
-      let encode = (~value: option(Js.Json.t)=None, tag: string): Js.Json.t =>
+      let encode = (tag: string, value: option(Js.Json.t)): Js.Json.t =>
         {
           "tag": tag,
           "value": value->Belt.Option.getWithDefault(""->Decco.stringToJson),
