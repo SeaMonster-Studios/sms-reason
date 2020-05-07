@@ -73,8 +73,7 @@ module MakePV = (Config: MakePV) => {
 module type MakePVV = {
   type t;
   let name: string;
-  let encodePattern:
-    (t, (~value: option(Js.Json.t)=?, string) => Js.Json.t) => 'a;
+  let encodePattern: (t, (~value: option(Js.Json.t)=?, string) => 'a) => 'a;
   let decodePattern:
     (string, Js.Json.t, Decco.decodeError) =>
     Belt.Result.t(t, Decco.decodeError);
