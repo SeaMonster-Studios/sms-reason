@@ -73,7 +73,8 @@ module MakePV = (Config: MakePV) => {
 module type MakePVV = {
   type t;
   let name: string;
-  let encodePattern: (t, (string, Js.Json.t) => 'a) => 'a;
+  let encodePattern:
+    (t, (~value: option(Js.Json.t)=?, string) => Js.Json.t) => 'a;
   let decodePattern:
     (string, Js.Json.t, Decco.decodeError) =>
     Belt.Result.t(t, Decco.decodeError);
@@ -83,63 +84,85 @@ module MakePVV = (Config: MakePVV) => {
 
   let%private encoder: Decco.encoder(t) =
     t => {
-      /**This will not work if the value of the variant also contains variants */
-
-      let encode = (tag: string, value: Js.Json.t): Js.Json.t =>
-        {"tag": tag, "value": value}->Obj.magic;
+      /** It's possible that one variant will have a value while another will not */
+      let encode = (~value: option(Js.Json.t)=None, tag: string): Js.Json.t =>
+        {
+          "tag": tag,
+          "value": value->Belt.Option.getWithDefault(""->Decco.stringToJson),
+        }
+        ->Obj.magic;
 
       t->Config.encodePattern(encode);
     };
 
   let%private decoder: Decco.decoder(t) =
     json =>
-      switch (json->Js.Json.decodeObject) {
-      | Some(dict) =>
-        switch (dict->Js.Dict.get("tag"), dict->Js.Dict.get("value")) {
-        | (Some(tag), Some(value)) =>
-          tag
+      /** It's possible that one variant will have a value while another will not. If it doesn't then the value will be null. */
+      (
+        if (json->Js.typeof == "string") {
+          json
           ->Decco.stringFromJson
           ->Belt.Result.flatMap(tag =>
               Config.decodePattern(
                 tag,
-                value,
+                ""->Decco.stringToJson,
                 {
-                  path: {j|[$name].tag|j},
+                  path: {j|[$name]|j},
                   message: {j|$tag variant type does not exist on $name|j},
                   value: tag->Decco.stringToJson,
                 }: Decco.decodeError,
               )
+            );
+        } else {
+          switch (json->Js.Json.decodeObject) {
+          | Some(dict) =>
+            switch (dict->Js.Dict.get("tag"), dict->Js.Dict.get("value")) {
+            | (Some(tag), Some(value)) =>
+              tag
+              ->Decco.stringFromJson
+              ->Belt.Result.flatMap(tag =>
+                  Config.decodePattern(
+                    tag,
+                    value,
+                    {
+                      path: {j|[$name].tag|j},
+                      message: {j|$tag variant type does not exist on $name|j},
+                      value: tag->Decco.stringToJson,
+                    }: Decco.decodeError,
+                  )
+                )
+            | (None, None) =>
+              Error(
+                {
+                  path: {j|[$name].tag, [$name].value|j},
+                  message: "variant fields `tag` and `value` do not exist",
+                  value: json,
+                }: Decco.decodeError,
+              )
+            | (Some(_), None) =>
+              Error(
+                {
+                  path: {j|[$name].tag|j},
+                  message: "variant field `tag` does not exist",
+                  value: json,
+                }: Decco.decodeError,
+              )
+            | (None, Some(_)) =>
+              Error(
+                {
+                  path: {j|[$name].value|j},
+                  message: "variant field `value` does not exist",
+                  value: json,
+                }: Decco.decodeError,
+              )
+            }
+          | None =>
+            Error(
+              {path: "", message: "Not a dict", value: json}: Decco.decodeError,
             )
-        | (None, None) =>
-          Error(
-            {
-              path: {j|[$name].tag, [$name].value|j},
-              message: "variant fields `tag` and `value` do not exist",
-              value: json,
-            }: Decco.decodeError,
-          )
-        | (Some(_), None) =>
-          Error(
-            {
-              path: {j|[$name].tag|j},
-              message: "variant field `tag` does not exist",
-              value: json,
-            }: Decco.decodeError,
-          )
-        | (None, Some(_)) =>
-          Error(
-            {
-              path: {j|[$name].value|j},
-              message: "variant field `value` does not exist",
-              value: json,
-            }: Decco.decodeError,
-          )
+          };
         }
-      | None =>
-        Error(
-          {path: "", message: "Not a dict", value: json}: Decco.decodeError,
-        )
-      };
+      );
 
   [@genType]
   [@decco]
