@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/notice-system",
-  "version": "0.11.9",
+  "version": "0.11.11",
   "private": false,
   "scripts": {
     "build": "bsb -make-world",
@@ -26,7 +26,7 @@
     "@glennsl/bs-jest": "^0.5.0",
     "@seamonster-studios/react-use-countdown": "^0.11.0",
     "@seamonster-studios/react-use-measure": "^0.11.5",
-    "@seamonster-studios/reason": "^0.11.9",
+    "@seamonster-studios/reason": "^0.11.11",
     "bs-css-emotion": "^1.0.1",
     "bs-platform": "^7.0.1",
     "bs-react-spring": "^0.4.0",
