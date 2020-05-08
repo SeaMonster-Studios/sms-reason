@@ -141,16 +141,16 @@ module MakePVV = (Config: MakePVV) => {
             | (Some(_), None) =>
               Error(
                 {
-                  path: {j|[$name].tag|j},
-                  message: "variant field `tag` does not exist",
+                  path: {j|[$name].value|j},
+                  message: "variant field `value` does not exist",
                   value: json,
                 }: Decco.decodeError,
               )
             | (None, Some(_)) =>
               Error(
                 {
-                  path: {j|[$name].value|j},
-                  message: "variant field `value` does not exist",
+                  path: {j|[$name].tag|j},
+                  message: "variant field `tag` does not exist",
                   value: json,
                 }: Decco.decodeError,
               )
