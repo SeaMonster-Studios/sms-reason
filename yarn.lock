@@ -1695,6 +1695,14 @@
   dependencies:
     "@babel/runtime" "^7.0.0"
 
+"@seamonster-studios/react-use-measure@0.11.4":
+  version "0.11.4"
+  resolved "https://registry.yarnpkg.com/@seamonster-studios/react-use-measure/-/react-use-measure-0.11.4.tgz#ac313215db5701fbce6d90b5abd75cffedd92c3c"
+  integrity sha512-BsM8loIcDXU+gzt2vuenxV4yuxWQ4nAtBU3PKwqtBqDulvPUq6W29y783k6y//E/bRtWoIlVVVSdFhMdQ2XeGQ==
+  dependencies:
+    "@juggle/resize-observer" "^3.1.1"
+    react-use-measure "^2.0.0"
+
 "@sinonjs/commons@^1.7.0":
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/@sinonjs/commons/-/commons-1.7.1.tgz#da5fd19a5f71177a53778073978873964f49acf1"
@@ -2974,6 +2982,11 @@ decco@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decco/-/decco-1.2.0.tgz#f67d7d0d4bdd0f001710a36d2d698fed6c2b52b8"
   integrity sha512-sPk3qV7SF4djb7jvaPI2w5R4FmALjj/dziBmHEkdsYg2ImhvUreh/eL20FdnViVZ+jVJMqsUZaKtOIwIjMmnHQ==
+
+decco@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/decco/-/decco-1.2.1.tgz#f64b68c5ef1a689d438b6064fbf93af0f8cfbbca"
+  integrity sha512-esHlkq1D6elqdeqVG2EZfkcQ2g5knhMfeACxwiIc1KjOb3D2a+rQfRt9KpNBIZkl6kiQmH6Wwnp3yCIckj/S2A==
 
 deck.gl@^8.0.17:
   version "8.1.0"
@@ -6344,6 +6357,11 @@ posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
+
+postcode-validator@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/postcode-validator/-/postcode-validator-3.1.0.tgz#12f9a99010e7f29802e113a061fdc97c2b0a8457"
+  integrity sha512-K2uylJ6WqzJIYyYwDbeLo3BC8iq1hsy5u6PuiOGXKDfFEdUWmd4UjVjjyrwGPlOPmLInpaHCm7J5IoJQYFKFsg==
 
 potpack@^1.0.1:
   version "1.0.1"

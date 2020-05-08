@@ -35,6 +35,7 @@
     "msal": "^1.2.2",
     "nanoid": "^2.1.11",
     "papaparse": "^5.1.1",
+    "postcode-validator": "^3.1.0",
     "randomcolor": "^0.5.4",
     "react-copy-to-clipboard": "5.0.1",
     "react-json-view": "^1.19.1",
