@@ -640,23 +640,23 @@ module Notice = {
          | _ =>
            <div className=Style.Notice.content>
              content
-             {switch (notice.type_) {
-              | `error =>
-                <div>
-                  <div>
-                    "An unknown error has occurred, please try again later. If this continues, please contact us."
-                    ->React.string
-                  </div>
-                </div>
-              // <a
-              //   href="/contact"
-              //   rel="noopener noreferrer"
-              //   target="_blank">
-              //   "here"->React.string
-              // </a>
-              /***TODO: Implement a way for a custom message here. Ideally we'd want a developer to be able to implement a sentry "send report" form and maybe give the user an opportunity to restart the app */
-              | _ => React.null
-              }}
+             //  {switch (notice.type_) {
+             //   | `error =>
+             //     <div>
+             //       <div>
+             //         "An unknown error has occurred, please try again later. If this continues, please contact us."
+             //         ->React.string
+             //       </div>
+             //     </div>
+             //   // <a
+             //   //   href="/contact"
+             //   //   rel="noopener noreferrer"
+             //   //   target="_blank">
+             //   //   "here"->React.string
+             //   // </a>
+             //   /***TODO: Implement a way for a custom message here. Ideally we'd want a developer to be able to implement a sentry "send report" form and maybe give the user an opportunity to restart the app */
+             //   | _ => React.null
+             //   }}
              timerNode
            </div>
          }}
