@@ -20,8 +20,10 @@ external setWithOptions: (string, string, setOptions) => unit = "set";
 [@bs.module "js-cookie"]
 external setJsonWithOptions: (string, Js.Json.t, setOptions) => unit = "set";
 
-[@bs.module "js-cookie"] external get: string => string = "get";
+[@bs.module "js-cookie"]
+external get: string => Js.Nullable.t(string) = "get";
 
-[@bs.module "js-cookie"] external getJson: string => string = "getJSON";
+[@bs.module "js-cookie"]
+external getJson: string => Js.Nullable.t(Js.Json.t) = "getJSON";
 
 [@bs.module "js-cookie"] external remove: string => unit = "remove";
