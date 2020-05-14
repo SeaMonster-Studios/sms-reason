@@ -3,7 +3,7 @@
 Contains many reason bindings as well as utilities used across other packages.
 
 Install:
-`yarn add @semonster-studios/reason`
+`yarn add @seamonster-studios/reason`
 
 
 Install Peer Dependencies:
