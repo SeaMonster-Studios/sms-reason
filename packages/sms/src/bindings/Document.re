@@ -33,3 +33,16 @@ type element = {
 
 external domElToDomEl_: Dom.element => element = "%identity";
 external _domElToDomEl: element => Dom.element = "%identity";
+
+type location = {
+  host: string,
+  origin: string,
+  protocol: string,
+  hostname: string,
+  port: string,
+  pathname: string,
+  search: string,
+  hash: string,
+  href: string,
+};
+[@bs.val] [@bs.scope "window"] external location: location = "location";
