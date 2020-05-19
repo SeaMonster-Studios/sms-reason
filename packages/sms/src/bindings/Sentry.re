@@ -10,7 +10,7 @@ type transport;
 [@bs.deriving abstract]
 type options = {
   [@bs.optional]
-  blackListUrls: array(Js.Re.t),
+  blacklistUrls: array(Js.Re.t),
   [@bs.optional]
   whitelistUrls: array(Js.Re.t),
   [@bs.optional]
@@ -53,7 +53,7 @@ type options = {
 };
 
 [@bs.module "@sentry/browser"]
-external init: (~options: options=?, unit) => unit = "int";
+external init: Js.Nullable.t(options) => unit = "init";
 
 [@bs.module "@sentry/browser"]
 external capturePromiseException: Js.Promise.error => unit =
