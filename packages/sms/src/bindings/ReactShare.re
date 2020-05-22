@@ -13,15 +13,18 @@ module Twitter = {
     "TwitterShareButton";
 };
 
-module Facebook = {
+module Facebook0 = {
   [@bs.module "react-share"] [@react.component]
   external make:
-    (
-      ~children: React.element,
-      ~url: string,
-      ~quote: string=?,
-      ~ariaLabel: string=?
-    ) =>
-    React.element =
+    (~children: React.element, ~url: string, ~quote: string=?) => React.element =
     "FacebookShareButton";
+};
+
+module Facebook = {
+  [@react.component]
+  let make =
+      (~children, ~url: string, ~quote: option(string)=?, ~ariaLabel: string) =>
+    <Spread props={"aria-label": ariaLabel}>
+      <Facebook0 url ?quote> children </Facebook0>
+    </Spread>;
 };
