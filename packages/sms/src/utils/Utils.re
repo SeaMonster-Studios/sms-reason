@@ -1,9 +1,5 @@
 open Belt;
 
-module StyleU = {
-  let rem_of_px = pixel => (pixel->float_of_int /. 16.)->Css.rem;
-};
-
 module ErrorU = {
   let unknownErrorMessage = "An unknown error has occurred.";
 };
