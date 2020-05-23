@@ -19,6 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "@boldcommerce/bold-subscriptions-js": "^1.2.6",
+    "@sentry/node": "^5.15.5",
     "dayjs": "^1.8.23",
     "deck.gl": "^8.0.17",
     "downshift": "^5.0.5",

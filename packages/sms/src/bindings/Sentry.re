@@ -53,7 +53,10 @@ type options = {
 };
 
 [@bs.module "@sentry/browser"]
-external init: Js.Nullable.t(options) => unit = "init";
+external initBrowser: Js.Nullable.t(options) => unit = "init";
+
+[@bs.module "@sentry/node"]
+external initNode: Js.Nullable.t(options) => unit = "init";
 
 [@bs.module "@sentry/browser"]
 external capturePromiseException: Js.Promise.error => unit =
