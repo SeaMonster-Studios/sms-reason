@@ -13,7 +13,9 @@ let getItemAndDecode = (key, decoder) =>
     switch (cachedState->Js.Json.parseExn->decoder) {
     | Ok(decoded) => Some(decoded)
     | Error(error) =>
-      error->Sentry.captureDeccoError("Local Storage Item with key: " ++ key);
+      error->Sentry.Browser.captureDeccoError(
+        "Local Storage Item with key: " ++ key,
+      );
       None;
     }
   | None => None
