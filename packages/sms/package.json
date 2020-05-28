@@ -42,7 +42,7 @@
     "react-copy-to-clipboard": "5.0.1",
     "react-json-view": "^1.19.1",
     "react-map-gl": "^5.2.3",
-    "react-query": "^1.0.27",
+    "react-query": "^1.5.3",
     "react-responsive": "^8.0.3",
     "react-share": "^4.1.0",
     "react-sortable-hoc": "^1.11.0",

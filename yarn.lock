@@ -1695,6 +1695,11 @@
   dependencies:
     "@babel/runtime" "^7.0.0"
 
+"@scarf/scarf@^1.0.0":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@scarf/scarf/-/scarf-1.0.5.tgz#accee0bce88a9047672f7c8faf3cada59c996b81"
+  integrity sha512-9WKaGVpQH905Aqkk+BczFEeLQxS07rl04afFRPUG9IcSlOwmo5EVVuuNu0d4M9LMYucObvK0LoAe+5HfMW2QhQ==
+
 "@seamonster-studios/react-use-measure@0.11.4":
   version "0.11.4"
   resolved "https://registry.yarnpkg.com/@seamonster-studios/react-use-measure/-/react-use-measure-0.11.4.tgz#ac313215db5701fbce6d90b5abd75cffedd92c3c"
@@ -6704,10 +6709,13 @@ react-map-gl@^5.2.3:
     react-virtualized-auto-sizer "^1.0.2"
     viewport-mercator-project "^6.2.3 || ^7.0.1"
 
-react-query@^1.0.27:
-  version "1.0.29"
-  resolved "https://registry.yarnpkg.com/react-query/-/react-query-1.0.29.tgz#80e42223c5bde582b892ed606fdde069d6165a7b"
-  integrity sha512-jfgv8xyGS7OAhwIVMx52oK4vBtCgVkCdQrWCMFDI+TgYIXUsCgXL2+dsIVNyM7IylUNneSfAncaF3HCKHe55eQ==
+react-query@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-1.5.3.tgz#672dbda734113e8b0e0b90b06e003c4daeef8a58"
+  integrity sha512-KiOdVnKdimn8QCNirs1lJdrCE5o8nFgn8BMmlk2ujfUopnHPSGZs4EaVSuwRynNaTNI0N9U0Fws1Pcn6DtvE2g==
+  dependencies:
+    "@scarf/scarf" "^1.0.0"
+    ts-toolbelt "^6.4.2"
 
 react-responsive@^8.0.3:
   version "8.0.3"
@@ -7952,6 +7960,11 @@ trim-off-newlines@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-off-newlines/-/trim-off-newlines-1.0.1.tgz#9f9ba9d9efa8764c387698bcbfeb2c848f11adb3"
   integrity sha1-n5up2e+odkw4dpi8v+sshI8RrbM=
+
+ts-toolbelt@^6.4.2:
+  version "6.9.4"
+  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-6.9.4.tgz#cc3a070d99c557c552b4f69e36f13d430c47a760"
+  integrity sha512-muRZZqfOTOVvLk5cdnp7YWm6xX+kD/WL2cS/L4zximBRcbQSuMoTbQQ2ZZBVMs1gB0EZw1qThP+HrIQB35OmEw==
 
 tslib@^1.10.0, tslib@^1.9.0, tslib@^1.9.3:
   version "1.11.1"
