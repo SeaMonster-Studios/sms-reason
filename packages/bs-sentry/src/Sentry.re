@@ -52,8 +52,8 @@ type options = {
     Js.Promise.t(Js.Nullable.t(event)),
 };
 
-let%private captureDeccoError =
-            (captureMessage, error: Decco.decodeError, decoderName: string) => {
+let captureDeccoError =
+    (captureMessage, error: Decco.decodeError, decoderName: string) => {
   let path = error.path;
   let message = error.message;
   let value = error.value->Js.Json.stringify;
@@ -67,47 +67,4 @@ let%private captureDeccoError =
   |j};
   Js.log(report);
   captureMessage(report);
-};
-
-module Browser = {
-  [@bs.module "@sentry/browser"]
-  external make: Js.Nullable.t(options) => unit = "init";
-
-  [@bs.module "@sentry/browser"]
-  external capturePromiseException: Js.Promise.error => unit =
-    "captureException";
-
-  [@bs.module "@sentry/browser"]
-  external captureException: 'a => unit = "captureException";
-
-  [@bs.module "@sentry/browser"]
-  external captureMessage: string => unit = "captureMessage";
-
-  [@bs.module "@sentry/browser"]
-  external showReportDialog: unit => unit = "showReportDialog";
-
-  [@bs.module "@sentry/browser"]
-  external withScope: scope => unit = "showReportDialog";
-
-  let captureDeccoError = captureDeccoError(captureMessage);
-};
-
-module Node = {
-  [@bs.module "@sentry/node"]
-  external make: Js.Nullable.t(options) => unit = "init";
-
-  [@bs.module "@sentry/node"]
-  external capturePromiseException: Js.Promise.error => unit =
-    "captureException";
-
-  [@bs.module "@sentry/node"]
-  external captureException: 'a => unit = "captureException";
-
-  [@bs.module "@sentry/node"]
-  external captureMessage: string => unit = "captureMessage";
-
-  [@bs.module "@sentry/node"]
-  external withScope: scope => unit = "showReportDialog";
-
-  let captureDeccoError = captureDeccoError(captureMessage);
 };
