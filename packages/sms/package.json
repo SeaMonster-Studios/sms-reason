@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/reason",
-  "version": "0.13.1",
+  "version": "0.13.2",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/sms",
   "scripts": {
@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "@boldcommerce/bold-subscriptions-js": "^1.2.6",
-    "@seamonster-studios/bs-sentry": "^0.13.0",
+    "@seamonster-studios/bs-sentry": "^0.13.2",
     "dayjs": "^1.8.23",
     "deck.gl": "^8.0.17",
     "downshift": "^5.0.5",
