@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/bs-sentry",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/bs-sentry",
   "scripts": {
