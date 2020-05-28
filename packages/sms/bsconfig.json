@@ -23,6 +23,7 @@
     "decco/ppx"
   ],
   "bs-dependencies": [
+    "@seamonster-studios/bs-sentry",
     "reason-react",
     "bs-date-fns",
     "decco"
