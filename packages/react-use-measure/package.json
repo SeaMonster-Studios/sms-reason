@@ -2,6 +2,7 @@
   "name": "@seamonster-studios/react-use-measure",
   "version": "0.12.0",
   "private": false,
+  "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/react-use-measure",
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w -ws _ ",

@@ -1,8 +1,8 @@
 {
-  "name": "@seamonster-studios/react-use-countdown",
+  "name": "@seamonster-studios/bs-sentry",
   "version": "0.12.0",
   "private": false,
-  "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/react-use-countdown",
+  "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/bs-sentry",
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w -ws _ ",
@@ -18,8 +18,15 @@
   ],
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
+  "dependencies": {
+    "@juggle/resize-observer": "^3.1.1",
+    "@sentry/browser": "^5.15.5",
+    "@sentry/node": "^5.15.5",
+    "react-use-measure": "^2.0.0"
+  },
   "devDependencies": {
     "bs-platform": "^7.0.1",
+    "decco": "^1.2.1",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "reason-react": ">=0.7.0"
