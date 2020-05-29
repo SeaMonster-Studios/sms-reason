@@ -1,0 +1,32 @@
+{
+  "name": "@seamonster-studios/bs-react-query",
+  "version": "0.13.3",
+  "private": false,
+  "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/bs-react-query",
+  "scripts": {
+    "build": "bsb -make-world",
+    "start": "bsb -make-world -w -ws _ ",
+    "clean": "bsb -clean-world"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "BuckleScript",
+    "ReasonReact",
+    "reason-react"
+  ],
+  "author": "Engineering Team @ SeaMonster Studios",
+  "license": "MIT",
+  "dependencies": {
+    "react-query": "^1.5.3",
+    "react-query-devtools": "^1.1.5"
+  },
+  "devDependencies": {
+    "bs-platform": "^7.0.1",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
+    "reason-react": ">=0.7.0"
+  },
+  "gitHead": "442fcf71845e384ccdd5ca0e92a3a17ff17461f2"
+}
