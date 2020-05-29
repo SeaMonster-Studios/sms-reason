@@ -1,4 +1,6 @@
-# React Use Measure bindings
+# React Query bindings
+
+JS Lib documentation: https://github.com/tannerlinsley/react-query
 
 Install:
 `yarn add @seamonster-studios/bs-react-query`

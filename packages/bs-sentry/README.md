@@ -1,4 +1,4 @@
-# React Use Measure bindings
+# @sentry/browser and @sentry/node bindings
 
 Install:
 `yarn add @seamonster-studios/bs-sentry`

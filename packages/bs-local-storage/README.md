@@ -1,4 +1,4 @@
-# React Use Measure bindings
+# LocalStorage bindings
 
 Install:
 `yarn add @seamonster-studios/bs-local-storage`
