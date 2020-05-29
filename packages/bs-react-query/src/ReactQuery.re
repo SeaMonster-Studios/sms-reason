@@ -1,5 +1,6 @@
 // Lib: https://github.com/tannerlinsley/react-query
 // Typescript type reference: https://github.com/tannerlinsley/react-query/blob/master/types/index.d.ts
+
 type key('keyVars) = (string, 'keyVars);
 
 module Hooks = {
