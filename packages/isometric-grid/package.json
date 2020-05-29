@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/isometric-grid",
-  "version": "0.13.3",
+  "version": "0.13.5",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/isometric-grid",
   "scripts": {
@@ -22,7 +22,7 @@
   "license": "MIT",
   "devDependencies": {
     "@seamonster-studios/react-use-measure": "0.11.4",
-    "@seamonster-studios/reason": "^0.13.3",
+    "@seamonster-studios/reason": "^0.13.5",
     "bs-css-emotion": "^1.1.0",
     "bs-date-fns": "^0.1.6",
     "bs-platform": "^7.2.2",
