@@ -1,5 +1,6 @@
 // Lib: https://github.com/tannerlinsley/react-query
 // Typescript type reference: https://github.com/tannerlinsley/react-query/blob/master/types/index.d.ts
+open Belt;
 
 type key('keyVars) = (string, 'keyVars);
 
@@ -245,20 +246,22 @@ module Hooks = {
 
     let convertQuery: useQuery_unmodified('response) => useQuery('response) =
       result => {
-        status:
-          switch (
-            result.status,
-            result.data->Js.Nullable.toOption,
-            result.error->Js.Nullable.toOption,
-          ) {
-          | ("success", Some(data), _) => `success(data)
-          | ("error", _, Some(error)) => `error(error)
-          | ("loading", _, _)
-          | _ => `loading
-          },
-        isFetching: result.isFetching,
-        isStale: result.isStale,
-        failureCount: result.failureCount,
+        {
+          status:
+            switch (
+              result.status,
+              result.data->Js.Nullable.toOption,
+              result.error->Js.Nullable.toOption,
+            ) {
+            | ("success", Some(data), _) => `success(data)
+            | ("error", _, Some(error)) => `error(error)
+            | ("loading", _, _)
+            | _ => `loading
+            },
+          isFetching: result.isFetching,
+          isStale: result.isStale,
+          failureCount: result.failureCount,
+        };
       };
 
     type usePaginatedQuery_unmodified('response) = {
@@ -366,7 +369,7 @@ module Hooks = {
 
   let useQuery =
       (
-        ~key: option(key('keyVars))=?,
+        ~key: option(key('keyVars)),
         ~vars: option('optionalVars)=?,
         ~options: option(Options.query('queryFnParamsFilter, 'response))=?,
         fn,
@@ -416,7 +419,7 @@ module Hooks = {
   [@bs.module "react-query"]
   external useMutation:
     (
-      ~fn: (string, 'keyVars, 'optionalVars) => Js.Promise.t('response),
+      ~fn: 'vars => Js.Promise.t('response),
       ~options: Options.mutate('response, 'mutateVars, 'mutateData)=?
     ) =>
     Result.useMutation_unmodified('response, 'mutateVars, 'mutateData) =
@@ -453,7 +456,7 @@ module ConfigProvider = {
     [@bs.optional]
     refetchAllOnWindowFocus: bool,
     [@bs.optional]
-    queryKeySerializerFn: 'queryKey => 'serializerResponse,
+    queryKeySerializerFn: string => 'serializerResponse,
     [@bs.optional]
     onMutate: 'onMutate,
     [@bs.optional]
@@ -479,6 +482,8 @@ module ConfigProvider = {
     refetchOnMount: Hooks.Options.refetchOnMount,
     [@bs.optional]
     isDataEqual: ('prevData, 'nextData) => bool,
+    [@bs.optional]
+    refetchOnWindowFocus: Hooks.Options.refetchOnWindowFocus,
   };
 
   /**WARNING: config prop must be stable or memoized. Do not create an inline object!  */
@@ -613,3 +618,59 @@ external useQueryCache: unit => Cache.t = "useQueryCache";
 
 [@bs.module "react-query"]
 external useIsFetching: unit => int = "useIsFetching";
+
+module Helpers = {
+  let queryIsSuccess = (query: Hooks.Result.useQuery('response)) =>
+    switch (query.status) {
+    | `success(_) => true
+    | _ => false
+    };
+
+  let allQueriesAreSuccess =
+      (queries: array(Hooks.Result.useQuery('response))) =>
+    queries
+    ->Array.keep(query =>
+        switch (query.status) {
+        | `success(_) => true
+        | _ => false
+        }
+      )
+    ->Array.length
+    == queries->Array.length;
+
+  let paginatedIsSuccess = (query: Hooks.Result.usePaginatedQuery('response)) =>
+    switch (query.status) {
+    | `success(_) => true
+    | _ => false
+    };
+
+  let allPaginatedAreSuccess =
+      (queries: array(Hooks.Result.usePaginatedQuery('response))) =>
+    queries
+    ->Array.keep(query =>
+        switch (query.status) {
+        | `success(_) => true
+        | _ => false
+        }
+      )
+    ->Array.length
+    == queries->Array.length;
+
+  let infiniteIsSuccess = (query: Hooks.Result.useInfiniteQuery('response)) =>
+    switch (query.status) {
+    | `success(_) => true
+    | _ => false
+    };
+
+  let allInfiniteAreSuccess =
+      (queries: array(Hooks.Result.useInfiniteQuery('response))) =>
+    queries
+    ->Array.keep(query =>
+        switch (query.status) {
+        | `success(_) => true
+        | _ => false
+        }
+      )
+    ->Array.length
+    == queries->Array.length;
+};
