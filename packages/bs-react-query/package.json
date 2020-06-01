@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/bs-react-query",
-  "version": "0.13.6",
+  "version": "0.13.7",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/bs-react-query",
   "scripts": {
