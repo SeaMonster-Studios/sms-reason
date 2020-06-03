@@ -175,7 +175,7 @@ module Hooks = {
 
     type mutate('response, 'mutateVars, 'mutateData) =
       (
-        ~params: 'mutateVars,
+        ~vars: 'mutateVars,
         ~options: Options.mutate('response, 'mutateVars, 'mutateData)=?,
         unit
       ) =>
@@ -238,6 +238,7 @@ module Hooks = {
       isFetching,
       isStale,
       failureCount,
+      refetch,
       data: data_('response),
     };
 
@@ -245,6 +246,7 @@ module Hooks = {
       status: [ | `loading | `error(Js.Promise.error) | `success('response)],
       isFetching,
       isStale,
+      refetch,
       failureCount,
     };
 
@@ -265,6 +267,7 @@ module Hooks = {
           isFetching: result.isFetching,
           isStale: result.isStale,
           failureCount: result.failureCount,
+          refetch: result.refetch,
         };
       };
 
