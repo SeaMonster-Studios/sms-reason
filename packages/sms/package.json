@@ -28,7 +28,6 @@
     "fontfaceobserver": "^2.1.0",
     "format-usd": "^1.0.1",
     "formik": "^2.1.4",
-    "js-cookie": "^2.2.1",
     "lodash.difference": "^4.5.0",
     "lodash.isequal": "^4.5.0",
     "lodash.sortby": "^4.7.0",

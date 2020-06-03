@@ -1,5 +1,5 @@
 [@bs.deriving abstract]
-type setOptions = {
+type options = {
   [@bs.optional]
   path: string,
   [@bs.optional]
@@ -10,15 +10,10 @@ type setOptions = {
   secure: bool,
 };
 
-[@bs.module "js-cookie"] external set: (string, string) => unit = "set";
-
 [@bs.module "js-cookie"]
-external setWithOptions: (string, string, setOptions) => unit = "set";
-
-[@bs.module "js-cookie"] external setJson: (string, Js.Json.t) => unit = "set";
-
-[@bs.module "js-cookie"]
-external setJsonWithOptions: (string, Js.Json.t, setOptions) => unit = "set";
+external set:
+  (~name: string, ~value: string, ~options: options=?, unit) => unit =
+  "set";
 
 [@bs.module "js-cookie"]
 external get: string => Js.Nullable.t(string) = "get";
