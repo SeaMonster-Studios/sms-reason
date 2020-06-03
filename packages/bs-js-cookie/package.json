@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/bs-js-cookie",
-  "version": "0.13.8",
+  "version": "0.13.9",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/bs-js-cookie",
   "scripts": {
