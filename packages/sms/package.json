@@ -19,9 +19,7 @@
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
   "dependencies": {
-    "@boldcommerce/bold-subscriptions-js": "^1.2.6",
     "@seamonster-studios/bs-sentry": "^0.13.3",
-    "dayjs": "^1.8.23",
     "deck.gl": "^8.0.17",
     "downshift": "^5.0.5",
     "email-validator": "^2.0.4",

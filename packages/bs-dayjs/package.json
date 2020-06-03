@@ -1,8 +1,8 @@
 {
-  "name": "@seamonster-studios/bs-js-cookie",
+  "name": "@seamonster-studios/bs-dayjs",
   "version": "0.13.8",
   "private": false,
-  "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/bs-js-cookie",
+  "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/bs-dayjs",
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w -ws _ ",
@@ -19,7 +19,7 @@
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
   "dependencies": {
-    "js-cookie": "^2.2.1"
+    "dayjs": "^1.8.28"
   },
   "devDependencies": {
     "bs-platform": "^7.0.1"
