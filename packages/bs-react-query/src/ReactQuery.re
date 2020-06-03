@@ -174,7 +174,11 @@ module Hooks = {
     type canFetchMore = bool;
 
     type mutate('response, 'mutateVars, 'mutateData) =
-      ('mutateVars, Options.mutate('response, 'mutateVars, 'mutateData)) =>
+      (
+        ~params: 'mutateVars,
+        ~options: Options.mutate('response, 'mutateVars, 'mutateData)=?,
+        unit
+      ) =>
       Js.Promise.t('response);
 
     type useMutation_unmodified_rec('response) = {
