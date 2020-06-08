@@ -6719,10 +6719,10 @@ react-map-gl@^5.2.3:
     react-virtualized-auto-sizer "^1.0.2"
     viewport-mercator-project "^6.2.3 || ^7.0.1"
 
-react-query-devtools@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/react-query-devtools/-/react-query-devtools-1.1.5.tgz#0bd14abe28dcf807495acd65c1bec1665e2937ad"
-  integrity sha512-KGOjlDNn/OLUh7s5ECKs2Dv8y0TDiGgQbBv9SWxnIsoTmxWRV7Gk4OZ0L3sge3IgwpQJqkSOTFMOwQGsdX3mtA==
+react-query-devtools@^1.1.17:
+  version "1.1.17"
+  resolved "https://registry.yarnpkg.com/react-query-devtools/-/react-query-devtools-1.1.17.tgz#ea9b51579a5bdbd34518e22efdfb4cb0e0a11eb6"
+  integrity sha512-KlXECp/rs7D3qS8aBSFFbu/ditsOOfbg9d73aSkkOQ488x7UjuK30QoD4dAR9kmz/ke+Hia73b+nkw65nbGtQg==
   dependencies:
     match-sorter "^4.1.0"
 
@@ -6730,6 +6730,14 @@ react-query@^1.5.3:
   version "1.5.3"
   resolved "https://registry.yarnpkg.com/react-query/-/react-query-1.5.3.tgz#672dbda734113e8b0e0b90b06e003c4daeef8a58"
   integrity sha512-KiOdVnKdimn8QCNirs1lJdrCE5o8nFgn8BMmlk2ujfUopnHPSGZs4EaVSuwRynNaTNI0N9U0Fws1Pcn6DtvE2g==
+  dependencies:
+    "@scarf/scarf" "^1.0.0"
+    ts-toolbelt "^6.4.2"
+
+react-query@^1.5.5:
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/react-query/-/react-query-1.5.5.tgz#6f94e061a8ce9ff1fb746f2c50b588711aa0f070"
+  integrity sha512-6pUh6/qSf3e8HNMJFMIfhqluE3WZ8F/ugZGrNZ9YT5zvftDlXNj5gdY9ZUK0rldkBqxUHqmiNAePcaApHCZMFw==
   dependencies:
     "@scarf/scarf" "^1.0.0"
     ts-toolbelt "^6.4.2"

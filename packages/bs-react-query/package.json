@@ -19,8 +19,8 @@
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
   "dependencies": {
-    "react-query": "^1.5.3",
-    "react-query-devtools": "^1.1.5"
+    "react-query": "^1.5.5",
+    "react-query-devtools": "^1.1.17"
   },
   "devDependencies": {
     "bs-platform": "^7.0.1",

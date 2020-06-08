@@ -10,47 +10,83 @@ Add `@seamonster-studios/bs-react-query` to your bsconfig.json
 Example Usage:
 ```reason
 
-let reportPromiseError = (error: Js.Promise.error) => {
-  Js.log(error);
-  SentryBrowser.capturePromiseException(error);
-};
+// App.re
+[@react.component]
+let make = () => {
+  let queryConfig =
+      React.useMemo0(() =>
+        ReactQuery.ConfigProvider.(
+          config(
+            // ~cacheTime=5000,
+            // ~staleTime=10000,
+            ~onError=error => error->Utils.reportPromiseError,
+            (),
+          )
+        )
+      );
 
-let reportDecodeError = (error: Decco.decodeError, decoderName) => {
-  Js.log(error);
-  SentryBrowser.captureDeccoError(error, decoderName);
-};
-
-
-let promiseQueryPrep = (promise, decoder, fnName, decoderName) =>
-  promise 
-  ->FutureJs.fromPromise(_error => () /** If an async call is being handled by react query , we are already reporting the error via ReactQuery.ConfigProvider so we don't need to report it again when converting our promise to a future */)
-  ->Future.mapOk(res => res##data->decoder)
-  ->Future.tapOk(decoded =>
-      switch (decoded) {
-      | Ok(_) => ()
-      | Error(decodeError) =>
-        decodeError->reportDecodeError({j|$fnName: $decoderName|j})
-      }
+  <ReactQuery.ConfigProvider
+    config=ReactQuery.ConfigProvider.(
+      config(
+        ~cacheTime=5000,
+        ~onError=error => error->Utils.reportPromiseError,
+        (),
+      )
     )
-  ->FutureJs.resultToPromise;
+  >
+    // ...children
+  </ReactQuery.ConfigProvider>
+}
 
-let useProject = projectId =>
-  ReactQuery.Hooks.useQuery(~key=("projects", [|projectId|]), (_, _, _) =>
-    Api.instance
-    ->Axios.Instance.get("/projects/" ++ projectId)
-    ->promiseQueryPrep(project_decode, "useProject", "project_decode")
+// AuthQueries.re
+
+module Authed = {
+  include ReactQuery2.QuerySet({
+    type key = string;
+    type data = Result.t(Auth.authResponseData, Decco.decodeError);
+    type queryVars = unit;
+    type mutateVars = Auth0.user;
+  });
+
+  let endpoint = "/login";
+
+  let useAuthed = Query.use(~key=ready ? endpoint->Some : None, ~options?, (key, _) =>
+    // return a promise with value with the same type as data
   );
 
-<ReactQuery.ConfigProvider
-  config=ReactQuery.ConfigProvider.(
-    config(
-      ~cacheTime=5000,
-      ~onError=error => error->Utils.reportPromiseError,
+  let useLogin = () => Mutation.use(_ => {
+    // return a promise with value with the same type as data
+  })
+};
+
+// Root.re
+[@react.component]
+let make = () => {
+  let url = ReasonReactRouter.useUrl();
+
+  let authed =
+    AuthHooks.useAuthed(
+      ~options=AuthHooks.Query.Options.(make(~retry=0, ())),
       (),
-    )
-  )
->
-  // ...App
-</ReactQuery.ConfigProvider>
+    );
+
+  {switch (authed.status, authed.isFetching) {
+    | (Success(Ok(authedStatus)), _) =>
+      <SiteLayout authed=true>
+        <RootAuthed authedStatus documentReferrer />
+      </SiteLayout>
+    | (Loading, true) => <Loaders.SplashScreen />
+    | (Loading, false)
+    | (Success(Error(_)), _)
+    | (Error(_), _) =>
+      <SiteLayout authed=false>
+        <MarketingLayout>
+          {switch (url.path) {
+            //  screens by path
+          }}
+        </MarketingLayout>
+      </SiteLayout>
+    }}
+};
 
 ```

@@ -1,30 +1,151 @@
-// Lib: https://github.com/tannerlinsley/react-query
-// Typescript type reference: https://github.com/tannerlinsley/react-query/blob/master/types/index.d.ts
-open Belt;
+type cache;
 
-type key('keyVars) = (string, 'keyVars);
+module type OptionTypes = {type data;};
 
-module Hooks = {
+module OptionTypes = (Config: OptionTypes) => {
+  type data;
+  type manual = bool;
+  type retry = int;
+  type retryDelay = int => int;
+  type staleTime = int;
+  type cacheTime = int;
+  type refetchInterval = int;
+  type refetchIntervalInBackground = bool;
+  type refetchOnWindowFocus = bool;
+  type suspense = bool;
+  type initialData = Config.data;
+  type refetchOnMount = bool;
+  type getFetchMore = (Config.data, array(Config.data)) => bool;
+};
+
+module type ResultTypes = {type data;};
+
+module ResultTypes = (Config: ResultTypes) => {
+  type status_ = string;
+  type error_ = Js.Nullable.t(Js.Promise.error);
+  type data_ = Js.Nullable.t(Config.data);
+  type isFetching = bool;
+  type isStale = bool;
+  type failureCount = int;
+  type refetch = unit => unit;
+  type fetchMore = unit => unit;
+  type canFetchMore = bool;
+};
+
+module Cache = {
+  /** These are global cache elements. All other Cache properties and methods have types specific to a query and so exist within each query module */
+  type callback = cache => unit;
+  [@bs.module "react-query"] external cache: cache = "queryCache";
+
+  [@bs.module "react-query"] [@bs.scope "queryCache"]
+  external clear: unit => unit = "clear";
+
+  [@bs.module "react-query"] [@bs.scope "queryCache"]
+  external subscribe: callback => unit = "subscribe";
+
+  [@bs.module "react-query"] [@bs.scope "queryCache"]
+  external isFetching: bool = "isFetching";
+};
+
+module type MakeCache = {
+  type key;
+  type data;
+  type vars;
+};
+
+module MakeCache = (Config: MakeCache) => {
+  type queryFn = (Config.key, Config.vars) => Js.Promise.t(Config.data);
+
+  [@bs.module "react-query"] [@bs.scope "queryCache"]
+  external get: Config.key => array(Config.data) = "getQueries";
+
+  [@bs.deriving abstract]
+  type removeConfig = {
+    [@bs.optional]
+    exact: bool,
+  };
+
+  [@bs.module "react-query"] [@bs.scope "queryCache"]
+  external remove: (~key: Config.key, ~config: removeConfig=?, unit) => unit =
+    "removeQueries";
+
+  [@bs.deriving abstract]
+  type cancelConfig = {
+    [@bs.optional]
+    exact: bool,
+  };
+
+  [@bs.module "react-query"] [@bs.scope "queryCache"]
+  external cancel: (~key: Config.key, ~config: cancelConfig=?, unit) => unit =
+    "cancelQueries";
+
+  [@bs.deriving abstract]
+  type refetchConfig = {
+    [@bs.optional]
+    exact: bool,
+    [@bs.optional]
+    throwOnError: bool,
+    [@bs.optional]
+    force: bool,
+  };
+
+  [@bs.module "react-query"] [@bs.scope "queryCache"]
+  external refetch:
+    (~key: Config.key, ~config: refetchConfig=?, unit) =>
+    Js.Nullable.t(Config.data) =
+    "refetchQueries";
+
+  [@bs.module "react-query"] [@bs.scope "queryCache"]
+  external setData:
+    (Config.key, Js.Nullable.t(Config.data) => Js.Nullable.t(Config.data)) =>
+    unit =
+    "setQueryData";
+
+  [@bs.module "react-query"] [@bs.scope "queryCache"]
+  external getData: Config.key => Js.Nullable.t(Config.data) = "getQueryData";
+
+  [@bs.deriving abstract]
+  type prefetchConfig = {
+    [@bs.optional]
+    throwOnError: bool,
+  };
+
+  [@bs.module "react-query"] [@bs.scope "queryCache"]
+  external prefetch:
+    (
+      ~key: Config.key=?,
+      ~vars: Config.vars=?,
+      ~fn: queryFn=?,
+      ~config: prefetchConfig=?,
+      unit
+    ) =>
+    Js.Promise.t(Config.data) =
+    "prefetchQuery";
+};
+
+module type Query = {
+  type key;
+  type vars;
+  type data;
+};
+
+module Query = (Config: Query) => {
+  type queryFn = (Config.key, Config.vars) => Js.Promise.t(Config.data);
+
+  module Cache =
+    MakeCache({
+      type data = Config.data;
+      type key = Config.key;
+      type vars = Config.vars;
+    });
+
   module Options = {
-    type manual = bool;
-    type retry = int;
-    type retryDelay = int => int;
-    type staleTime = int;
-    type cacheTime = int;
-    type refetchInterval = int;
-    type refetchIntervalInBackground = bool;
-    type refetchOnWindowFocus = bool;
-    type onSuccess('response) = 'response => unit;
-    type onError = Js.Promise.error => unit;
-    type onSettled('response) = ('response, Js.Promise.error) => unit;
-    type suspense = bool;
-    type initialData('response) = 'response;
-    type refetchOnMount = bool;
-    type queryFnParamsFilter('a) = 'a => 'a;
-    type getFetchMore('response) = ('response, array('response)) => bool;
+    include OptionTypes({
+      type data = Config.data;
+    });
 
     [@bs.deriving abstract]
-    type query('queryFnParamsFilter, 'response) = {
+    type make = {
       [@bs.optional]
       manual,
       [@bs.optional]
@@ -42,23 +163,124 @@ module Hooks = {
       [@bs.optional]
       refetchOnWindowFocus,
       [@bs.optional]
-      onSuccess: onSuccess('response),
+      onSuccess: Config.data => unit,
       [@bs.optional]
-      onError,
+      onError: Js.Promise.error => unit,
       [@bs.optional]
-      onSettled: onSettled('response),
+      onSettled: (Config.data, Js.Promise.error) => unit,
       [@bs.optional]
       suspense,
       [@bs.optional]
-      initialData: initialData('response),
+      initialData,
       [@bs.optional]
       refetchOnMount,
-      [@bs.optional]
-      queryFnParamsFilter: queryFnParamsFilter('queryFnParamsFilter),
+    };
+  };
+
+  module Result = {
+    include ResultTypes({
+      type data = Config.data;
+    });
+
+    type t_unmodified = {
+      status: status_,
+      error: error_,
+      data: data_,
+      isFetching,
+      isStale,
+      failureCount,
+      refetch,
     };
 
+    type status =
+      | Loading
+      | Error(Js.Promise.error)
+      | Success(Config.data);
+
+    type t = {
+      status,
+      isFetching,
+      isStale,
+      failureCount,
+      refetch,
+    };
+
+    let isSuccess = t =>
+      switch (t.status) {
+      | Success(_) => true
+      | _ => false
+      };
+
+    let isError = t =>
+      switch (t.status) {
+      | Error(_) => true
+      | _ => false
+      };
+
+    let isLoading = t =>
+      switch (t.status) {
+      | Loading => true
+      | _ => false
+      };
+
+    let makeReasonable: t_unmodified => t =
+      query => {
+        status:
+          switch (
+            query.status,
+            query.data->Js.Nullable.toOption,
+            query.error->Js.Nullable.toOption,
+          ) {
+          | ("success", Some(data), _) => Success(data)
+          | ("error", _, Some(error)) => Error(error)
+          | ("loading", _, _)
+          | _ => Loading
+          },
+        isFetching: query.isFetching,
+        isStale: query.isStale,
+        failureCount: query.failureCount,
+        refetch: query.refetch,
+      };
+  };
+
+  [@bs.module "react-query"]
+  external use:
+    (
+      ~key: option(Config.key),
+      ~vars: Config.vars=?,
+      ~fn: queryFn,
+      ~options: Options.make=?
+    ) =>
+    Result.t_unmodified =
+    "useQuery";
+
+  let use =
+      (
+        ~key: option(Config.key),
+        ~vars: option(Config.vars)=?,
+        ~options: option(Options.make)=?,
+        fn,
+      ) =>
+    use(~key, ~vars?, ~fn, ~options?)->Result.makeReasonable;
+};
+
+module Paginated = (Config: Query) => {
+  type queryFn = (Config.key, Config.vars) => Js.Promise.t(Config.data);
+
+  module Cache =
+    MakeCache({
+      type data = Config.data;
+      type key = Config.key;
+      type vars = Config.vars;
+    });
+
+  module Options = {
+    include OptionTypes({
+      type data = Config.data;
+    });
+
     [@bs.deriving abstract]
-    type paginatedQuery('response) = {
+    type make = {
       [@bs.optional]
       manual,
       [@bs.optional]
@@ -76,21 +298,127 @@ module Hooks = {
       [@bs.optional]
       refetchOnWindowFocus,
       [@bs.optional]
-      onSuccess: onSuccess('response),
+      onSuccess: Config.data => unit,
       [@bs.optional]
-      onError,
+      onError: Js.Promise.error => unit,
       [@bs.optional]
       suspense,
       [@bs.optional]
-      initialData: initialData('response),
+      initialData,
       [@bs.optional]
       refetchOnMount,
     };
+  };
+
+  module Result = {
+    include ResultTypes({
+      type data = Config.data;
+    });
+
+    type t_unmodified = {
+      status: status_,
+      error: error_,
+      resolvedData: data_,
+      latestData: data_,
+      isFetching,
+      isStale,
+      failureCount,
+      refetch,
+    };
+
+    type status =
+      | Loading
+      | Error(Js.Promise.error)
+      | Success(Config.data, Config.data);
+
+    type t = {
+      status,
+      isFetching,
+      isStale,
+      failureCount,
+      refetch,
+    };
+
+    let isSuccess = t =>
+      switch (t.status) {
+      | Success(_) => true
+      | _ => false
+      };
+
+    let isError = t =>
+      switch (t.status) {
+      | Error(_) => true
+      | _ => false
+      };
+
+    let isLoading = t =>
+      switch (t.status) {
+      | Loading => true
+      | _ => false
+      };
+
+    let makeReasonable: t_unmodified => t =
+      query => {
+        status:
+          switch (
+            query.status,
+            query.resolvedData->Js.Nullable.toOption,
+            query.latestData->Js.Nullable.toOption,
+            query.error->Js.Nullable.toOption,
+          ) {
+          | ("success", Some(resolvedData), Some(latestData), _) =>
+            Success(resolvedData, latestData)
+          | ("error", _, _, Some(error)) => Error(error)
+          | ("loading", _, _, _)
+          | _ => Loading
+          },
+        isFetching: query.isFetching,
+        isStale: query.isStale,
+        failureCount: query.failureCount,
+        refetch: query.refetch,
+      };
+  };
+
+  [@bs.module "react-query"]
+  external use:
+    (
+      ~key: option(Config.key),
+      ~vars: Config.vars=?,
+      ~fn: queryFn,
+      ~options: Options.make=?
+    ) =>
+    Result.t_unmodified =
+    "usePaginatedQuery";
+
+  let use =
+      (
+        ~key: option(Config.key),
+        ~vars: option(Config.vars)=?,
+        ~options: option(Options.make)=?,
+        fn,
+      ) =>
+    use(~key, ~vars?, ~fn, ~options?)->Result.makeReasonable;
+};
+
+module Infinite = (Config: Query) => {
+  type queryFn = (Config.key, Config.vars) => Js.Promise.t(Config.data);
+
+  module Cache =
+    MakeCache({
+      type data = Config.data;
+      type key = Config.key;
+      type vars = Config.vars;
+    });
+
+  module Options = {
+    include OptionTypes({
+      type data = Config.data;
+    });
 
     [@bs.deriving abstract]
-    type infiniteQuery('response) = {
+    type make = {
       [@bs.optional]
-      getFetchMore: getFetchMore('response),
+      getFetchMore,
       [@bs.optional]
       manual,
       [@bs.optional]
@@ -108,32 +436,148 @@ module Hooks = {
       [@bs.optional]
       refetchOnWindowFocus,
       [@bs.optional]
-      onSuccess: onSuccess('response),
+      onSuccess: Config.data => unit,
       [@bs.optional]
-      onError,
+      onError: Js.Promise.error => unit,
       [@bs.optional]
       suspense,
       [@bs.optional]
-      initialData: initialData('response),
+      initialData,
       [@bs.optional]
       refetchOnMount,
     };
+  };
+
+  module Result = {
+    include ResultTypes({
+      type data = Config.data;
+    });
+
+    type t_unmodified = {
+      status: status_,
+      error: error_,
+      data: data_,
+      isFetching,
+      isStale,
+      failureCount,
+      refetch,
+      fetchMore,
+      canFetchMore,
+    };
+
+    type status =
+      | Loading
+      | Error(Js.Promise.error)
+      | Success(Config.data);
+
+    type t = {
+      status,
+      isFetching,
+      isStale,
+      failureCount,
+      refetch,
+      fetchMore,
+      canFetchMore,
+    };
+
+    let isSuccess = t =>
+      switch (t.status) {
+      | Success(_) => true
+      | _ => false
+      };
+
+    let isError = t =>
+      switch (t.status) {
+      | Error(_) => true
+      | _ => false
+      };
+
+    let isLoading = t =>
+      switch (t.status) {
+      | Loading => true
+      | _ => false
+      };
+
+    let makeReasonable: t_unmodified => t =
+      query => {
+        status:
+          switch (
+            query.status,
+            query.data->Js.Nullable.toOption,
+            query.error->Js.Nullable.toOption,
+          ) {
+          | ("success", Some(data), _) => Success(data)
+          | ("error", _, Some(error)) => Error(error)
+          | ("loading", _, _)
+          | _ => Loading
+          },
+        isFetching: query.isFetching,
+        isStale: query.isStale,
+        failureCount: query.failureCount,
+        refetch: query.refetch,
+        fetchMore: query.fetchMore,
+        canFetchMore: query.canFetchMore,
+      };
+  };
+
+  [@bs.module "react-query"]
+  external use:
+    (
+      ~key: option(Config.key),
+      ~vars: Config.vars=?,
+      ~fn: queryFn,
+      ~options: Options.make=?
+    ) =>
+    Result.t_unmodified =
+    "useInfiniteQuery";
+
+  let use =
+      (
+        ~key: option(Config.key),
+        ~vars: option(Config.vars)=?,
+        ~options: option(Options.make)=?,
+        fn,
+      ) =>
+    use(~key, ~vars?, ~fn, ~options?)->Result.makeReasonable;
+};
+
+module type Mutation = {
+  type vars;
+  type data;
+};
+
+module Mutation = (Config: Mutation) => {
+  type mutationFn = Config.vars => Js.Promise.t(Config.data);
+
+  module Options = {
+    include OptionTypes({
+      type data = Config.data;
+    });
+
+    // TODO: REVIEW
+    type onMutate = Config.vars => Js.Promise.t(Config.data);
+
+    type onSuccess =
+      (Config.data, Config.vars) => Js.Nullable.t(Js.Promise.t(unit));
+
+    type onError =
+      (Js.Promise.error, Config.vars, Config.data) =>
+      Js.Nullable.t(Js.Promise.t(unit));
+
+    type onSettled =
+      (Config.data, Js.Promise.error, Config.vars, Config.data) =>
+      Js.Nullable.t(Js.Promise.t(unit));
 
     [@bs.deriving abstract]
-    type mutate('response, 'mutateVars, 'mutateData) = {
+    type make = {
       [@bs.optional]
-      onMutate: 'mutateVars => Js.Promise.t('response),
+      onMutate,
       [@bs.optional]
-      onSuccess:
-        ('mutateData, 'mutateVars) => Js.Nullable.t(Js.Promise.t(unit)),
+      onSuccess,
       [@bs.optional]
-      onError:
-        (Js.Promise.error, 'mutateVars, 'response) =>
-        Js.Nullable.t(Js.Promise.t(unit)),
+      onError,
       [@bs.optional]
-      onSettled:
-        ('mutateData, Js.Promise.error, 'mutateVars, 'response) =>
-        Js.Nullable.t(Js.Promise.t(unit)),
+      onSettled,
       [@bs.optional]
       throwOnError: bool,
       [@bs.optional]
@@ -157,101 +601,72 @@ module Hooks = {
       [@bs.optional]
       suspense,
       [@bs.optional]
-      initialData: initialData('response),
+      initialData,
       [@bs.optional]
       refetchOnMount,
     };
   };
 
   module Result = {
-    type error_ = Js.Nullable.t(Js.Promise.error);
-    type data_('response) = Js.Nullable.t('response);
-    type isFetching = bool;
-    type isStale = bool;
-    type failureCount = int;
-    type refetch = unit => unit;
-    type fetchMore = unit => unit;
-    type canFetchMore = bool;
+    include ResultTypes({
+      type data = Config.data;
+    });
 
-    type mutate('response, 'mutateVars, 'mutateData) =
-      (
-        ~vars: 'mutateVars,
-        ~options: Options.mutate('response, 'mutateVars, 'mutateData)=?,
-        unit
-      ) =>
-      Js.Promise.t('response);
+    type mutate = Config.vars => Js.Promise.t(Config.data);
 
-    type useMutation_unmodified_rec('response) = {
-      status: string,
-      data: data_('response),
+    type promise = Js.Promise.t(Config.data);
+
+    type t_unmodified_rec = {
+      status: status_,
       error: error_,
-      promise: Js.Promise.t('response),
+      data: data_,
+      promise,
+      reset: unit => unit,
     };
 
-    type useMutation_unmodified('response, 'mutateVars, 'mutateData) = (
-      mutate('response, 'mutateVars, 'mutateData),
-      useMutation_unmodified_rec('response),
-    );
+    type t_unmodified = (mutate, t_unmodified_rec);
 
-    type useMutation_rec('response) = {
-      status: [
-        | `idle
-        | `loading
-        | `error(Js.Promise.error)
-        | `success('response)
-      ],
-      promise: Js.Promise.t('response),
+    type status =
+      | Idle
+      | Loading
+      | Error(Js.Promise.error)
+      | Success(Config.data);
+
+    type t_rec = {
+      status,
+      promise,
+      reset: unit => unit,
     };
 
-    type useMutation('response, 'mutateVars, 'mutateData) = (
-      mutate('response, 'mutateVars, 'mutateData),
-      useMutation_rec('response),
-    );
+    type t = (mutate, t_rec);
 
-    let convertMutation:
-      useMutation_unmodified('response, 'mutateVars, 'mutateData) =>
-      useMutation('response, 'mutateVars, 'mutateData) =
-      ((mutate, result)) => {
-        (
-          mutate,
-          {
-            status:
-              switch (
-                result.status,
-                result.data->Js.Nullable.toOption,
-                result.error->Js.Nullable.toOption,
-              ) {
-              | ("success", Some(data), _) => `success(data)
-              | ("error", _, Some(error)) => `error(error)
-              | ("loading", _, _) => `loading
-              | ("idle", _, _)
-              | _ => `idle
-              },
-            promise: result.promise,
-          },
-        );
+    let isSuccess = t_rec =>
+      switch (t_rec.status) {
+      | Success(_) => true
+      | _ => false
       };
 
-    type useQuery_unmodified('response) = {
-      status: string,
-      error: error_,
-      isFetching,
-      isStale,
-      failureCount,
-      refetch,
-      data: data_('response),
-    };
+    let isError = t_rec =>
+      switch (t_rec.status) {
+      | Error(_) => true
+      | _ => false
+      };
 
-    type useQuery('response) = {
-      status: [ | `loading | `error(Js.Promise.error) | `success('response)],
-      isFetching,
-      isStale,
-      refetch,
-      failureCount,
-    };
+    let isIdle = t_rec =>
+      switch (t_rec.status) {
+      | Idle => true
+      | _ => false
+      };
 
-    let convertQuery: useQuery_unmodified('response) => useQuery('response) =
-      result => {
+    let isLoading = t_rec =>
+      switch (t_rec.status) {
+      | Loading => true
+      | _ => false
+      };
+
+    let makeReasonable: t_unmodified => t =
+      ((mutate, result)) => (
+        mutate,
         {
           status:
             switch (
@@ -259,192 +674,36 @@ module Hooks = {
               result.data->Js.Nullable.toOption,
               result.error->Js.Nullable.toOption,
             ) {
-            | ("success", Some(data), _) => `success(data)
-            | ("error", _, Some(error)) => `error(error)
-            | ("loading", _, _)
-            | _ => `loading
+            | ("success", Some(data), _) => Success(data)
+            | ("error", _, Some(error)) => Error(error)
+            | ("loading", _, _) => Loading
+            | ("idle", _, _)
+            | _ => Idle
             },
-          isFetching: result.isFetching,
-          isStale: result.isStale,
-          failureCount: result.failureCount,
-          refetch: result.refetch,
-        };
-      };
-
-    type usePaginatedQuery_unmodified('response) = {
-      status: string,
-      resolvedData: data_('response),
-      latestData: data_('response),
-      error: error_,
-      isFetching,
-      isStale,
-      failureCount,
-      refetch,
-    };
-
-    type usePaginatedQuery('response) = {
-      status: [
-        | `loading
-        | `error(Js.Promise.error)
-        | `success('response, 'response)
-      ],
-      isFetching,
-      isStale,
-      failureCount,
-      refetch,
-    };
-
-    let convertPaginated:
-      usePaginatedQuery_unmodified('response) => usePaginatedQuery('response) =
-      result => {
-        status:
-          switch (
-            result.status,
-            result.resolvedData->Js.Nullable.toOption,
-            result.latestData->Js.Nullable.toOption,
-            result.error->Js.Nullable.toOption,
-          ) {
-          | ("success", Some(resolvedData), Some(latestData), _) =>
-            `success((resolvedData, latestData))
-          | ("success", None, Some(data), _)
-          | ("success", Some(data), None, _) => `success((data, data))
-          | ("error", _, _, Some(error)) => `error(error)
-          | ("loading", _, _, _)
-          | _ => `loading
-          },
-        isFetching: result.isFetching,
-        isStale: result.isStale,
-        failureCount: result.failureCount,
-        refetch: result.refetch,
-      };
-
-    type useInfiniteQuery_unmodified('response) = {
-      status: string,
-      data: data_('response),
-      error: error_,
-      isFetching,
-      isStale,
-      failureCount,
-      refetch,
-      fetchMore,
-      canFetchMore,
-    };
-
-    type useInfiniteQuery('response) = {
-      status: [ | `loading | `error(Js.Promise.error) | `success('response)],
-      isFetching,
-      isStale,
-      failureCount,
-      refetch,
-      fetchMore,
-      canFetchMore,
-    };
-
-    let convertInfinite:
-      useInfiniteQuery_unmodified('response) => useInfiniteQuery('response) =
-      result => {
-        status:
-          switch (
-            result.status,
-            result.data->Js.Nullable.toOption,
-            result.error->Js.Nullable.toOption,
-          ) {
-          | ("success", Some(data), _) => `success(data)
-          | ("error", _, Some(error)) => `error(error)
-          | ("loading", _, _)
-          | _ => `loading
-          },
-        isFetching: result.isFetching,
-        isStale: result.isStale,
-        failureCount: result.failureCount,
-        refetch: result.refetch,
-        fetchMore: result.fetchMore,
-        canFetchMore: result.canFetchMore,
-      };
+          promise: result.promise,
+          reset: result.reset,
+        },
+      );
   };
 
   [@bs.module "react-query"]
-  external useQuery:
+  external use:
     (
-      ~key: option(key('keyVars)),
-      ~vars: 'optionalVars=?,
-      ~fn: (string, 'keyVars, 'optionalVars) => Js.Promise.t('response),
-      ~options: Options.query('queryFnParamsFilter, 'response)=?
+      ~fn: Config.vars => Js.Promise.t(Config.data),
+      ~options: Options.make=?
     ) =>
-    Result.useQuery_unmodified('response) =
-    "useQuery";
-
-  let useQuery =
-      (
-        ~key: option(key('keyVars)),
-        ~vars: option('optionalVars)=?,
-        ~options: option(Options.query('queryFnParamsFilter, 'response))=?,
-        fn,
-      ) =>
-    useQuery(~key, ~vars?, ~fn, ~options?)->Result.convertQuery;
-
-  [@bs.module "react-query"]
-  external usePaginatedQuery:
-    (
-      ~key: option(key('keyVars)),
-      ~vars: 'optionalVars=?,
-      ~fn: (string, 'keyVars, 'optionalVars) => Js.Promise.t('response),
-      ~options: Options.paginatedQuery('response)=?
-    ) =>
-    Result.usePaginatedQuery_unmodified('response) =
-    "usePaginatedQuery";
-
-  let usePaginatedQuery =
-      (
-        ~key: option(key('keyVars))=?,
-        ~vars: option('optionalVars)=?,
-        ~options: option(Options.paginatedQuery('response))=?,
-        fn,
-      ) =>
-    usePaginatedQuery(~key, ~vars?, ~fn, ~options?)->Result.convertPaginated;
-
-  [@bs.module "react-query"]
-  external useInfiniteQuery:
-    (
-      ~key: option(key('keyVars)),
-      ~vars: 'optionalVars=?,
-      ~fn: (string, 'keyVars, 'optionalVars) => Js.Promise.t('response),
-      ~options: Options.infiniteQuery('response)=?
-    ) =>
-    Result.useInfiniteQuery_unmodified('response) =
-    "useInfiniteQuery";
-
-  let useInfiniteQuery =
-      (
-        ~key: option(key('keyVars))=?,
-        ~vars: option('optionalVars)=?,
-        ~options: option(Options.infiniteQuery('response))=?,
-        fn,
-      ) =>
-    useInfiniteQuery(~key, ~vars?, ~fn, ~options?)->Result.convertInfinite;
-
-  [@bs.module "react-query"]
-  external useMutation:
-    (
-      ~fn: 'vars => Js.Promise.t('response),
-      ~options: Options.mutate('response, 'mutateVars, 'mutateData)=?
-    ) =>
-    Result.useMutation_unmodified('response, 'mutateVars, 'mutateData) =
+    Result.t_unmodified =
     "useMutation";
 
-  let useMutation =
-      (
-        ~options: option(Options.mutate('response, 'mutateVars, 'mutateData))=?,
-        fn,
-      ) =>
-    useMutation(~options?, ~fn)->Result.convertMutation;
+  let use = (~options: option(Options.make)=?, fn) =>
+    use(~fn, ~options?)->Result.makeReasonable;
 };
 
 module ConfigProvider = {
   // https://github.com/tannerlinsley/react-query#reactqueryconfigprovider
   [@bs.deriving abstract]
   type config(
-    'queryKey,
+    'serializerParam,
     'serializerResponse,
     'onMutate,
     'onSuccess,
@@ -463,7 +722,7 @@ module ConfigProvider = {
     [@bs.optional]
     refetchAllOnWindowFocus: bool,
     [@bs.optional]
-    queryKeySerializerFn: string => 'serializerResponse,
+    queryKeySerializerFn: 'serializerParam => 'serializerResponse,
     [@bs.optional]
     onMutate: 'onMutate,
     [@bs.optional]
@@ -473,24 +732,21 @@ module ConfigProvider = {
     [@bs.optional]
     onSettled: 'onSettled,
     [@bs.optional]
-    retry: Hooks.Options.retry,
+    retry: int,
     [@bs.optional]
-    retryDelay: Hooks.Options.retryDelay,
+    retryDelay: int => int,
     [@bs.optional]
-    staleTime: Hooks.Options.staleTime,
+    staleTime: int,
     [@bs.optional]
-    cacheTime: Hooks.Options.cacheTime,
+    cacheTime: int,
     [@bs.optional]
-    refetchInterval: Hooks.Options.refetchInterval,
+    refetchInterval: int,
     [@bs.optional]
-    queryFnParamsFilter:
-      Hooks.Options.queryFnParamsFilter('queryFnParamsFilter),
-    [@bs.optional]
-    refetchOnMount: Hooks.Options.refetchOnMount,
+    refetchOnMount: bool,
     [@bs.optional]
     isDataEqual: ('prevData, 'nextData) => bool,
     [@bs.optional]
-    refetchOnWindowFocus: Hooks.Options.refetchOnWindowFocus,
+    refetchOnWindowFocus: bool,
   };
 
   /**WARNING: config prop must be stable or memoized. Do not create an inline object!  */
@@ -499,7 +755,7 @@ module ConfigProvider = {
     (
       ~children: React.element,
       ~config: config(
-                 (string, 'keyVars),
+                 'serializerParam,
                  'serializerResponse,
                  'onMutate,
                  'onSuccess,
@@ -514,98 +770,13 @@ module ConfigProvider = {
     "ReactQueryConfigProvider";
 };
 
-module Cache = {
-  type t;
-  type queryObject;
-  type callback = t => unit;
-
-  [@bs.module "react-query"] external cache: t = "queryCache";
-
-  [@bs.module "react-query"] [@bs.scope "queryCache"]
-  external clear: unit => unit = "clear";
-
-  [@bs.module "react-query"] [@bs.scope "queryCache"]
-  external subscribe: callback => unit = "subscribe";
-
-  [@bs.module "react-query"] [@bs.scope "queryCache"]
-  external isFetching: bool = "isFetching";
-
-  [@bs.module "react-query"] [@bs.scope "queryCache"]
-  external getQueries: key('keyVars) => array(queryObject) = "getQueries";
-
-  [@bs.deriving abstract]
-  type removeQueriesConfig = {
-    [@bs.optional]
-    exact: bool,
-  };
-
-  [@bs.module "react-query"] [@bs.scope "queryCache"]
-  external removeQueries:
-    (~key: key('keyVars), ~config: removeQueriesConfig=?, unit) => unit =
-    "removeQueries";
-
-  [@bs.deriving abstract]
-  type cancelQueriesConfig = {
-    [@bs.optional]
-    exact: bool,
-  };
-
-  [@bs.module "react-query"] [@bs.scope "queryCache"]
-  external cancelQueries:
-    (~key: key('keyVars), ~config: cancelQueriesConfig=?, unit) => unit =
-    "cancelQueries";
-
-  [@bs.deriving abstract]
-  type refetchQueriesConfig = {
-    [@bs.optional]
-    exact: bool,
-    [@bs.optional]
-    throwOnError: bool,
-    [@bs.optional]
-    force: bool,
-  };
-
-  [@bs.module "react-query"] [@bs.scope "queryCache"]
-  external refetchQueries:
-    (~key: key('keyVars), ~config: refetchQueriesConfig=?, unit) =>
-    Js.Nullable.t('data) =
-    "refetchQueries";
-
-  [@bs.module "react-query"] [@bs.scope "queryCache"]
-  external setQueryData:
-    (~key: key('keyVars), ~updater: 'updater) => Js.Nullable.t('data) =
-    "setQueryData";
-
-  [@bs.module "react-query"] [@bs.scope "queryCache"]
-  external getQueryData: key('keyVars) => Js.Nullable.t('data) =
-    "getQueryData";
-
-  [@bs.deriving abstract]
-  type prefetchQueryConfig = {
-    [@bs.optional]
-    throwOnError: bool,
-  };
-
-  [@bs.module "react-query"] [@bs.scope "queryCache"]
-  external prefetchQuery:
-    (
-      ~key: 'queryKey=?,
-      ~vars: 'queryVariables=?,
-      ~fn: 'queryFn=?,
-      ~config: prefetchQueryConfig=?,
-      unit
-    ) =>
-    Js.Promise.t('response) =
-    "prefetchQuery";
-};
-
 module CacheProvider = {
   [@bs.module "react-query"]
-  external makeQueryCache: unit => Cache.t = "makeQueryCache";
+  external makeQueryCache: unit => cache = "makeQueryCache";
 
   [@react.component] [@bs.module "react-query"]
   external make:
-    (~queryCache: Cache.t, ~children: React.element) => React.element =
+    (~queryCache: cache, ~children: React.element) => React.element =
     "ReactQueryCacheProvider";
 };
 
@@ -621,63 +792,88 @@ module SetConsole = {
 };
 
 [@bs.module "react-query"]
-external useQueryCache: unit => Cache.t = "useQueryCache";
+external useQueryCache: unit => cache = "useQueryCache";
 
 [@bs.module "react-query"]
 external useIsFetching: unit => int = "useIsFetching";
 
-module Helpers = {
-  let queryIsSuccess = (query: Hooks.Result.useQuery('response)) =>
-    switch (query.status) {
-    | `success(_) => true
-    | _ => false
-    };
+module type Set = {
+  type key;
+  type data;
+  type queryVars;
+  type mutateVars;
+};
 
-  let allQueriesAreSuccess =
-      (queries: array(Hooks.Result.useQuery('response))) =>
-    queries
-    ->Array.keep(query =>
-        switch (query.status) {
-        | `success(_) => true
-        | _ => false
-        }
-      )
-    ->Array.length
-    == queries->Array.length;
+module QuerySet = (Config: Set) => {
+  module Query =
+    Query({
+      type key = Config.key;
+      type data = Config.data;
+      type vars = Config.queryVars;
+    });
 
-  let paginatedIsSuccess = (query: Hooks.Result.usePaginatedQuery('response)) =>
-    switch (query.status) {
-    | `success(_) => true
-    | _ => false
-    };
+  module Mutation =
+    Mutation({
+      type data = Config.data;
+      type vars = Config.mutateVars;
+    });
+};
 
-  let allPaginatedAreSuccess =
-      (queries: array(Hooks.Result.usePaginatedQuery('response))) =>
-    queries
-    ->Array.keep(query =>
-        switch (query.status) {
-        | `success(_) => true
-        | _ => false
-        }
-      )
-    ->Array.length
-    == queries->Array.length;
+module PaginatedSet = (Config: Set) => {
+  module Paginated =
+    Paginated({
+      type key = Config.key;
+      type data = Config.data;
+      type vars = Config.queryVars;
+    });
 
-  let infiniteIsSuccess = (query: Hooks.Result.useInfiniteQuery('response)) =>
-    switch (query.status) {
-    | `success(_) => true
-    | _ => false
-    };
+  module Mutation =
+    Mutation({
+      type data = Config.data;
+      type vars = Config.mutateVars;
+    });
+};
 
-  let allInfiniteAreSuccess =
-      (queries: array(Hooks.Result.useInfiniteQuery('response))) =>
-    queries
-    ->Array.keep(query =>
-        switch (query.status) {
-        | `success(_) => true
-        | _ => false
-        }
-      )
-    ->Array.length
-    == queries->Array.length;
+module InfiniteSet = (Config: Set) => {
+  module Infinite =
+    Infinite({
+      type key = Config.key;
+      type data = Config.data;
+      type vars = Config.queryVars;
+    });
+
+  module Mutation =
+    Mutation({
+      type data = Config.data;
+      type vars = Config.mutateVars;
+    });
+};
+
+module Make = (Config: Set) => {
+  module Query =
+    Query({
+      type key = Config.key;
+      type data = Config.data;
+      type vars = Config.queryVars;
+    });
+
+  module Paginated =
+    Paginated({
+      type key = Config.key;
+      type data = Config.data;
+      type vars = Config.queryVars;
+    });
+
+  module Infinite =
+    Infinite({
+      type key = Config.key;
+      type data = Config.data;
+      type vars = Config.queryVars;
+    });
+
+  module Mutation =
+    Mutation({
+      type data = Config.data;
+      type vars = Config.mutateVars;
+    });
 };
