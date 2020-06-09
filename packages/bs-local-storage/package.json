@@ -24,10 +24,8 @@
     "decco": "^1.2.1",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
+    "@seamonster-studios/bs-sentry": "^0.14.0",
     "reason-react": ">=0.7.0"
   },
-  "gitHead": "442fcf71845e384ccdd5ca0e92a3a17ff17461f2",
-  "dependencies": {
-    "@seamonster-studios/bs-sentry": "^0.14.0"
-  }
+  "gitHead": "442fcf71845e384ccdd5ca0e92a3a17ff17461f2"
 }
