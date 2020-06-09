@@ -38,26 +38,25 @@ let make = () => {
   </ReactQuery.ConfigProvider>
 }
 
-// AuthQueries.re
+// AuthHooks.re
 
-module Authed = {
-  include ReactQuery2.QuerySet({
-    type key = string;
-    type data = Result.t(Auth.authResponseData, Decco.decodeError);
-    type queryVars = unit;
-    type mutateVars = Auth0.user;
-  });
+include ReactQuery.QuerySet({
+  type key = string;
+  type data = Result.t(Auth.authResponseData, Decco.decodeError);
+  type queryVars = unit;
+  type mutateVars = Auth0.user;
+});
 
-  let endpoint = "/login";
+let endpoint = "/login";
 
-  let useAuthed = Query.use(~key=ready ? endpoint->Some : None, ~options?, (key, _) =>
-    // return a promise with value with the same type as data
-  );
+let useAuthed = Query.use(~key=ready ? endpoint->Some : None, ~options?, (key, _) =>
+  // return a promise with value with the same type as data
+);
 
-  let useLogin = () => Mutation.use(_ => {
-    // return a promise with value with the same type as data
-  })
-};
+let useLogin = () => Mutation.use(_ => {
+  // return a promise with value with the same type as data
+})
+
 
 // Root.re
 [@react.component]
