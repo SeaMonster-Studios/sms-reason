@@ -554,7 +554,6 @@ module Mutation = (Config: Mutation) => {
       type data = Config.data;
     });
 
-    // TODO: REVIEW
     type onMutate = Config.vars => Js.Promise.t(Config.data);
 
     type onSuccess =
