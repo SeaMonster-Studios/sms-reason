@@ -27,9 +27,14 @@ type itemWithExpiration('a) = {
   data: 'a,
 };
 
+type itemResponse('a) =
+  | Cache('a)
+  | Expired
+  | NoCache;
+
 let getItemWithExpiration = (storage_key, decoder) =>
   switch (getItem(storage_key)->Js.Nullable.toOption) {
-  | None => None
+  | None => NoCache
   | Some(jsonString) =>
     switch (
       jsonString->Js.Json.parseExn |> itemWithExpiration_decode(decoder)
@@ -39,11 +44,15 @@ let getItemWithExpiration = (storage_key, decoder) =>
             Js.Date.fromFloat(cache.expiresAt),
             Js.Date.make(),
           )) {
-        Some(Ok(cache.data));
+        Cache(cache.data);
       } else {
-        None;
+        Expired;
       }
-    | Error(error) => Some(Error(error))
+    | Error(error) =>
+      error->SentryBrowser.captureDeccoError(
+        "getItemWithExpiration, key: " ++ storage_key,
+      );
+      Expired;
     }
   };
 
