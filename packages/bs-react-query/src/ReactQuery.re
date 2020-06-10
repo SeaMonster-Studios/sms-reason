@@ -3,6 +3,24 @@
   ""
 |}];
 
+let%private useMakeReasonable = (query, makeReasonable) => {
+  let prevQuery = SeamonsterStudiosReactHooks.Hooks.usePrevious(query);
+  let (reasonable, setReasonable) =
+    React.useState(() => query->makeReasonable);
+
+  React.useEffect3(
+    () => {
+      if (!LodashIsEqual.make(query, prevQuery)) {
+        setReasonable(_ => query->makeReasonable);
+      };
+      None;
+    },
+    (makeReasonable, query, prevQuery),
+  );
+
+  reasonable;
+};
+
 type cache;
 
 module type OptionTypes = {type data;};
@@ -246,25 +264,6 @@ module Query = (Config: Query) => {
         failureCount: query.failureCount,
         refetch: query.refetch,
       };
-
-    let useMakeReasonable: t_unmodified => t =
-      query => {
-        let prevQuery = SeamonsterStudiosReactHooks.Hooks.usePrevious(query);
-        let (reasonable, setReasonable) =
-          React.useState(() => query->makeReasonable);
-
-        React.useEffect3(
-          () => {
-            if (!LodashIsEqual.make(query, prevQuery)) {
-              setReasonable(_ => query->makeReasonable);
-            };
-            None;
-          },
-          (makeReasonable, query, prevQuery),
-        );
-
-        reasonable;
-      };
   };
 
   [@bs.module "react-query"]
@@ -285,7 +284,8 @@ module Query = (Config: Query) => {
         ~options: option(Options.make)=?,
         fn,
       ) =>
-    use(~key, ~vars?, ~fn, ~options?)->Result.useMakeReasonable;
+    use(~key, ~vars?, ~fn, ~options?)
+    ->useMakeReasonable(Result.makeReasonable);
 };
 
 module Paginated = (Config: Query) => {
@@ -401,25 +401,6 @@ module Paginated = (Config: Query) => {
         failureCount: query.failureCount,
         refetch: query.refetch,
       };
-
-    let useMakeReasonable: t_unmodified => t =
-      query => {
-        let prevQuery = SeamonsterStudiosReactHooks.Hooks.usePrevious(query);
-        let (reasonable, setReasonable) =
-          React.useState(() => query->makeReasonable);
-
-        React.useEffect3(
-          () => {
-            if (!LodashIsEqual.make(query, prevQuery)) {
-              setReasonable(_ => query->makeReasonable);
-            };
-            None;
-          },
-          (makeReasonable, query, prevQuery),
-        );
-
-        reasonable;
-      };
   };
 
   [@bs.module "react-query"]
@@ -440,7 +421,8 @@ module Paginated = (Config: Query) => {
         ~options: option(Options.make)=?,
         fn,
       ) =>
-    use(~key, ~vars?, ~fn, ~options?)->Result.useMakeReasonable;
+    use(~key, ~vars?, ~fn, ~options?)
+    ->useMakeReasonable(Result.makeReasonable);
 };
 
 module Infinite = (Config: Query) => {
@@ -561,25 +543,6 @@ module Infinite = (Config: Query) => {
         fetchMore: query.fetchMore,
         canFetchMore: query.canFetchMore,
       };
-
-    let useMakeReasonable: t_unmodified => t =
-      query => {
-        let prevQuery = SeamonsterStudiosReactHooks.Hooks.usePrevious(query);
-        let (reasonable, setReasonable) =
-          React.useState(() => query->makeReasonable);
-
-        React.useEffect3(
-          () => {
-            if (!LodashIsEqual.make(query, prevQuery)) {
-              setReasonable(_ => query->makeReasonable);
-            };
-            None;
-          },
-          (makeReasonable, query, prevQuery),
-        );
-
-        reasonable;
-      };
   };
 
   [@bs.module "react-query"]
@@ -600,7 +563,8 @@ module Infinite = (Config: Query) => {
         ~options: option(Options.make)=?,
         fn,
       ) =>
-    use(~key, ~vars?, ~fn, ~options?)->Result.useMakeReasonable;
+    use(~key, ~vars?, ~fn, ~options?)
+    ->useMakeReasonable(Result.makeReasonable);
 };
 
 module type Mutation = {
@@ -745,25 +709,6 @@ module Mutation = (Config: Mutation) => {
           reset: result.reset,
         },
       );
-
-    let useMakeReasonable: t_unmodified => t =
-      query => {
-        let prevQuery = SeamonsterStudiosReactHooks.Hooks.usePrevious(query);
-        let (reasonable, setReasonable) =
-          React.useState(() => query->makeReasonable);
-
-        React.useEffect3(
-          () => {
-            if (!LodashIsEqual.make(query, prevQuery)) {
-              setReasonable(_ => query->makeReasonable);
-            };
-            None;
-          },
-          (makeReasonable, query, prevQuery),
-        );
-
-        reasonable;
-      };
   };
 
   [@bs.module "react-query"]
@@ -776,7 +721,7 @@ module Mutation = (Config: Mutation) => {
     "useMutation";
 
   let use = (~options: option(Options.make)=?, fn) =>
-    use(~fn, ~options?)->Result.useMakeReasonable;
+    use(~fn, ~options?)->useMakeReasonable(Result.makeReasonable);
 };
 
 module ConfigProvider = {

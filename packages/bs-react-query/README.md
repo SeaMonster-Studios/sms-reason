@@ -3,7 +3,7 @@
 JS Lib documentation: https://github.com/tannerlinsley/react-query
 
 Install:
-`yarn add @seamonster-studios/bs-react-query`
+`yarn add @seamonster-studios/bs-react-query @seamonster-studios/bs-lodash @seamonster-studios/react-hooks`
 
 Add `@seamonster-studios/bs-react-query` to your bsconfig.json
 
