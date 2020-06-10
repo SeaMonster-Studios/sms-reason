@@ -1,0 +1,1 @@
+[@bs.module] external isEqual: ('a, 'a) => bool = "lodash.isequal";
