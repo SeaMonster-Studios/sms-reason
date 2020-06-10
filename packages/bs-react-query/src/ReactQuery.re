@@ -4,6 +4,11 @@
 |}];
 
 let%private useMakeReasonable = (query, makeReasonable) => {
+  /**
+   * React Query is providing us with the query results, but then we change those results into something that's easier to use in reason.
+   * It appears that this causes a compare function to fail (data structures don't match) within react query, resulting in the query being rerendered.
+   * This hook resolves this performance issue
+   */
   let prevQuery = SeamonsterStudiosReactHooks.Hooks.usePrevious(query);
   let (reasonable, setReasonable) =
     React.useState(() => query->makeReasonable);
