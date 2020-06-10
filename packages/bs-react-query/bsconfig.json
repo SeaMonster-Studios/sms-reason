@@ -20,7 +20,9 @@
   ],
   "suffix": ".bs.js",
   "bs-dependencies": [
-    "reason-react"
+    "reason-react",
+    "@seamonster-studios/bs-lodash",
+    "@seamonster-studios/react-hooks"
   ],
   "refmt": 3
 }

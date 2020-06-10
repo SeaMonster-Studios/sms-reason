@@ -19,6 +19,8 @@
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
   "dependencies": {
+    "@seamonster-studios/bs-lodash": "^0.14.3",
+    "@seamonster-studios/react-hooks": "^0.14.4",
     "react-query": "^1.5.5",
     "react-query-devtools": "^1.1.17"
   },

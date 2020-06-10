@@ -1,1 +1,1 @@
-[@bs.module] external isEqual: ('a, 'a) => bool = "lodash.isequal";
+[@bs.module] external make: ('a, 'a) => bool = "lodash.isequal";
