@@ -1,7 +1,7 @@
 # NoticeSystem
 
 Install:
-`yarn add @semonster-studios/notice-system`
+`yarn add @seamonster-studios/notice-system`
 
 Install Peer Dependencies:
 
