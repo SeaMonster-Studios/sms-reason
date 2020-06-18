@@ -19,7 +19,6 @@
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
   "dependencies": {
-    "@seamonster-studios/bs-sentry": "^0.14.0",
     "deck.gl": "^8.0.17",
     "downshift": "^5.0.5",
     "email-validator": "^2.0.4",
@@ -56,7 +55,8 @@
     "moduleserve": "^0.9.0",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
-    "reason-react": ">=0.7.0"
+    "reason-react": ">=0.7.0",
+    "@seamonster-studios/bs-sentry": "^0.14.0"
   },
   "gitHead": "ff5376abae3912eeb7aa5f95179e08541f393203"
 }
