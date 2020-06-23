@@ -25,15 +25,7 @@ let make = () => {
         )
       );
 
-  <ReactQuery.ConfigProvider
-    config=ReactQuery.ConfigProvider.(
-      config(
-        ~cacheTime=5000,
-        ~onError=error => error->Utils.reportPromiseError,
-        (),
-      )
-    )
-  >
+  <ReactQuery.ConfigProvider config=queryConfig>
     // ...children
   </ReactQuery.ConfigProvider>
 }
