@@ -14,21 +14,14 @@ Example Usage:
 [@react.component]
 let make = () => {
   let queryConfig =
-      React.useMemo0(() =>
-        ReactQuery.ConfigProvider.(
-          config(
-            // ~cacheTime=5000,
-            // ~staleTime=10000,
-            ~onError=error => error->Utils.reportPromiseError,
-            (),
-          )
-        )
-      );
+    React.useMemo0(() =>
+      ReactQuery.ConfigProvider.(config(~onError=error => error->Js.log, ()))
+    );
 
   <ReactQuery.ConfigProvider config=queryConfig>
-    // ...children
-  </ReactQuery.ConfigProvider>
-}
+    <Posts />
+  </ReactQuery.ConfigProvider>;
+};
 
 // AuthHooks.re
 
