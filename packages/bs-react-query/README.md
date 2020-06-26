@@ -1,6 +1,6 @@
-# React Query bindings
+# React Query bindings (1.x)
 
-JS Lib documentation: https://github.com/tannerlinsley/react-query
+JS Lib documentation: https://github.com/tannerlinsley/react-query/blob/1.x/README.md
 
 Install:
 `yarn add @seamonster-studios/bs-react-query @seamonster-studios/bs-lodash @seamonster-studios/react-hooks`
