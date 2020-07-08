@@ -1,1 +1,1 @@
-[@bs.module] external make: string => string = "title-case";
+[@bs.module "title-case"] external make: string => string = "titleCase";

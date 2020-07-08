@@ -1,6 +1,6 @@
-# React Query bindings
+# React Query bindings (1.x)
 
-JS Lib documentation: https://github.com/tannerlinsley/react-query
+JS Lib documentation: https://github.com/tannerlinsley/react-query/blob/1.x/README.md
 
 Install:
 `yarn add @seamonster-studios/bs-react-query @seamonster-studios/bs-lodash @seamonster-studios/react-hooks`
@@ -14,29 +14,14 @@ Example Usage:
 [@react.component]
 let make = () => {
   let queryConfig =
-      React.useMemo0(() =>
-        ReactQuery.ConfigProvider.(
-          config(
-            // ~cacheTime=5000,
-            // ~staleTime=10000,
-            ~onError=error => error->Utils.reportPromiseError,
-            (),
-          )
-        )
-      );
+    React.useMemo0(() =>
+      ReactQuery.ConfigProvider.(config(~onError=error => error->Js.log, ()))
+    );
 
-  <ReactQuery.ConfigProvider
-    config=ReactQuery.ConfigProvider.(
-      config(
-        ~cacheTime=5000,
-        ~onError=error => error->Utils.reportPromiseError,
-        (),
-      )
-    )
-  >
-    // ...children
-  </ReactQuery.ConfigProvider>
-}
+  <ReactQuery.ConfigProvider config=queryConfig>
+    <Posts />
+  </ReactQuery.ConfigProvider>;
+};
 
 // AuthHooks.re
 
