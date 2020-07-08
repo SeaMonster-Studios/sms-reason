@@ -1,3 +1,5 @@
+open ReasonDateFns;
+
 [@bs.val] [@bs.scope "localStorage"]
 external removeItem: string => unit = "removeItem";
 
@@ -57,7 +59,7 @@ let getItemWithExpiration = (storage_key, decoder) =>
   };
 
 let setItemWithExpiration = (storage_key, data, encoder) =>
-  {expiresAt: DateFns.addDays(1., Js.Date.make())->Js.Date.getTime, data}
+  {expiresAt: DateFns.addDays(1, Js.Date.make())->Js.Date.getTime, data}
   |> itemWithExpiration_encode(encoder)
   |> Js.Json.stringify
   |> setItem(storage_key);
