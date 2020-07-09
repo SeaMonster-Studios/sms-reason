@@ -44,7 +44,7 @@
     "title-case": "^3.0.2",
     "url-validator": "^2.0.3",
     "usa-states": "^0.0.5",
-    "uuid": "^7.0.2"
+    "uuid": "^8.2.0"
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.5.0",
