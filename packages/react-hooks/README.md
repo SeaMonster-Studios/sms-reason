@@ -1,4 +1,4 @@
 # SMS Custom React Hooks 
 
 Install:
-`yarn add @semonster-studios/react-hooks`
+`yarn add @seamonster-studios/react-hooks`
