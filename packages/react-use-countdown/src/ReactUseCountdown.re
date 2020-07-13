@@ -31,7 +31,7 @@ let reducer = (state: state, action) => {
     let nextTime = state.time - frequency;
 
     if (nextTime <= 0) {
-      onEnd();
+      Js.Global.setTimeout(() => {onEnd()}, 0)->ignore;
       {time: 0, playState: `paused};
     } else {
       {...state, time: nextTime};
@@ -42,7 +42,7 @@ let reducer = (state: state, action) => {
 let createInterval = (fn, frequency) =>
   Js.Global.setInterval(() => fn(), frequency);
 
-let useHook = (duration, onEnd) => {
+let use = (duration, onEnd) => {
   let timerCallback = React.useRef(() => ());
 
   let (state, dispatch) =
