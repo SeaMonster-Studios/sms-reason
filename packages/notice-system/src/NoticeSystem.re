@@ -93,8 +93,7 @@ module Style = {
       "notices--container",
       style([
         overflowY(`auto),
-        display(`flex),
-        flexDirection(`column),
+        display(`grid),
         maxHeight(`calc((`sub, 100.->vh, 20->px))),
         selector("> div", [overflow(`hidden)]),
       ]),
