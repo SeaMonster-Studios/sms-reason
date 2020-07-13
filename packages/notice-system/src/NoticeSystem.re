@@ -4,57 +4,32 @@ type shownNoticesType =
   | Active
   | All;
 
-type noticeColor = {
+type toggleNoticeTypeButtonPalette = {
   text: Css.Types.Color.t,
-  accent: Css.Types.Color.t,
   background: Css.Types.Color.t,
-};
-
-type noticeColors = {
-  info: noticeColor,
-  success: noticeColor,
-  warning: noticeColor,
-  error: noticeColor,
-};
-
-type toggleNoticeTypeButton = {
-  background: Css.Types.Color.t,
-  text: Css.Types.Color.t,
 };
 
 type palette = {
-  notices: noticeColors,
-  toggleNoticeTypeButton,
+  accent: Css.Types.Color.t,
+  info: Css.Types.Color.t,
+  success: Css.Types.Color.t,
+  warning: Css.Types.Color.t,
+  error: Css.Types.Color.t,
+  toggleNoticeTypeButton: toggleNoticeTypeButtonPalette,
 };
 
-let defaultPalette = {
-  notices: {
-    info: {
-      text: Css.rgb(61, 128, 204),
-      accent: Css.rgb(77, 100, 128),
-      background: Css.rgb(152, 201, 255),
+let defaultPalette =
+  Css.{
+    accent: rgba(0, 0, 0, 0.75),
+    info: rgb(132, 210, 250),
+    success: rgb(157, 250, 176),
+    warning: rgb(250, 219, 120),
+    error: rgb(250, 172, 145),
+    toggleNoticeTypeButton: {
+      background: rgb(132, 213, 250),
+      text: rgba(0, 0, 0, 0.75),
     },
-    success: {
-      text: Css.rgb(52, 199, 125),
-      accent: Css.rgb(69, 122, 95),
-      background: Css.rgb(140, 251, 196),
-    },
-    warning: {
-      text: Css.rgb(204, 185, 61), // 255, 255, 51
-      accent: Css.rgb(128, 121, 77),
-      background: Css.rgb(255, 241, 153),
-    },
-    error: {
-      text: Css.rgb(204, 84, 57),
-      accent: Css.rgb(128, 84, 74),
-      background: Css.rgb(255, 168, 148),
-    },
-  },
-  toggleNoticeTypeButton: {
-    text: Css.rgb(255, 255, 255),
-    background: Css.rgb(61, 128, 204),
-  },
-};
+  };
 
 module Style = {
   open Css;
@@ -68,147 +43,110 @@ module Style = {
   };
 
   let board = (p: palette) =>
-    style([
-      label("notice--board"),
-      position(`fixed),
-      bottom(0->px),
-      right(0->px),
-      zIndex(99999999),
-      display(`flex),
-      flexDirection(`column),
-      padding(20->px),
-      selector(
-        "[class*='notice--info']",
-        [
-          borderLeftColor(p.notices.info.accent),
-          color(p.notices.info.text),
-          backgroundColor(p.notices.info.background),
-          selector(
-            "button[class*='remove-button'] path",
-            [SVG.fill(p.notices.info.text)],
-          ),
-          selector(
-            "div[class*='life-bar'] > div",
-            [backgroundColor(p.notices.info.text)],
-          ),
-        ],
-      ),
-      selector(
-        "[class*='notice--success']",
-        [
-          borderLeftColor(p.notices.success.accent),
-          color(p.notices.success.text),
-          backgroundColor(p.notices.success.background),
-          selector(
-            "button[class*='remove-button'] path",
-            [SVG.fill(p.notices.success.text)],
-          ),
-          selector(
-            "div[class*='life-bar'] > div",
-            [backgroundColor(p.notices.success.text)],
-          ),
-        ],
-      ),
-      selector(
-        "[class*='notice--warning']",
-        [
-          borderLeftColor(p.notices.warning.accent),
-          color(p.notices.warning.text),
-          backgroundColor(p.notices.warning.background),
-          selector(
-            "button[class*='remove-button'] path",
-            [SVG.fill(p.notices.warning.text)],
-          ),
-          selector(
-            "div[class*='life-bar'] > div",
-            [backgroundColor(p.notices.warning.text)],
-          ),
-        ],
-      ),
-      selector(
-        "[class*='notice--error']",
-        [
-          borderLeftColor(p.notices.error.accent),
-          color(p.notices.error.text),
-          backgroundColor(p.notices.error.background),
-          selector(
-            "button[class*='remove-button'] path",
-            [SVG.fill(p.notices.error.text)],
-          ),
-          selector(
-            "div[class*='life-bar'] > div",
-            [backgroundColor(p.notices.error.text)],
-          ),
-        ],
-      ),
-      selector(
-        "[class*='notices--type-toggle']",
-        [
-          backgroundColor(p.toggleNoticeTypeButton.background),
-          selector("button", [color(p.toggleNoticeTypeButton.text)]),
-        ],
-      ),
-      selector(
-        "[class*='notice--loader'] > div > div",
-        [background(p.notices.info.text)],
-      ),
+    merge([
+      "notice--board",
+      style([
+        position(`fixed),
+        bottom(0->px),
+        right(0->px),
+        zIndex(99999999),
+        display(`flex),
+        flexDirection(`column),
+        padding(20->px),
+        selector(
+          ".notice--close-icon",
+          [
+            padding(10->px),
+            margin((-10)->px),
+            cursor(`pointer),
+            selector("path", [SVG.fill(p.accent)]),
+          ],
+        ),
+        selector(
+          ".notices--notice",
+          [
+            borderLeftColor(p.accent),
+            color(p.accent),
+            selector(
+              ".notice--life-bar > div",
+              [backgroundColor(p.accent)],
+            ),
+          ],
+        ),
+        selector(".notice--info", [backgroundColor(p.info)]),
+        selector(".notice--success", [backgroundColor(p.success)]),
+        selector(".notice--warning", [backgroundColor(p.warning)]),
+        selector(".notice--error", [backgroundColor(p.error)]),
+        selector(
+          ".notices--type-toggle",
+          [
+            backgroundColor(p.toggleNoticeTypeButton.background),
+            selector("button", [color(p.toggleNoticeTypeButton.text)]),
+          ],
+        ),
+        selector(".notice--loader > div > div", [background(p.accent)]),
+      ]),
     ]);
 
   let noticesContainer =
-    style([
-      label("notices--container"),
-      overflowY(`auto),
-      display(`flex),
-      flexDirection(`column),
-      maxHeight(`calc((`sub, 100.->vh, 20->px))),
-      selector("> div", [overflow(`hidden)]),
+    merge([
+      "notices--container",
+      style([
+        overflowY(`auto),
+        display(`flex),
+        flexDirection(`column),
+        maxHeight(`calc((`sub, 100.->vh, 20->px))),
+        selector("> div", [overflow(`hidden)]),
+      ]),
     ]);
 
   let toggleAllNotices = visible =>
-    style([
-      label("notices--type-toggle"),
-      opacity(visible ? 1. : 0.),
-      Common.boxShadow,
-      borderRadius(100.->pct),
-      position(`absolute),
-      bottom(0->px),
-      right(0->px),
-      width(visible ? 50->px : 0->px),
-      height(visible ? 50->px : 0->px),
-      overflow(`hidden),
-      display(`flex),
-      alignItems(`center),
-      justifyContent(`center),
-      transition(~duration=300, ~timingFunction=`ease, "all"),
-      transforms([translateX(25->px), translateY(25->px)]),
-      selector(
-        "button",
-        [
-          opacity(0.),
-          fontWeight(`bold),
-          cursor(`pointer),
-          background(`none),
-          borderStyle(`none),
-          textTransform(`uppercase),
-          selector("&:focus", [outlineStyle(`none)]),
-        ],
-      ),
-      selector(
-        "&:hover",
-        [
-          borderRadius(5->px),
-          width(100->px),
-          transforms([translateX(5->px), translateY(5->px)]),
-          selector("button", [opacity(1.)]),
-        ],
-      ),
+    merge([
+      "notices--type-toggle",
+      style([
+        opacity(visible ? 1. : 0.),
+        Common.boxShadow,
+        borderRadius(100.->pct),
+        position(`absolute),
+        bottom(0->px),
+        right(0->px),
+        width(visible ? 50->px : 0->px),
+        height(visible ? 50->px : 0->px),
+        overflow(`hidden),
+        display(`flex),
+        alignItems(`center),
+        justifyContent(`center),
+        transition(~duration=300, ~timingFunction=`ease, "all"),
+        transforms([translateX(25->px), translateY(25->px)]),
+        selector(
+          "button",
+          [
+            opacity(0.),
+            fontWeight(`bold),
+            cursor(`pointer),
+            background(`none),
+            borderStyle(`none),
+            textTransform(`uppercase),
+            selector("&:focus", [outlineStyle(`none)]),
+          ],
+        ),
+        selector(
+          "&:hover",
+          [
+            borderRadius(5->px),
+            width(100->px),
+            transforms([translateX(5->px), translateY(5->px)]),
+            selector("button", [opacity(1.)]),
+          ],
+        ),
+      ]),
     ]);
 
   module Notice = {
     let base =
       merge([
+        "notices--notice",
         style([
-          label("notices--notice"),
           width(275->px),
           backgroundColor(Common.white),
           Common.boxShadow,
@@ -217,16 +155,17 @@ module Style = {
           display(`flex),
           flexDirection(`column),
           marginTop(10->px),
+          borderRadius(3->px),
         ]),
       ]);
 
-    let info = merge([base, style([label("notice--info")])]);
+    let info = merge([base, "notice--info"]);
 
-    let success = merge([base, style([label("notice--success")])]);
+    let success = merge([base, "notice--success"]);
 
-    let warning = merge([base, style([label("notice--warning")])]);
+    let warning = merge([base, "notice--warning"]);
 
-    let error = merge([base, style([label("notice--error")])]);
+    let error = merge([base, "notice--error"]);
 
     let lifeBarAnimation =
       keyframes([(0, [width(100.->pct)]), (100, [width(0.->pct)])]);
@@ -242,10 +181,10 @@ module Style = {
     let life = (duration, playState, shownNoticeType) =>
       merge([
         hideWithAllNoticeType(shownNoticeType),
+        "notice--life-bar",
         style([
           width(100.->pct),
           marginTop(10->px),
-          label("notice--life-bar"),
           selector(
             "> div",
             [
@@ -262,56 +201,68 @@ module Style = {
       ]);
 
     let header =
-      style([
-        label("notice--header"),
-        padding3(~bottom=10->px, ~top=10->px, ~h=10->px),
-        textTransform(`uppercase),
-        fontWeight(`bold),
-        fontSize(12->px),
-        display(`flex),
-        alignItems(`center),
-        justifyContent(`spaceBetween),
+      merge([
+        "notice--header",
+        style([
+          padding3(~bottom=10->px, ~top=10->px, ~h=10->px),
+          textTransform(`uppercase),
+          fontWeight(`bold),
+          fontSize(12->px),
+          display(`flex),
+          alignItems(`center),
+          justifyContent(`spaceBetween),
+        ]),
       ]);
 
     let content =
-      style([
-        label("notice--content"),
-        padding3(~top=0->px, ~bottom=10->px, ~h=10->px),
-        fontSize(14->px),
-        lineHeight(1.25->em),
+      merge([
+        "notice--content",
+        style([
+          padding3(~top=0->px, ~bottom=10->px, ~h=10->px),
+          fontSize(14->px),
+          lineHeight(1.25->em),
+        ]),
       ]);
 
     let loaderContent =
-      style([
-        label("notice--loader-content"),
-        selector(
-          "> div:first-of-type",
-          [
-            display(`flex),
-            alignItems(`center),
-            justifyContent(`center),
-            height(42->px),
-            marginTop((-20)->px),
-          ],
-        ),
-        selector(
-          "div[class*='life-bar']",
-          [margin(0->px), padding3(~bottom=10->px, ~h=20->px, ~top=0->px)],
-        ),
+      merge([
+        "notice--content",
+        "notice--loader-content",
+        style([
+          selector(
+            "> div:first-of-type",
+            [
+              display(`flex),
+              alignItems(`center),
+              justifyContent(`center),
+              height(42->px),
+              marginTop((-20)->px),
+            ],
+          ),
+          selector(
+            ".notice--life-bar",
+            [
+              margin(0->px),
+              padding3(~bottom=10->px, ~h=20->px, ~top=0->px),
+            ],
+          ),
+        ]),
       ]);
 
     let loader =
-      style([
-        label("notice--loader"),
-        transforms([scale(0.5, 0.5)]),
-        selector(".inner-container", [margin(0->px)]),
+      merge([
+        "notice--loader",
+        style([
+          transforms([scale(0.5, 0.5)]),
+          selector(".inner-container", [margin(0->px)]),
+        ]),
       ]);
 
     let removeButton = shownNoticeType =>
       merge([
         hideWithAllNoticeType(shownNoticeType),
+        "notice--remove-button",
         style([
-          label("notice--remove-button"),
           position(`relative),
           zIndex(2),
           borderStyle(`none),
@@ -335,6 +286,28 @@ let noticeGap = 10;
 
 type type_ = [ | `success | `error | `info | `warning | `loading];
 
+type singularNoticeRelationship = [ | `before | `after | `replace];
+
+let handleNoticeContentRender =
+    (
+      globalContent,
+      singularNoticeContent,
+      relationship: singularNoticeRelationship,
+    ) =>
+  switch (relationship) {
+  | `replace => singularNoticeContent
+  | `before => <> singularNoticeContent globalContent </>
+  | `after => <> globalContent singularNoticeContent </>
+  };
+
+type globalNoticeContent = {
+  success: option((React.element, singularNoticeRelationship)),
+  error: option((React.element, singularNoticeRelationship)),
+  info: option((React.element, singularNoticeRelationship)),
+  warning: option((React.element, singularNoticeRelationship)),
+  loading: option((React.element, singularNoticeRelationship)),
+};
+
 type singleNoticeLife = option(int);
 type newNotice = (type_, React.element, singleNoticeLife);
 type updateNotice = (string, type_, React.element, singleNoticeLife);
@@ -349,22 +322,26 @@ type notice = {
   type_,
 };
 
-type noticeSystemState = {
-  notices: array(notice),
-  noticeHeights: Belt.Map.String.t(int),
-  noticeLife: int, //milliseconds
-  shownNoticesType,
-};
-
 type noticeSystemAction =
   | AddNotice(string, string, newNotice)
   | SetNoticeHeight(setNoticeHeight)
   | RemoveNotice(string)
   | SetNoticeLife(int)
-  | SetShownNoticeType(shownNoticesType);
+  | SetShownNoticeType(shownNoticesType)
+  | SetDispatch(noticeSystemAction => unit);
+
+type noticeSystemState = {
+  notices: array(notice),
+  noticeHeights: Belt.Map.String.t(int),
+  noticeLife: int, //milliseconds
+  shownNoticesType,
+  globalNoticeContent,
+  dispatch: noticeSystemAction => unit,
+};
 
 let reducer = (state: noticeSystemState, action) =>
   switch (action) {
+  | SetDispatch(dispatch) => {...state, dispatch}
   | SetShownNoticeType(shownNoticesType) => {...state, shownNoticesType}
   | AddNotice(id, key, (type_, element, singleNoticeLife)) =>
     switch (state.notices->Array.getBy(item => item.id == id)) {
@@ -435,102 +412,136 @@ let reducer = (state: noticeSystemState, action) =>
   | SetNoticeLife(noticeLife) => {...state, noticeLife}
   };
 
-let noticeSystemStore =
-  Reductive.Store.create(
-    ~reducer,
-    ~preloadedState={
-      notices: [||],
-      noticeHeights: Map.String.empty,
-      noticeLife: defaultLife,
-      shownNoticesType: Active,
-    },
-    (),
-  );
-
-module Store = {
-  include ReductiveContext.Make({
-    type action = noticeSystemAction;
-    type state = noticeSystemState;
-  });
+let initialState = {
+  notices: [||],
+  noticeHeights: Map.String.empty,
+  noticeLife: defaultLife,
+  shownNoticesType: Active,
+  dispatch: _ => (),
+  globalNoticeContent: {
+    success: None,
+    error: None,
+    info: None,
+    warning: None,
+    loading: None,
+  },
 };
 
-let noticeHeightsSelector = state => state.noticeHeights;
+let%private context = React.createContext(initialState);
 
-let useNoticeHeights = () => Store.useSelector(noticeHeightsSelector);
+module ContextProvider = {
+  let make = React.Context.provider(context);
+  let makeProps = (~value: noticeSystemState, ~children, ()) => {
+    "value": value,
+    "children": children,
+  };
+};
 
-let getNoticeHeight = (noticeHeights, id) =>
+let use = () => React.useContext(context);
+
+let%private getNoticeHeight = (noticeHeights, id) =>
   noticeHeights->Map.String.get(id);
 
 let useNoticeHeight = id => {
-  let noticeHeights = useNoticeHeights();
+  let noticeSystem = use();
+
   React.useMemo2(
-    () => noticeHeights->getNoticeHeight(id),
-    (noticeHeights, id),
+    () => noticeSystem.noticeHeights->getNoticeHeight(id),
+    (noticeSystem.noticeHeights, id),
   );
 };
 
-let allNoticesSelector = state => state.notices;
-
-let useAllNotices = () => Store.useSelector(allNoticesSelector);
-
-let shownNoticeTypeSelector = state => state.shownNoticesType;
-
-let useShownNoticeType = () => Store.useSelector(shownNoticeTypeSelector);
-
-let noticeLifeSelector = state => state.noticeLife;
-
-let useNoticeLife = () => Store.useSelector(noticeLifeSelector);
-
 let useNotices = () => {
-  let allNotices = useAllNotices();
+  let noticeSystem = use();
 
   React.useMemo1(
-    () => allNotices->Array.keep(notice => notice.isActive),
-    [|allNotices|],
+    () => noticeSystem.notices->Array.keep(notice => notice.isActive),
+    [|noticeSystem.notices|],
   );
 };
 
 let useNotice = id => {
-  let notices = useAllNotices();
+  let noticeSystem = use();
 
   React.useMemo2(
-    () => notices->Array.getBy(notice => notice.id == id),
-    (notices, id),
+    () => noticeSystem.notices->Array.getBy(notice => notice.id == id),
+    (noticeSystem.notices, id),
   );
 };
 
 let useSetShownNoticeType = () => {
-  let dispatch = Store.useDispatch();
+  let noticeSystem = use();
 
   React.useCallback1(
-    shownNoticesType => {dispatch(SetShownNoticeType(shownNoticesType))},
-    [|dispatch|],
+    shownNoticesType => {
+      noticeSystem.dispatch(SetShownNoticeType(shownNoticesType))
+    },
+    [|noticeSystem.dispatch|],
   );
 };
 
 let useRemoveNotice = () => {
-  let dispatch = Store.useDispatch();
+  let noticeSystem = use();
 
   React.useCallback1(
-    noticeId => {dispatch(RemoveNotice(noticeId))},
-    [|dispatch|],
+    noticeId => {noticeSystem.dispatch(RemoveNotice(noticeId))},
+    [|noticeSystem.dispatch|],
   );
 };
 
+module LoaderContent = {
+  let className =
+    Css.(
+      style([
+        display(`flex),
+        justifyContent(`center),
+        marginTop(35->px),
+        marginBottom(35->px),
+      ])
+    );
+
+  [@react.component]
+  let make = () => {
+    <div>
+      <div className={Css.merge([className, Style.Notice.loader])}>
+        <Sms.ReactSpinners.PropagateLoader size=20 loading=true />
+      </div>
+    </div>;
+  };
+};
+
 module Notice = {
+  module CloseIcon = {
+    [@react.component]
+    let make = (~className="") =>
+      <svg
+        className={Css.merge(["notice--close-icon", className])}
+        width="35"
+        height="35"
+        viewBox="0 0 35 35"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M24.043 17.25L33.8086 27.0156C34.3945 27.6016 34.6875 28.3828 34.6875 29.1641C34.6875 30.043 34.3945 30.8242 33.8086 31.4102L31.6602 33.5586C30.9766 34.1445 30.1953 34.4375 29.4141 34.4375C28.5352 34.4375 27.8516 34.1445 27.2656 33.5586L17.5 23.793L7.73438 33.5586C7.14844 34.1445 6.36719 34.4375 5.58594 34.4375C4.70703 34.4375 3.92578 34.1445 3.33984 33.5586L1.19141 31.4102C0.605469 30.8242 0.3125 30.043 0.3125 29.1641C0.3125 28.3828 0.605469 27.6016 1.19141 27.0156L10.957 17.25L1.19141 7.48438C0.605469 6.89844 0.3125 6.21484 0.3125 5.33594C0.3125 4.55469 0.605469 3.77344 1.19141 3.08984L3.33984 0.941406C3.92578 0.355469 4.70703 0.0625 5.58594 0.0625C6.36719 0.0625 7.14844 0.355469 7.73438 0.941406L17.5 10.707L27.2656 0.941406C27.8516 0.355469 28.5352 0.0625 29.4141 0.0625C30.1953 0.0625 30.9766 0.355469 31.6602 0.941406L33.8086 3.08984C34.3945 3.77344 34.6875 4.55469 34.6875 5.33594C34.6875 6.21484 34.3945 6.89844 33.8086 7.48438L24.043 17.25Z"
+          fill="#989898"
+        />
+      </svg>;
+  };
   module Header = {
     [@react.component]
     let make = (~id, ~title) => {
-      let shownNoticeType = useShownNoticeType();
+      let noticeSystem = use();
       let notice = useNotice(id);
       let removeNotice = useRemoveNotice();
 
       <header className=Style.Notice.header>
         <div> title->React.string </div>
-        {switch (shownNoticeType) {
+        {switch (noticeSystem.shownNoticesType) {
          | Active =>
            <button
-             className={Style.Notice.removeButton(shownNoticeType)}
+             className={Style.Notice.removeButton(
+               noticeSystem.shownNoticesType,
+             )}
              type_="button"
              onClick={_ =>
                switch (notice) {
@@ -538,7 +549,7 @@ module Notice = {
                | Some(notice) => removeNotice(notice.key)
                }
              }>
-             <Icons.Close />
+             <CloseIcon />
            </button>
          | All => React.null
          }}
@@ -549,21 +560,20 @@ module Notice = {
   /**id props on this component defaults to "", but the NoticeSystem always passes the id to the component. The user will not need to do this when instantiating this */
   [@react.component]
   let make = (~title=?, ~content, ~id="") => {
+    let noticeSystem = use();
     let notice = useNotice(id);
     let removeNotice = useRemoveNotice();
-    let shownNoticeType = useShownNoticeType();
-    // let logout = AppStoreHooks.useLogout();
 
     let life =
       React.useMemo2(
         () => {
-          switch (shownNoticeType, notice) {
+          switch (noticeSystem.shownNoticesType, notice) {
           | (All, _) => 999999999
           | (Active, Some(notice)) => notice.life
           | (Active, _) => defaultLife
           }
         },
-        (shownNoticeType, notice),
+        (noticeSystem.shownNoticesType, notice),
       );
 
     let handleRemoveNotice =
@@ -576,7 +586,7 @@ module Notice = {
         (notice, removeNotice),
       );
 
-    let countdown = ReactUseCountdown.useHook(life, handleRemoveNotice);
+    let countdown = ReactUseCountdown.use(life, handleRemoveNotice);
 
     React.useEffect1(
       () => {
@@ -587,13 +597,13 @@ module Notice = {
     );
 
     let timerNode =
-      switch (shownNoticeType) {
+      switch (noticeSystem.shownNoticesType) {
       | Active =>
         <div
           className={Style.Notice.life(
             life,
             countdown.playState,
-            shownNoticeType,
+            noticeSystem.shownNoticesType,
           )}>
           <div />
         </div>
@@ -627,47 +637,43 @@ module Notice = {
             }
           }
         />
-        {switch (notice.type_) {
-         | `loading =>
-           <div className=Style.Notice.loaderContent>
-             <div>
-               <Loaders.Container className=Style.Notice.loader>
-                 <Sms.ReactSpinners.PropagateLoader size=20 loading=true />
-               </Loaders.Container>
-             </div>
-             timerNode
-           </div>
-         | _ =>
-           <div className=Style.Notice.content>
-             content
-             //  {switch (notice.type_) {
-             //   | `error =>
-             //     <div>
-             //       <div>
-             //         "An unknown error has occurred, please try again later. If this continues, please contact us."
-             //         ->React.string
-             //       </div>
-             //     </div>
-             //   // <a
-             //   //   href="/contact"
-             //   //   rel="noopener noreferrer"
-             //   //   target="_blank">
-             //   //   "here"->React.string
-             //   // </a>
-             //   /***TODO: Implement a way for a custom message here. Ideally we'd want a developer to be able to implement a sentry "send report" form and maybe give the user an opportunity to restart the app */
-             //   | _ => React.null
-             //   }}
-             timerNode
-           </div>
-         }}
+        <div
+          className={
+            switch (notice.type_) {
+            | `loading => Style.Notice.loaderContent
+            | _ => Style.Notice.content
+            }
+          }>
+          {switch (
+             notice.type_,
+             noticeSystem.globalNoticeContent.error,
+             noticeSystem.globalNoticeContent.success,
+             noticeSystem.globalNoticeContent.info,
+             noticeSystem.globalNoticeContent.loading,
+             noticeSystem.globalNoticeContent.warning,
+           ) {
+           | (`error, Some((custom, rel)), _, _, _, _) =>
+             content->handleNoticeContentRender(custom, rel)
+           | (`success, _, Some((custom, rel)), _, _, _) =>
+             content->handleNoticeContentRender(custom, rel)
+           | (`info, _, _, Some((custom, rel)), _, _) =>
+             content->handleNoticeContentRender(custom, rel)
+           | (`loading, _, _, _, Some((custom, rel)), _) =>
+             content->handleNoticeContentRender(custom, rel)
+           | (`warning, _, _, _, _, Some((custom, rel))) =>
+             content->handleNoticeContentRender(custom, rel)
+           | _ => content
+           }}
+          timerNode
+        </div>
       </div>
     | None => React.null
     };
   };
 };
 
-let useAddNoticeAndGetId = () => {
-  let dispatch = Store.useDispatch();
+let useAddNotice = () => {
+  let noticeSystem = use();
 
   React.useMemo1(
     (
@@ -685,8 +691,7 @@ let useAddNoticeAndGetId = () => {
         switch (el, content) {
         | (Some(el), _) => el
         | (None, Some(content)) => <Notice content ?title />
-        | (None, None) =>
-          <Notice content={<span> "test"->React.string </span>} ?title />
+        | (None, None) => <Notice content=React.null ?title />
         };
 
       let id =
@@ -695,56 +700,14 @@ let useAddNoticeAndGetId = () => {
         | None => Sms.Uuid.make()
         };
 
-      dispatch(AddNotice(id, key, (type_, element, life)));
+      noticeSystem.dispatch(AddNotice(id, key, (type_, element, life)));
       id;
     },
-    [|dispatch|],
+    [|noticeSystem.dispatch|],
   );
 };
 
-type manage = {
-  add:
-    (
-      ~id: string=?,
-      ~content: React.element=?,
-      ~el: React.element=?,
-      ~title: string=?,
-      ~life: int=?,
-      type_
-    ) =>
-    string,
-  remove: string => unit,
-};
-
-let useManage = () => {
-  let add = useAddNoticeAndGetId();
-  let remove = useRemoveNotice();
-
-  React.useMemo2(() => {add, remove}, (add, remove));
-};
-
-let useAddNotice = () => {
-  let dispatch = Store.useDispatch();
-
-  React.useMemo1(
-    ((), ~id, ~content=?, ~el=?, ~title=?, ~life: singleNoticeLife=?, type_) => {
-      /** If an id is provided then this new notice will _replace_ the previous notice with that id. This is beneficial when using notices for acync states (Loading, Success, Error) */
-      let key = Sms.Uuid.make();
-      let element =
-        switch (el, content) {
-        | (Some(el), _) => el
-        | (None, Some(content)) => <Notice content ?title />
-        | (None, None) =>
-          <Notice content={<span> "test"->React.string </span>} ?title />
-        };
-
-      dispatch(AddNotice(id, key, (type_, element, life)));
-    },
-    [|dispatch|],
-  );
-};
-
-type useManageNoticeValue = {
+type useNewValue = {
   notice: option(notice),
   add:
     (
@@ -760,11 +723,28 @@ type useManageNoticeValue = {
   id: string,
 };
 
-let useManageNotice = () => {
+let useNew = () => {
+  let noticeSystem = use();
   let noticeId = React.useMemo0(() => Sms.Uuid.make());
-  let addNotice = useAddNotice();
   let removeNotice = useRemoveNotice();
   let notice = useNotice(noticeId);
+
+  let addNotice =
+    React.useMemo1(
+      ((), ~id, ~content=?, ~el=?, ~title=?, ~life: singleNoticeLife=?, type_) => {
+        /** If an id is provided then this new notice will _replace_ the previous notice with that id. This is beneficial when using notices for acync states (Loading, Success, Error) */
+        let key = Sms.Uuid.make();
+        let element =
+          switch (el, content) {
+          | (Some(el), _) => el
+          | (None, Some(content)) => <Notice content ?title />
+          | (None, None) => <Notice content=React.null ?title />
+          };
+
+        noticeSystem.dispatch(AddNotice(id, key, (type_, element, life)));
+      },
+      [|noticeSystem.dispatch|],
+    );
 
   React.useMemo4(
     () => {
@@ -784,21 +764,14 @@ let useManageNotice = () => {
   );
 };
 
-let useSetNoticeHeight = () => {
-  let dispatch = Store.useDispatch();
+let%private useSetNoticeHeight = () => {
+  let noticeSystem = use();
 
   React.useCallback1(
-    setNoticeHeight => {dispatch(SetNoticeHeight(setNoticeHeight))},
-    [|dispatch|],
-  );
-};
-
-let useSetNoticeLife = () => {
-  let dispatch = Store.useDispatch();
-
-  React.useCallback1(
-    noticeLife => {dispatch(SetNoticeLife(noticeLife))},
-    [|dispatch|],
+    setNoticeHeight => {
+      noticeSystem.dispatch(SetNoticeHeight(setNoticeHeight))
+    },
+    [|noticeSystem.dispatch|],
   );
 };
 
@@ -859,28 +832,17 @@ module Component = {
     | Active;
 
   [@react.component]
-  let make = (~children, ~noticeLife, ~palette, ~className="") => {
+  let make = (~children, ~palette, ~className="") => {
+    let noticeSystem = use();
     let activeNotices = useNotices();
-    let allNotices = useAllNotices();
-    let setNoticeLife = useSetNoticeLife();
-    let showNoticeType = useShownNoticeType();
     let setShownNoticeType = useSetShownNoticeType();
-    let noticeHeights = useNoticeHeights();
-
-    React.useEffect2(
-      () => {
-        setNoticeLife(noticeLife);
-        None;
-      },
-      (setNoticeLife, noticeLife),
-    );
 
     let getTransitionState =
       React.useCallback2(
         (notice: notice) =>
           {
             opacity:
-              switch (showNoticeType, notice.isActive) {
+              switch (noticeSystem.shownNoticesType, notice.isActive) {
               | (Active, true)
               | (All, _) => 1.
               | (Active, false) => 0.
@@ -888,21 +850,21 @@ module Component = {
             transform: "translateY(0)",
             /*** Animating the height specifically allows the animation to be smooth when stacking notices. */
             height:
-              switch (showNoticeType, notice.isActive) {
+              switch (noticeSystem.shownNoticesType, notice.isActive) {
               | (Active, true)
               | (All, _) =>
-                noticeHeights
+                noticeSystem.noticeHeights
                 ->getNoticeHeight(notice.id)
                 ->Option.getWithDefault(0)
               | (Active, false) => 0
               },
           },
-        (noticeHeights, showNoticeType),
+        (noticeSystem.noticeHeights, noticeSystem.shownNoticesType),
       );
 
     let transitions =
       TransitionHook.use(
-        allNotices,
+        noticeSystem.notices,
         item => item.key,
         TransitionHook.config(
           ~from=
@@ -937,20 +899,20 @@ module Component = {
         </div>
         <div
           className={Style.toggleAllNotices(
-            allNotices->Array.length > 0
-            && allNotices->Array.length > activeNotices->Array.length,
+            noticeSystem.notices->Array.length > 0
+            && noticeSystem.notices->Array.length > activeNotices->Array.length,
           )}>
           <button
             onClick={_ =>
               setShownNoticeType(
-                switch (showNoticeType) {
+                switch (noticeSystem.shownNoticesType) {
                 | Active => All
                 | All => Active
                 },
               )
             }>
             (
-              showNoticeType == All
+              noticeSystem.shownNoticesType == All
                 ? "Show Current Notices" : "Show All Notices"
             )
             ->React.string
@@ -961,16 +923,83 @@ module Component = {
   };
 };
 
-module Container = {
+[@react.component]
+let make =
+    (
+      ~children,
+      ~noticeLife=defaultLife,
+      ~palette=defaultPalette,
+      ~globalNoticeContent=?,
+      ~className="",
+    ) => {
+  let (value, dispatch) = React.useReducer(reducer, initialState);
+
+  React.useEffect1(
+    () => {
+      dispatch->SetDispatch->dispatch;
+      None;
+    },
+    [|dispatch|],
+  );
+
+  let value =
+    React.useMemo3(
+      () =>
+        {
+          ...value,
+          noticeLife,
+          globalNoticeContent:
+            switch (globalNoticeContent) {
+            | None => initialState.globalNoticeContent
+            | Some(globalNoticeContent) => globalNoticeContent
+            },
+        },
+      (value, globalNoticeContent, noticeLife),
+    );
+
+  <ContextProvider value>
+    <Component palette className> children </Component>
+  </ContextProvider>;
+};
+
+module TestButtons = {
   [@react.component]
-  let make =
-      (
-        ~children,
-        ~noticeLife=defaultLife,
-        ~palette=defaultPalette,
-        ~className="",
-      ) =>
-    <Store.Provider store=noticeSystemStore>
-      <Component palette className noticeLife> children </Component>
-    </Store.Provider>;
+  let make = () => {
+    let addNotice = useAddNotice();
+    <p>
+      <button onClick={_ => addNotice(`error)->ignore}>
+        "Create Error Notice"->React.string
+      </button>
+      <button onClick={_ => addNotice(~title="Loading", `loading)->ignore}>
+        "Create Loading Notice"->React.string
+      </button>
+      <button
+        onClick={_ =>
+          addNotice(
+            ~content="You did something that worked!"->React.string,
+            `success,
+          )
+          ->ignore
+        }>
+        "Create Success Notice"->React.string
+      </button>
+      <button
+        onClick={_ =>
+          addNotice(~content="Some kind of info!"->React.string, `info)
+          ->ignore
+        }>
+        "Create Info Notice"->React.string
+      </button>
+      <button
+        onClick={_ =>
+          addNotice(
+            ~content="Warning about something.."->React.string,
+            `warning,
+          )
+          ->ignore
+        }>
+        "Create Warning Notice"->React.string
+      </button>
+    </p>;
+  };
 };
