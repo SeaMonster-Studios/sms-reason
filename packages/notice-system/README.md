@@ -7,6 +7,12 @@ Install Peer Dependencies:
 
 `yarn add @seamonster-studios/react-use-countdown @seamonster-studios/react-use-measure @seamonster-studios/reason bs-css-emotion bs-react-spring`
 
+## Features
+- Focus on async request status
+- Life bar
+- Life bar pause on hover
+- View all previous notices
+
 ![Demo](./demo.gif)
 
 
