@@ -14,7 +14,10 @@
       "subdirs": true
     }
   ],
-  "bsc-flags": ["-bs-super-errors", "-bs-no-version-header"],
+  "bsc-flags": [
+    "-bs-super-errors",
+    "-bs-no-version-header"
+  ],
   "package-specs": [
     {
       "module": "commonjs",
@@ -22,14 +25,15 @@
     }
   ],
   "suffix": ".bs.js",
-  "ppx-flags": ["decco/ppx"],
+  "ppx-flags": [
+    "decco/ppx"
+  ],
   "bs-dependencies": [
     "reason-react",
     "bs-css",
     "bs-css-emotion",
     "bs-date-fns",
     "bs-fetch",
-    "reductive",
     "decco",
     "bs-react-spring"
   ],

@@ -8,7 +8,10 @@
     "dir": "src",
     "subdirs": true
   },
-  "bsc-flags": ["-bs-super-errors", "-bs-no-version-header"],
+  "bsc-flags": [
+    "-bs-super-errors",
+    "-bs-no-version-header"
+  ],
   "package-specs": [
     {
       "module": "commonjs",
@@ -20,7 +23,6 @@
     "reason-react",
     "bs-css",
     "bs-css-emotion",
-    "reductive",
     "@seamonster-studios/reason",
     "@seamonster-studios/react-use-countdown",
     "@seamonster-studios/react-use-measure",

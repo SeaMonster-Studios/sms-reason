@@ -20,8 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "@juggle/resize-observer": "^3.1.1",
-    "react-use-measure": "^2.0.0",
-    "reductive": "^2.0.1"
+    "react-use-measure": "^2.0.0"
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.5.0",

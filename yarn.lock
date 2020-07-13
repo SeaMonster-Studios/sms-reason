@@ -6969,13 +6969,6 @@ redeyed@~0.4.0:
   dependencies:
     esprima "~1.0.4"
 
-reductive@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/reductive/-/reductive-2.0.1.tgz#23062796549f329bc4216adaad96fe103a120f29"
-  integrity sha512-uOaB+oJSp/dia2T7issdqDvfBhlZrzZ0lYlVd73Pn0MzIBl/jGqEWuA/JbT5KzpRRCTs/OS5XhelkVQKfyadTw==
-  dependencies:
-    use-subscription "^1.0.0"
-
 regenerator-runtime@^0.13.4:
   version "0.13.5"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.5.tgz#d878a1d094b4306d10b9096484b33ebd55e26697"
@@ -8154,13 +8147,6 @@ usa-states@^0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/usa-states/-/usa-states-0.0.5.tgz#3a88c972def5345ae9b87186fc4402385b861bb7"
   integrity sha1-OojJct71NFrpuHGG/EQCOFuGG7c=
-
-use-subscription@^1.0.0:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/use-subscription/-/use-subscription-1.4.1.tgz#edcbcc220f1adb2dd4fa0b2f61b6cc308e620069"
-  integrity sha512-7+IIwDG/4JICrWHL/Q/ZPK5yozEnvRm6vHImu0LKwQlmWGKeiF7mbAenLlK/cTNXrTtXHU/SFASQHzB6+oSJMQ==
-  dependencies:
-    object-assign "^4.1.1"
 
 use@^3.1.0:
   version "3.1.1"

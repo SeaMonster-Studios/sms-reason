@@ -3884,12 +3884,7 @@ redeyed@~0.4.0:
   dependencies:
     esprima "~1.0.4"
 
-reductive@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/reductive/-/reductive-2.0.1.tgz#23062796549f329bc4216adaad96fe103a120f29"
-  integrity sha512-uOaB+oJSp/dia2T7issdqDvfBhlZrzZ0lYlVd73Pn0MzIBl/jGqEWuA/JbT5KzpRRCTs/OS5XhelkVQKfyadTw==
-  dependencies:
-    use-subscription "^1.0.0"
+
 
 regenerator-runtime@^0.13.4:
   version "0.13.5"
