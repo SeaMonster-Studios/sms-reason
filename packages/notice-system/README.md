@@ -13,7 +13,7 @@ Install Peer Dependencies:
 - Life bar pause on hover
 - View all previous notices
 
-![Demo](https://opensource-repo-assets.s3-us-west-2.amazonaws.com/reason/notice-system/demo.gif?raw=true)
+![Demo](https://opensource-repo-assets.s3-us-west-2.amazonaws.com/reason/notice-system/demo-2.gif)
 
 
 ## Basic Usage
