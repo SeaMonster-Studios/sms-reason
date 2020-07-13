@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/bs-react-query",
-  "version": "0.15.0",
+  "version": "0.15.2",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/bs-react-query",
   "scripts": {
@@ -19,8 +19,8 @@
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
   "dependencies": {
-    "@seamonster-studios/bs-lodash": "^0.15.0",
-    "@seamonster-studios/react-hooks": "^0.15.0",
+    "@seamonster-studios/bs-lodash": "^0.15.2",
+    "@seamonster-studios/react-hooks": "^0.15.2",
     "react-query": "^1.5.5",
     "react-query-devtools": "^1.1.17"
   },
