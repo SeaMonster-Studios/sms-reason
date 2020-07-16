@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/notice-system",
-  "version": "0.15.4",
+  "version": "0.15.5",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/notice-system",
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@glennsl/bs-jest": "^0.5.0",
-    "@seamonster-studios/react-use-countdown": "^0.15.2",
+    "@seamonster-studios/react-use-countdown": "^0.15.5",
     "@seamonster-studios/react-use-measure": "^0.15.2",
     "@seamonster-studios/reason": "^0.15.2",
     "bs-css-emotion": "^1.0.1",
