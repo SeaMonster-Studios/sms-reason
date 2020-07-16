@@ -181,22 +181,26 @@ module Style = {
       merge([
         hideWithAllNoticeType(shownNoticeType),
         "notice--life-bar",
-        style([
-          width(100.->pct),
-          marginTop(10->px),
-          selector(
-            "> div",
-            [
-              height(2->px),
-              opacity(0.35),
-              animationName(lifeBarAnimation),
-              animationDuration(duration),
-              animationTimingFunction(`linear),
-              animationFillMode(`forwards),
-              animationPlayState(playState),
-            ],
-          ),
-        ]),
+        switch (duration) {
+        | Some(duration) =>
+          style([
+            width(100.->pct),
+            marginTop(10->px),
+            selector(
+              "> div",
+              [
+                height(2->px),
+                opacity(0.35),
+                animationName(lifeBarAnimation),
+                animationDuration(duration),
+                animationTimingFunction(`linear),
+                animationFillMode(`forwards),
+                animationPlayState(playState),
+              ],
+            ),
+          ])
+        | None => style([display(`none)])
+        },
       ]);
 
     let header =
@@ -279,9 +283,13 @@ module Style = {
 
 open Belt;
 
-let defaultLife = 10000;
-
 let noticeGap = 10;
+
+type life =
+  | Finite(int)
+  | Infinite;
+
+let defaultLife = Finite(10000);
 
 type type_ = [ | `success | `error | `info | `warning | `loading];
 
@@ -307,7 +315,7 @@ type globalNoticeContent = {
   loading: option((React.element, singularNoticeRelationship)),
 };
 
-type singleNoticeLife = option(int);
+type singleNoticeLife = option(life);
 type newNotice = (type_, React.element, singleNoticeLife);
 type updateNotice = (string, type_, React.element, singleNoticeLife);
 type setNoticeHeight = (string, int);
@@ -317,7 +325,7 @@ type notice = {
   key: string,
   isActive: bool,
   element: React.element,
-  life: int,
+  life,
   type_,
 };
 
@@ -325,14 +333,14 @@ type noticeSystemAction =
   | AddNotice(string, string, newNotice)
   | SetNoticeHeight(setNoticeHeight)
   | RemoveNotice(string)
-  | SetNoticeLife(int)
+  | SetNoticeLife(life)
   | SetShownNoticeType(shownNoticesType)
   | SetDispatch(noticeSystemAction => unit);
 
 type noticeSystemState = {
   notices: array(notice),
   noticeHeights: Belt.Map.String.t(int),
-  noticeLife: int, //milliseconds
+  noticeLife: life, //milliseconds
   shownNoticesType,
   globalNoticeContent,
   dispatch: noticeSystemAction => unit,
@@ -573,9 +581,17 @@ module Notice = {
       React.useMemo2(
         () => {
           switch (noticeSystem.shownNoticesType, notice) {
-          | (All, _) => 999999999
-          | (Active, Some(notice)) => notice.life
-          | (Active, _) => defaultLife
+          | (All, _) => None
+          | (Active, Some(notice)) =>
+            switch (notice.life) {
+            | Infinite => None
+            | Finite(life) => life->Some
+            }
+          | (Active, _) =>
+            switch (defaultLife) {
+            | Infinite => None
+            | Finite(life) => life->Some
+            }
           }
         },
         (noticeSystem.shownNoticesType, notice),
@@ -713,19 +729,17 @@ let useAddNotice = () => {
 };
 
 type useNewValue = {
-  // notice: option(notice),
   add:
     (
       ~id: string=?,
       ~content: ReasonReact.reactElement=?,
       ~el: React.element=?,
       ~title: string=?,
-      ~life: int=?,
+      ~life: life=?,
       type_
     ) =>
     unit,
   remove: unit => unit,
-  // isActive: bool,
   id: string,
 };
 

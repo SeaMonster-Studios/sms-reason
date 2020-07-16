@@ -46,7 +46,17 @@ let use = (duration, onEnd) => {
   let timerCallback = React.useRef(() => ());
 
   let (state, dispatch) =
-    React.useReducer(reducer, {playState: `paused, time: duration});
+    React.useReducer(
+      reducer,
+      {
+        playState: `paused,
+        time:
+          switch (duration) {
+          | Some(duration) => duration
+          | None => 1
+          },
+      },
+    );
 
   React.useEffect2(
     () => {
@@ -62,11 +72,12 @@ let use = (duration, onEnd) => {
         let current = React.Ref.current(timerCallback);
         current();
       };
-      switch (state.playState, state.time == 0) {
-      | (`paused, true)
-      | (`paused, false)
-      | (`running, true) => Some(() => ())
-      | (`running, false) =>
+      switch (duration, state.playState, state.time == 0) {
+      | (None, _, _)
+      | (_, `paused, true)
+      | (_, `paused, false)
+      | (_, `running, true) => Some(() => ())
+      | (Some(_), `running, false) =>
         let id = Js.Global.setInterval(tick, frequency);
         Some(() => id->Js.Global.clearInterval);
       };
@@ -87,7 +98,15 @@ let use = (duration, onEnd) => {
 
   let restart =
     React.useCallback2(
-      () => dispatch(Restart(duration)),
+      () =>
+        dispatch(
+          Restart(
+            switch (duration) {
+            | Some(duration) => duration
+            | None => 1
+            },
+          ),
+        ),
       (duration, dispatch),
     );
 
