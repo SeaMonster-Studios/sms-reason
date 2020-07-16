@@ -400,7 +400,13 @@ let reducer = (state: noticeSystemState, action) =>
       ...state,
       noticeHeights: Map.String.set(state.noticeHeights, id, height),
     }
-  | RemoveNotice(key) => {
+  | RemoveNotice(key) =>
+    /** RemoveNotice takes a key not an id.
+     * This is b/c React Spring is animating based on the key value, which can change. This happens if the user creates a new notice _with_ an existing notice's id:
+     *     The previous notice is removed (an animates off screen), a new one is created (and animates on screen)
+     * Id's never change on a single notice.
+    */
+    {
       ...state,
       notices:
         state.notices
@@ -483,7 +489,7 @@ let useRemoveNotice = () => {
   let noticeSystem = use();
 
   React.useCallback1(
-    noticeId => {noticeSystem.dispatch(RemoveNotice(noticeId))},
+    noticeKey => {noticeSystem.dispatch(RemoveNotice(noticeKey))},
     [|noticeSystem.dispatch|],
   );
 };
@@ -707,9 +713,10 @@ let useAddNotice = () => {
 };
 
 type useNewValue = {
-  notice: option(notice),
+  // notice: option(notice),
   add:
     (
+      ~id: string=?,
       ~content: ReasonReact.reactElement=?,
       ~el: React.element=?,
       ~title: string=?,
@@ -718,48 +725,43 @@ type useNewValue = {
     ) =>
     unit,
   remove: unit => unit,
-  isActive: bool,
+  // isActive: bool,
   id: string,
 };
 
 let useNew = () => {
   let noticeSystem = use();
   let noticeId = React.useMemo0(() => Sms.Uuid.make());
+  let key = React.useMemo0(() => Sms.Uuid.make());
   let removeNotice = useRemoveNotice();
-  let notice = useNotice(noticeId);
 
-  let addNotice =
-    React.useMemo1(
-      ((), ~id, ~content=?, ~el=?, ~title=?, ~life: singleNoticeLife=?, type_) => {
-        /** If an id is provided then this new notice will _replace_ the previous notice with that id. This is beneficial when using notices for acync states (Loading, Success, Error) */
-        let key = Sms.Uuid.make();
-        let element =
-          switch (el, content) {
-          | (Some(el), _) => el
-          | (None, Some(content)) => <Notice content ?title />
-          | (None, None) => <Notice content=React.null ?title />
-          };
-
-        noticeSystem.dispatch(AddNotice(id, key, (type_, element, life)));
-      },
-      [|noticeSystem.dispatch|],
-    );
-
-  React.useMemo4(
+  React.useMemo2(
     () => {
       {
-        notice,
-        add: addNotice(~id=noticeId),
-        remove: () => removeNotice(noticeId),
+        add:
+          (
+            ~id=noticeId,
+            ~content=?,
+            ~el=?,
+            ~title=?,
+            ~life: singleNoticeLife=?,
+            type_,
+          ) => {
+          /** If an id is provided then this new notice will _replace_ the previous notice with that id. This is beneficial when using notices for acync states (Loading, Success, Error) */
+          let element =
+            switch (el, content) {
+            | (Some(el), _) => el
+            | (None, Some(content)) => <Notice content ?title />
+            | (None, None) => <Notice content=React.null ?title />
+            };
+
+          noticeSystem.dispatch(AddNotice(id, key, (type_, element, life)));
+        },
+        remove: () => removeNotice(key),
         id: noticeId,
-        isActive:
-          switch (notice) {
-          | None => false
-          | Some(notice) => notice.isActive
-          },
       }
     },
-    (notice, addNotice, removeNotice, noticeId),
+    (removeNotice, noticeId),
   );
 };
 
