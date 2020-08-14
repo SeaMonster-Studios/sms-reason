@@ -769,6 +769,15 @@ let useNew = () => {
             | (None, None) => <Notice content=React.null ?title />
             };
 
+          let life =
+            (
+              switch (life) {
+              | None => type_ == `loading ? Infinite : defaultLife
+              | Some(life) => life
+              }
+            )
+            ->Some;
+
           noticeSystem.dispatch(AddNotice(id, key, (type_, element, life)));
         },
         remove: () => removeNotice(key),
