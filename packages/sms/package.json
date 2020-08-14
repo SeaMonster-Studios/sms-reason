@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/reason",
-  "version": "0.15.2",
+  "version": "0.15.6",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/sms",
   "scripts": {
