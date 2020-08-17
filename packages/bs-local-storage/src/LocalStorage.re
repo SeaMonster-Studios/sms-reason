@@ -1,8 +1,8 @@
 module DateFns = {
-  [@bs.module "date-fns/is_before"]
+  [@bs.module "date-fns/isBefore"]
   external isBefore: (Js.Date.t, Js.Date.t) => bool = "default";
 
-  [@bs.module "date-fns/is_before"]
+  [@bs.module "date-fns/addDays"]
   external addDays: (int, Js.Date.t) => Js.Date.t = "default";
 };
 
