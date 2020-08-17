@@ -20,7 +20,6 @@
   "license": "MIT",
   "devDependencies": {
     "@seamonster-studios/bs-sentry": "^0.15.2",
-    "@seamonster-studios/reason-date-fns": "^0.11.2",
     "bs-platform": "^7.0.1",
     "decco": "^1.2.1",
     "react": "^16.8.1",

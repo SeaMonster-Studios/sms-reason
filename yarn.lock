@@ -1710,11 +1710,6 @@
     "@juggle/resize-observer" "^3.1.1"
     react-use-measure "^2.0.0"
 
-"@seamonster-studios/reason-date-fns@^0.11.2":
-  version "0.11.2"
-  resolved "https://registry.yarnpkg.com/@seamonster-studios/reason-date-fns/-/reason-date-fns-0.11.2.tgz#c5ad282bb3d1bba4694280d84387596aed4590ff"
-  integrity sha512-nuADxZddZNS/wJLJCAFBAfYifS9BTMq78nTggGckf4L6yMjHTFVRgp7dcaRnAywHSFv6/KZhfZF2vNyxcgDh4A==
-
 "@sentry/apm@5.15.5":
   version "5.15.5"
   resolved "https://registry.yarnpkg.com/@sentry/apm/-/apm-5.15.5.tgz#dc0515f16405de52b3ba0d26f8a6dc2fcefe5fcc"

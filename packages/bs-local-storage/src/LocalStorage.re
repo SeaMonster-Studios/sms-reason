@@ -1,4 +1,10 @@
-open SeamonsterStudiosReasonDateFns;
+module DateFns = {
+  [@bs.module "date-fns/is_before"]
+  external isBefore: (Js.Date.t, Js.Date.t) => bool = "default";
+
+  [@bs.module "date-fns/is_before"]
+  external addDays: (int, Js.Date.t) => Js.Date.t = "default";
+};
 
 [@bs.val] [@bs.scope "localStorage"]
 external removeItem: string => unit = "removeItem";

@@ -25,7 +25,6 @@
   "bs-dependencies": [
     "reason-react",
     "@seamonster-studios/bs-sentry",
-    "@seamonster-studios/reason-date-fns",
     "decco"
   ],
   "refmt": 3
