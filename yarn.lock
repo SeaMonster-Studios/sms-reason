@@ -6933,10 +6933,10 @@ realpath-native@^1.1.0:
   dependencies:
     util.promisify "^1.0.0"
 
-reason-date-fns@^0.10.4:
-  version "0.10.4"
-  resolved "https://registry.yarnpkg.com/reason-date-fns/-/reason-date-fns-0.10.4.tgz#8e0e90cdfc57e0855da95143ba115373dba195d9"
-  integrity sha512-GXwFc75YWGAsYOGnRYHdCOTxcI8GsAgr5+P9+U88p2aNVOsc30pOLAJE6RwjtERZKkk00GoMxbUWv572MsppPA==
+reason-date-fns@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/reason-date-fns/-/reason-date-fns-0.11.0.tgz#83105bf5a5f8861fde5a271d92127c40557abcb2"
+  integrity sha512-tGfPYCd5imTgqSc++op/yqMRuB54LovIgW+E+yuX91vootZbm8fENvrAFd3MkKPpuy4QhxsqxdU3vNF8DiFG2w==
 
 reason-react@>=0.7.0:
   version "0.7.0"
