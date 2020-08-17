@@ -1710,6 +1710,11 @@
     "@juggle/resize-observer" "^3.1.1"
     react-use-measure "^2.0.0"
 
+"@seamonster-studios/reason-date-fns@^0.11.1":
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/@seamonster-studios/reason-date-fns/-/reason-date-fns-0.11.1.tgz#294737c7167754f1d90c6bbb85430db0fa791c0f"
+  integrity sha512-CraSX/2cPw6Qu8ZeE6JEaPJ8+vr8uXi8tGR3CL4YqxSNeXzZLX9/NVRNq61SH5ZTM8YZooCZSLHqyu9OdMGhSA==
+
 "@sentry/apm@5.15.5":
   version "5.15.5"
   resolved "https://registry.yarnpkg.com/@sentry/apm/-/apm-5.15.5.tgz#dc0515f16405de52b3ba0d26f8a6dc2fcefe5fcc"
@@ -6932,11 +6937,6 @@ realpath-native@^1.1.0:
   integrity sha512-wlgPA6cCIIg9gKz0fgAPjnzh4yR/LnXovwuo9hvyGvx3h8nX4+/iLZplfUWasXpqD8BdnGnP5njOFjkUwPzvjA==
   dependencies:
     util.promisify "^1.0.0"
-
-reason-date-fns@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/reason-date-fns/-/reason-date-fns-0.11.0.tgz#83105bf5a5f8861fde5a271d92127c40557abcb2"
-  integrity sha512-tGfPYCd5imTgqSc++op/yqMRuB54LovIgW+E+yuX91vootZbm8fENvrAFd3MkKPpuy4QhxsqxdU3vNF8DiFG2w==
 
 reason-react@>=0.7.0:
   version "0.7.0"

@@ -24,8 +24,10 @@
     "decco": "^1.2.1",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
-    "reason-date-fns": "^0.11.0",
     "reason-react": ">=0.7.0"
   },
-  "gitHead": "a8bc3c96fda232e9b2808367e14a3ce87c3de8b6"
+  "gitHead": "a8bc3c96fda232e9b2808367e14a3ce87c3de8b6",
+  "dependencies": {
+    "@seamonster-studios/reason-date-fns": "^0.11.1"
+  }
 }
