@@ -20,14 +20,12 @@
   "license": "MIT",
   "devDependencies": {
     "@seamonster-studios/bs-sentry": "^0.15.2",
+    "@seamonster-studios/reason-date-fns": "^0.11.2",
     "bs-platform": "^7.0.1",
     "decco": "^1.2.1",
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "reason-react": ">=0.7.0"
   },
-  "gitHead": "a8bc3c96fda232e9b2808367e14a3ce87c3de8b6",
-  "dependencies": {
-    "@seamonster-studios/reason-date-fns": "^0.11.2"
-  }
+  "gitHead": "a8bc3c96fda232e9b2808367e14a3ce87c3de8b6"
 }
