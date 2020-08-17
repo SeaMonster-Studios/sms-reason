@@ -26,5 +26,8 @@
     "react-dom": "^16.8.1",
     "reason-react": ">=0.7.0"
   },
-  "gitHead": "a8bc3c96fda232e9b2808367e14a3ce87c3de8b6"
+  "gitHead": "a8bc3c96fda232e9b2808367e14a3ce87c3de8b6",
+  "dependencies": {
+    "date-fns": "^2.15.0"
+  }
 }
