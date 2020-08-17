@@ -28,6 +28,6 @@
   },
   "gitHead": "a8bc3c96fda232e9b2808367e14a3ce87c3de8b6",
   "dependencies": {
-    "@seamonster-studios/reason-date-fns": "^0.11.1"
+    "@seamonster-studios/reason-date-fns": "^0.11.2"
   }
 }

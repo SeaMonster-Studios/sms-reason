@@ -1,4 +1,4 @@
-open ReasonDateFns;
+open SeamonsterStudiosReasonDateFns;
 
 [@bs.val] [@bs.scope "localStorage"]
 external removeItem: string => unit = "removeItem";
