@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/bs-local-storage",
-  "version": "0.15.15",
+  "version": "0.15.16",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/bs-local-storage",
   "scripts": {
