@@ -3,7 +3,7 @@ module DateFns = {
   external isBefore: (Js.Date.t, Js.Date.t) => bool = "default";
 
   [@bs.module "date-fns/addDays"]
-  external addDays: (int, Js.Date.t) => Js.Date.t = "default";
+  external addDays: (Js.Date.t, int) => Js.Date.t = "default";
 };
 
 [@bs.val] [@bs.scope "localStorage"]
@@ -64,8 +64,9 @@ let getItemWithExpiration = (storage_key, decoder) =>
     }
   };
 
-let setItemWithExpiration = (storage_key, data, encoder) =>
-  {expiresAt: DateFns.addDays(1, Js.Date.make())->Js.Date.getTime, data}
+let setItemWithExpiration = (storage_key, data, encoder) => {
+  {expiresAt: DateFns.addDays(Js.Date.make(), 1)->Js.Date.getTime, data}
   |> itemWithExpiration_encode(encoder)
   |> Js.Json.stringify
   |> setItem(storage_key);
+};
