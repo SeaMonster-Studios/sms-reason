@@ -49,8 +49,8 @@ let getItemWithExpiration = (storage_key, decoder) =>
     ) {
     | Ok(cache) =>
       if (DateFns.isBefore(
-            Js.Date.fromFloat(cache.expiresAt),
             Js.Date.make(),
+            Js.Date.fromFloat(cache.expiresAt),
           )) {
         Cache(cache.data);
       } else {
