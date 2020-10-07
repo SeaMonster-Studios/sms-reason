@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/react-copy-to-clipboard",
-  "version": "0.15.17",
+  "version": "0.15.18",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/react-copy-to-clipboard",
   "scripts": {
@@ -19,7 +19,7 @@
   "author": "Engineering Team @ SeaMonster Studios",
   "license": "MIT",
   "devDependencies": {
-    "@seamonster-studios/reason": "^0.15.17",
+    "@seamonster-studios/reason": "^0.15.18",
     "bs-css-emotion": "^1.1.0",
     "bs-platform": "^7.0.1",
     "react": "^16.8.1",
