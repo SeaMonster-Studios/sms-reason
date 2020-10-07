@@ -23,7 +23,6 @@
     "decco/ppx"
   ],
   "bs-dependencies": [
-    "reason-react",
     "decco"
   ],
   "refmt": 3
