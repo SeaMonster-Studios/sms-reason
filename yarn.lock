@@ -2354,10 +2354,23 @@ bs-css-emotion@^1.0.1, bs-css-emotion@^1.1.0:
     bs-css "12.1.0"
     emotion "^10.0.7"
 
+bs-css-emotion@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/bs-css-emotion/-/bs-css-emotion-2.1.0.tgz#d1e82aca79b4da333b774b5c0b6546b22743de3f"
+  integrity sha512-nEnO/BbU4MFNh/zvqLfz+AktVCAJ++9WK/etYmOL4/fCKyKwbc7T/YHMu7Xe9CZ5rwH9s/qST/pEehKq+qVL2g==
+  dependencies:
+    bs-css "13.1.0"
+    emotion "^10.0.7"
+
 bs-css@12.1.0:
   version "12.1.0"
   resolved "https://registry.yarnpkg.com/bs-css/-/bs-css-12.1.0.tgz#8bea8970d31cd133bb81e2aeb78b187a807d003c"
   integrity sha512-cKxVoPe1PtVTYAUYp81lleRwawd/OhdgDINx8V1/AOUuHkan6g23Jh6b+WACJXrOn4vVJmSgVdBfMqaeHMoi8g==
+
+bs-css@13.1.0:
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/bs-css/-/bs-css-13.1.0.tgz#2697aba575625d55ad7f07eaef93a74748ec8d42"
+  integrity sha512-G39iqPZdSZyjibeDOljCh2/VDfeQQBEGN2mKK+zQBSjinjfpeTwd4GIK69s5hNXJ2n4k6urHfs9pvwCe2LoExQ==
 
 bs-date-fns@^0.1.6:
   version "0.1.6"

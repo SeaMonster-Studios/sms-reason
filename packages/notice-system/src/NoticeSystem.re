@@ -20,14 +20,14 @@ type palette = {
 
 let defaultPalette =
   Css.{
-    accent: rgba(0, 0, 0, 0.75),
+    accent: rgba(0, 0, 0, `percent(0.75)),
     info: rgb(132, 210, 250),
     success: rgb(157, 250, 176),
     warning: rgb(250, 219, 120),
     error: rgb(250, 172, 145),
     toggleNoticeTypeButton: {
       background: rgb(132, 213, 250),
-      text: rgba(0, 0, 0, 0.75),
+      text: rgba(0, 0, 0, `percent(0.75)),
     },
   };
 
@@ -37,7 +37,12 @@ module Style = {
   module Common = {
     let boxShadow =
       boxShadow(
-        Shadow.box(~x=px(2), ~y=px(2), ~blur=px(10), rgba(0, 0, 0, 0.15)),
+        Shadow.box(
+          ~x=px(2),
+          ~y=px(2),
+          ~blur=px(10),
+          rgba(0, 0, 0, `percent(0.15)),
+        ),
       );
     let white = rgb(255, 255, 255);
   };
@@ -59,7 +64,7 @@ module Style = {
             padding(10->px),
             margin((-10)->px),
             cursor(`pointer),
-            selector("path", [SVG.fill(p.accent)]),
+            selector("path", [SVG.fill(p.accent->Obj.magic)]),
           ],
         ),
         selector(
