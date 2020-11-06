@@ -2,7 +2,7 @@ open Belt;
 
 type state = {
   name: string,
-  appreviation: string,
+  abbreviation: string,
   territory: bool,
   capital: string,
   contiguous: bool,
