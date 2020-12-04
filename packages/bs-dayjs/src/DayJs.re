@@ -1,5 +1,7 @@
 type dayjs;
 
+[@bs.module] external now: unit => dayjs = "dayjs";
+
 [@bs.module] external dayjs: string => dayjs = "dayjs";
 
 [@bs.send] external format: (dayjs, string) => string = "format";
