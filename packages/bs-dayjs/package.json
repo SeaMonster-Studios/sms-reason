@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/bs-dayjs",
-  "version": "0.15.7",
+  "version": "0.15.22",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/bs-dayjs",
   "scripts": {
