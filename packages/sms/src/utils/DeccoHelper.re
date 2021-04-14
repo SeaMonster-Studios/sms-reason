@@ -3,11 +3,7 @@ open Belt;
 module PolymorphicVariantHelpers = {
   external t_to_string: 'a => string = "%identity";
 
-  let encode = (x, ~tToJs) =>
-    /** for some reason tToJs if failing with `x` is already a string */
-    Js.typeof(x)
-    == "string"
-      ? x->t_to_string->Decco.stringToJson : x->tToJs->Decco.stringToJson;
+  let encode = (x, ~tToJs) => x->tToJs->Decco.stringToJson;
 
   let decode = (x, ~tFromJs, ~name) =>
     Decco.stringFromJson(x)

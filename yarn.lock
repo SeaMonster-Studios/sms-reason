@@ -3102,6 +3102,11 @@ decco@^1.2.1:
   resolved "https://registry.yarnpkg.com/decco/-/decco-1.2.1.tgz#f64b68c5ef1a689d438b6064fbf93af0f8cfbbca"
   integrity sha512-esHlkq1D6elqdeqVG2EZfkcQ2g5knhMfeACxwiIc1KjOb3D2a+rQfRt9KpNBIZkl6kiQmH6Wwnp3yCIckj/S2A==
 
+decco@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/decco/-/decco-1.4.0.tgz#38578e1edce9f4febda3b429312b95a3f0d0807d"
+  integrity sha512-LjzKnysrmFqkzzRD4w8yb5IfTvMh3grNUJQqVKhp+lv+8KcoXx2AUIvLsFBwamBxAwKc6il3ZJc90i0ZWxSosQ==
+
 deck.gl@^8.0.17:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/deck.gl/-/deck.gl-8.1.0.tgz#a5e041ff30cb08580a3b8c7eda65f898ea472d4f"
