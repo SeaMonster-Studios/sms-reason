@@ -745,10 +745,10 @@
   resolved "https://registry.yarnpkg.com/@scarf/scarf/-/scarf-1.0.6.tgz#52011dfb19187b53b75b7b6eac20da0810ddd88f"
   integrity sha512-y4+DuXrAd1W5UIY3zTcsosi/1GyYT8k5jGnZ/wG7UUHVrU+MHlH4Mp87KK2/lvMW4+H7HVcdB+aJhqywgXksjA==
 
-"@seamonster-studios/bs-sentry@^0.15.2":
-  version "0.15.2"
-  resolved "https://registry.yarnpkg.com/@seamonster-studios/bs-sentry/-/bs-sentry-0.15.2.tgz#b99200c599cf829e8842aa37665bd35356f33e5a"
-  integrity sha512-IxCdZCZ1DxEfhKUDiqu6QcLjSA+REKACbiBrftynU7RZK7dmF2TDDykPgpt737S2IPGqkq40yGalagMa9YHJ+g==
+"@seamonster-studios/bs-sentry@^0.15.18":
+  version "0.15.18"
+  resolved "https://registry.yarnpkg.com/@seamonster-studios/bs-sentry/-/bs-sentry-0.15.18.tgz#00ac5ad1684b66689d4f3532a0aa39d514d7e3bc"
+  integrity sha512-Pz92qvYgGXDTEsQRhzXXUKuhPIvGWx0S4gnFq/zO6JXxGL12/MTMoSISYrlxo09N12kL/DQR8gLSYgr9ahp5ug==
   dependencies:
     "@sentry/browser" "^5.15.5"
     "@sentry/node" "^5.15.5"
@@ -1595,10 +1595,10 @@ decamelize@^1.2.0:
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
   integrity sha1-9lNNFRSCabIDUue+4m9QH5oZEpA=
 
-decco@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/decco/-/decco-1.2.0.tgz#f67d7d0d4bdd0f001710a36d2d698fed6c2b52b8"
-  integrity sha512-sPk3qV7SF4djb7jvaPI2w5R4FmALjj/dziBmHEkdsYg2ImhvUreh/eL20FdnViVZ+jVJMqsUZaKtOIwIjMmnHQ==
+decco@^1.4.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/decco/-/decco-1.5.0.tgz#4a74d5cb9ffc7b3dd821f9e8a77ff633f05e752c"
+  integrity sha512-d+QQ+4AgEHyqK0Ums0xsgxRjC7b1IVe96M/I8y9SZ+uo0bR0Fi4zM9BJnzDcaKwUPM/z5ze5klfRscZkz+psRg==
 
 deck.gl@^8.0.17:
   version "8.0.17"
@@ -3590,9 +3590,9 @@ path-key@^3.0.0, path-key@^3.1.0:
   integrity sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==
 
 path-parse@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
-  integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+  integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 path-type@^4.0.0:
   version "4.0.0"
