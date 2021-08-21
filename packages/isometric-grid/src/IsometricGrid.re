@@ -273,6 +273,7 @@ type status('item) =
   | Loading
   | Running({
       items: array(('item, show)),
+      filter: filter('item),
       itemWidth: int,
       itemHeight: int,
       columns: int,
@@ -295,13 +296,14 @@ let reducer = (status, action) => {
     let {items, filter, containerWidth, columns} = runConfig;
     let width = containerWidth / columns;
     let items = items->initItemsState->applyFilter(filter);
-    Running({items, itemWidth: width, itemHeight: width, columns});
+    Running({items, filter, itemWidth: width, itemHeight: width, columns});
 
   | (Running(state), SetItems(items)) =>
-    Running({...state, items: items->initItemsState})
+    let items = items->initItemsState->applyFilter(state.filter)
+    Running({...state, items: items})
 
   | (Running(state), SetFilter(filter)) =>
-    Running({...state, items: state.items->applyFilter(filter)})
+    Running({...state, filter, items: state.items->applyFilter(filter)})
 
   | (Running(state), ChangeLayout({containerWidth, columns})) =>
     let width = containerWidth / state.columns;
