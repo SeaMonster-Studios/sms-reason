@@ -73,6 +73,13 @@ let make = () => {
       (filterBy1, filterBy2),
     );
 
+  let (paging, onLoadMoreClick) =
+    IsometricGrid.usePagination(
+      ~numItems=items->Array.length,
+      ~itemsPerPage=6,
+      ~openPages=1,
+    );
+
   <div className="example">
     <div className="toolbar">
       <button onClick={_ => setFilterBy1(b => !b)}> "filter"->str </button>
@@ -85,8 +92,11 @@ let make = () => {
       render
       filter
       padding=10
-      paging={IsometricGrid.Paged({openPages: 1, itemsPerPage: 6})}
-      buttonClass=Css.(style([color(black), marginLeft(`auto), marginRight(`auto)]))
+      paging={IsometricGrid.Paged(paging)}
+      buttonClass=Css.(
+        style([color(black), marginLeft(`auto), marginRight(`auto)])
+      )
+      onLoadMoreClick
     />
   </div>;
 };

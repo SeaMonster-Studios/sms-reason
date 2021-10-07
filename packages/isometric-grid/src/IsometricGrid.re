@@ -124,6 +124,26 @@ module HeightSpring = {
   let interpolate = interpolate(_, height => {height->string_of_int ++ "px"});
 };
 
+let usePagination = (~numItems, ~itemsPerPage, ~openPages) => {
+  let numPages =
+    Js.Math.ceil(numItems->float_of_int /. itemsPerPage->float_of_int);
+  let (paging, setPaging) =
+    React.useState(() =>
+      openPages < 1
+        ? {itemsPerPage, openPages: 1}
+        : openPages > numPages
+            ? {itemsPerPage, openPages: numPages} : {itemsPerPage, openPages}
+    );
+
+  let onLoadMoreClick = _ => {
+    setPaging(prevPaging => {
+      {...prevPaging, openPages: prevPaging.openPages + 1}
+    });
+  };
+
+  (paging, onLoadMoreClick);
+};
+
 module RunningView = {
   [@react.component]
   let make =
@@ -137,6 +157,7 @@ module RunningView = {
         ~paging as pagingProp,
         ~getKey,
         ~buttonClass,
+        ~onLoadMoreClick,
       ) => {
     let (paging, setPaging) = React.useState(() => pagingProp);
     React.useEffect2(
@@ -226,16 +247,7 @@ module RunningView = {
          ->React.array}
       </Spring.Div>
       {maxDisplayedItems < filteredItems->Array.length
-         ? <button
-             className=buttonClass
-             onClick={_ =>
-               setPaging(
-                 fun
-                 | Single => Single
-                 | Paged({openPages, itemsPerPage}) =>
-                   Paged({itemsPerPage, openPages: openPages + 1}),
-               )
-             }>
+         ? <button className=buttonClass onClick=onLoadMoreClick>
              "Load more"->str
            </button>
          : React.null}
@@ -299,8 +311,8 @@ let reducer = (status, action) => {
     Running({items, filter, itemWidth: width, itemHeight: width, columns});
 
   | (Running(state), SetItems(items)) =>
-    let items = items->initItemsState->applyFilter(state.filter)
-    Running({...state, items: items})
+    let items = items->initItemsState->applyFilter(state.filter);
+    Running({...state, items});
 
   | (Running(state), SetFilter(filter)) =>
     Running({...state, filter, items: state.items->applyFilter(filter)})
@@ -323,7 +335,8 @@ let make =
       ~padding=0,
       ~getKey,
       ~paging=Single,
-      ~buttonClass="isometric-grid__load-more-button"
+      ~buttonClass="isometric-grid__load-more-button",
+      ~onLoadMoreClick,
     ) => {
   let (ref, {ReactUseMeasure.width: containerWidth}) =
     ReactUseMeasure.(useHook(params(~polyfill, ())));
@@ -366,7 +379,8 @@ let make =
   );
 
   <div className=Css.([width(100.0->pct)]->style)>
-    <div ref className=Css.([display(`flex), flexDirection(`column)]->style)>
+    <div
+      ref className=Css.([display(`flex), flexDirection(`column)]->style)>
       {switch (status) {
        | Loading => React.null
        | Running({items, itemHeight, itemWidth}) =>
@@ -380,6 +394,7 @@ let make =
            paging
            getKey
            buttonClass
+           onLoadMoreClick
          />
        }}
     </div>
