@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/isometric-grid",
-  "version": "0.15.25",
+  "version": "0.15.26",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/isometric-grid",
   "scripts": {
