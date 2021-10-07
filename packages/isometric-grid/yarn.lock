@@ -487,10 +487,10 @@
     "@juggle/resize-observer" "^3.1.1"
     react-use-measure "^2.0.0"
 
-"@seamonster-studios/reason@^0.15.2":
-  version "0.15.2"
-  resolved "https://registry.yarnpkg.com/@seamonster-studios/reason/-/reason-0.15.2.tgz#5a1b4edd1424ce348a60bdbfa4a7ee3acad47b2f"
-  integrity sha512-tJAtulE/jTjOUJWMOW+dtd5TFVDcf72NjjItmSNMK747+ByL6gExvrDwPBMY6dfkPYj7yh8FgEt7p7rdKOEeBg==
+"@seamonster-studios/reason@^0.15.24":
+  version "0.15.24"
+  resolved "https://registry.yarnpkg.com/@seamonster-studios/reason/-/reason-0.15.24.tgz#1d6356127f7132f9b7dbb087baaa2ca406fbaa5d"
+  integrity sha512-rc7ClenRMHNgFYds1vEF2N8uY76PBqFwjYHtLpWbomk8x7/1uN8LfrVwYeEwjmI8/cbP3Ap1vuPaZnV0Wywm0w==
   dependencies:
     deck.gl "^8.0.17"
     downshift "^5.0.5"
@@ -1284,9 +1284,9 @@ parseurl@~1.3.3:
   integrity sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==
 
 path-parse@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
-  integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+  integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 path-type@^4.0.0:
   version "4.0.0"
