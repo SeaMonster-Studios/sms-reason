@@ -487,10 +487,10 @@
     "@juggle/resize-observer" "^3.1.1"
     react-use-measure "^2.0.0"
 
-"@seamonster-studios/reason@^0.15.2":
-  version "0.15.2"
-  resolved "https://registry.yarnpkg.com/@seamonster-studios/reason/-/reason-0.15.2.tgz#5a1b4edd1424ce348a60bdbfa4a7ee3acad47b2f"
-  integrity sha512-tJAtulE/jTjOUJWMOW+dtd5TFVDcf72NjjItmSNMK747+ByL6gExvrDwPBMY6dfkPYj7yh8FgEt7p7rdKOEeBg==
+"@seamonster-studios/reason@^0.15.24":
+  version "0.15.24"
+  resolved "https://registry.yarnpkg.com/@seamonster-studios/reason/-/reason-0.15.24.tgz#1d6356127f7132f9b7dbb087baaa2ca406fbaa5d"
+  integrity sha512-rc7ClenRMHNgFYds1vEF2N8uY76PBqFwjYHtLpWbomk8x7/1uN8LfrVwYeEwjmI8/cbP3Ap1vuPaZnV0Wywm0w==
   dependencies:
     deck.gl "^8.0.17"
     downshift "^5.0.5"
@@ -1082,9 +1082,9 @@ lines-and-columns@^1.1.6:
   integrity sha1-HADHQ7QzzQpOgHWPe2SldEDZ/wA=
 
 lodash-es@^4.17.14:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
-  integrity sha512-rlrc3yU3+JNOpZ9zj5pQtxnx2THmvRykwL4Xlxoa8I9lHBlVbbyPhgyPMioxVZ4NqyxaVVtaJnzsyOidQIhyyQ==
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.21.tgz#43e626c46e6591b7750beb2b50117390c609e3ee"
+  integrity sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==
 
 lodash.curry@^4.0.1:
   version "4.1.1"
