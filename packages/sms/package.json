@@ -25,7 +25,7 @@
     "fontfaceobserver": "^2.1.0",
     "format-usd": "^1.0.1",
     "formik": "^2.1.4",
-    "moment-timezone": "^0.5.28",
+    "moment-timezone": "^0.5.35",
     "msal": "^1.2.2",
     "nanoid": "^2.1.11",
     "papaparse": "^5.1.1",
