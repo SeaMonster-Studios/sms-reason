@@ -1,6 +1,6 @@
 {
   "name": "@seamonster-studios/bs-lodash",
-  "version": "0.15.2",
+  "version": "0.16.0",
   "private": false,
   "repository": "https://github.com/SeaMonster-Studios/sms-reason/tree/master/packages/bs-lodash",
   "scripts": {
