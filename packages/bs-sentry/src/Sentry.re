@@ -68,3 +68,17 @@ let captureDeccoError =
   Js.log(report);
   captureMessage(report);
 };
+
+module Integrations = {
+  module GlobalHandlers = {
+    [@bs.deriving abstract]
+    type options = {
+      [@bs.optional]
+      onerror: bool,
+      [@bs.optional]
+      onunhandledrejection: bool,
+    };
+    [@bs.module "@sentry/browser"] [@bs.scope "Integrations"] [@bs.new]
+    external make: options => integration = "GlobalHandlers";
+  };
+};
